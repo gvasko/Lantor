@@ -1,0 +1,35 @@
+.main-content {
+    display: flex;
+    flex-flow: row wrap;
+    width: 100%;
+}
+
+.input-content {
+    display: flex;
+    flex-flow: column;
+}
+
+.lang-collection-selector {
+  display: flex;
+  flex-flow: row wrap;
+  gap: 4px;
+}
+
+select {
+    max-height: 20px;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.dimension {
+    display: flex;
+    flex-flow: row;
+}
+
+.buttons {
+    display: flex;
+    flex-flow: row;
+    justify-content: flex-end;
+    gap: 4px;
+    padding: 5px;
+}
