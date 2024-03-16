@@ -10,14 +10,29 @@
       <p>Dimension: {{ dimension }}</p>
     </div>
     <div class="sample-text">
-      <textarea rows="20"></textarea>
+      <textarea rows="20" [(ngModel)]="text"></textarea>
     </div>
     <div class="buttons">
-      <button type="button">Clear</button>
-      <button type="button">Detect</button>
+      <button type="button" (click)="onClear()" [disabled]="!buttonsEnabled">Clear</button>
+      <button type="button" (click)="onDetect()" [disabled]="!buttonsEnabled">Detect</button>
     </div>
   </div>
   <div class="result-content">
-    <p>Some result</p>
+    <div class="result-table" *ngIf="!result">
+      <h3>No result</h3>
+    </div>
+    <div class="result-table" *ngIf="result">
+      <h3>Results</h3>
+      <table>
+        <tr>
+          <th>Language Name</th>
+          <th>Similarity Value</th>
+        </tr>
+        <tr *ngFor="let res of result.similarityValues">
+          <td>{{res.name}}</td>
+          <td>{{res.value}}</td>
+        </tr>
+      </table>
+    </div>
   </div>
 </div>
