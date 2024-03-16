@@ -2,11 +2,14 @@
     display: flex;
     flex-flow: row wrap;
     width: 100%;
+    padding-top: 20px;
 }
 
 .input-content {
     display: flex;
     flex-flow: column;
+    flex-grow: 1;
+    min-width: 300px;
 }
 
 .lang-collection-selector {
@@ -26,10 +29,25 @@ select {
     flex-flow: row;
 }
 
-.buttons {
+.sample-text {
     display: flex;
-    flex-flow: row;
-    justify-content: flex-end;
-    gap: 4px;
-    padding: 5px;
+    justify-content: center;  
+}
+
+textarea {
+    width: 90%;
+    resize: none;
+}
+
+.buttons {
+  display: flex;
+  flex-flow: row;
+  justify-content: center;
+  gap: 4px;
+  padding: 5px;
+}
+
+.result-content {
+  flex-grow: 1;
+  min-width: 300px;
 }

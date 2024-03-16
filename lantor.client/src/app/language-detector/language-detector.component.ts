@@ -7,4 +7,11 @@ import { Component } from '@angular/core';
 })
 export class LanguageDetectorComponent {
   dimension: number = 10;
+  get samplesSelectorEnabled(): boolean {
+    return false;
+  }
+
+  get dimensionsEnabled(): boolean {
+    return false;
+  }
 }
