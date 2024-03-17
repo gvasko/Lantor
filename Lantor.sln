@@ -3,9 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34316.72
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lantor.Server", "Lantor.Server\Lantor.Server.csproj", "{82FD6D14-FF2A-4A96-BE4E-89E0CBCA2F61}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lantor.Server", "Lantor.Server\Lantor.Server.csproj", "{82FD6D14-FF2A-4A96-BE4E-89E0CBCA2F61}"
 EndProject
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "lantor.client", "lantor.client\lantor.client.esproj", "{5D7DB113-684F-4ED3-AA9A-1700149CC714}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lantor.DomainModel", "Lantor.DomainModel\Lantor.DomainModel.csproj", "{60EAC5BC-F51E-4E6A-A93C-82C101E4DDF9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lantor.Data", "Lantor.Data\Lantor.Data.csproj", "{2C819BEF-C808-461D-86D2-47117CC7DF5C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,6 +27,14 @@ Global
 		{5D7DB113-684F-4ED3-AA9A-1700149CC714}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5D7DB113-684F-4ED3-AA9A-1700149CC714}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5D7DB113-684F-4ED3-AA9A-1700149CC714}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{60EAC5BC-F51E-4E6A-A93C-82C101E4DDF9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{60EAC5BC-F51E-4E6A-A93C-82C101E4DDF9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{60EAC5BC-F51E-4E6A-A93C-82C101E4DDF9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{60EAC5BC-F51E-4E6A-A93C-82C101E4DDF9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2C819BEF-C808-461D-86D2-47117CC7DF5C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C819BEF-C808-461D-86D2-47117CC7DF5C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2C819BEF-C808-461D-86D2-47117CC7DF5C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2C819BEF-C808-461D-86D2-47117CC7DF5C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

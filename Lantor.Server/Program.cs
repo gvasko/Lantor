@@ -1,4 +1,7 @@
 
+using Lantor.Data;
+using Microsoft.EntityFrameworkCore;
+
 namespace Lantor.Server
 {
     public class Program
@@ -13,6 +16,9 @@ namespace Lantor.Server
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+            var tempConnStr = builder.Configuration.GetConnectionString("LantorDatabase");
+            builder.Services.AddDbContext<LantorContext>(options => 
+                options.UseSqlServer(builder.Configuration.GetConnectionString("LantorDatabase")));
 
             var app = builder.Build();
 
