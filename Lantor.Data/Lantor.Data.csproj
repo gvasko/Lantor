@@ -7,6 +7,52 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="DefaultData\DutchSample.txt" />
+    <None Remove="DefaultData\EnglishSample.txt" />
+    <None Remove="DefaultData\FrenchSample.txt" />
+    <None Remove="DefaultData\GermanSample.txt" />
+    <None Remove="DefaultData\HungarianSample.txt" />
+    <None Remove="DefaultData\ItalianSample.txt" />
+    <None Remove="DefaultData\PolishSample.txt" />
+    <None Remove="DefaultData\PortugueseSample.txt" />
+    <None Remove="DefaultData\RomanianSample.txt" />
+    <None Remove="DefaultData\SpanishSample.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="DefaultData\DutchSample.txt">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DefaultData\EnglishSample.txt">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DefaultData\FrenchSample.txt">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DefaultData\GermanSample.txt">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DefaultData\HungarianSample.txt">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DefaultData\ItalianSample.txt">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DefaultData\PolishSample.txt">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DefaultData\PortugueseSample.txt">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DefaultData\RomanianSample.txt">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DefaultData\SpanishSample.txt">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.3" />
   </ItemGroup>
