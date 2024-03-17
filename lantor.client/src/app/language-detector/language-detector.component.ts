@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { LanguageSimilarityResult, LanguageSimilarityValue } from '../model/language-similarity-result';
+import { LanguageDetectorService } from '../services/language-detector.service';
 
 @Component({
   selector: 'lantor-language-detector',
@@ -10,6 +11,10 @@ export class LanguageDetectorComponent {
   dimension: number = 10;
   text: string = "";
   result: LanguageSimilarityResult | null = null;
+
+  constructor(private languageDetector: LanguageDetectorService) {
+
+  }
 
   get samplesSelectorEnabled(): boolean {
     return false;
@@ -29,10 +34,13 @@ export class LanguageDetectorComponent {
   }
 
   onDetect() {
-    let result = new LanguageSimilarityResult();
-    result.similarityValues.push(new LanguageSimilarityValue("en", 0.15));
-    result.similarityValues.push(new LanguageSimilarityValue("de", 0.11));
-    result.similarityValues.push(new LanguageSimilarityValue("hu", 0.05));
-    this.result = result;
+    this.languageDetector.calculateSimilarityValues(this.text).subscribe({
+      next: (result: LanguageSimilarityResult) => {
+        this.result = result;
+      },
+      error: (error) => {
+        console.log(`Language detector error: ${error}`);
+      }
+    });
   }
 }
