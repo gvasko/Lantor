@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
+import { LanguageDetectorRequest } from '../model/language-detector-request';
 import { LanguageSimilarityResult, LanguageSimilarityValue } from '../model/language-similarity-result';
 
 @Injectable({
@@ -12,10 +13,7 @@ export class LanguageDetectorService {
   }
 
   calculateSimilarityValues(text: string): Observable<LanguageSimilarityResult> {
-    let result = new LanguageSimilarityResult();
-    result.similarityValues.push(new LanguageSimilarityValue("en", 0.15));
-    result.similarityValues.push(new LanguageSimilarityValue("de", 0.11));
-    result.similarityValues.push(new LanguageSimilarityValue("hu", 0.05));
-    return of(result);
+    let body = new LanguageDetectorRequest(text);
+    return this.http.post<LanguageSimilarityResult>('/api/detectlanguages', body);
   }
 }
