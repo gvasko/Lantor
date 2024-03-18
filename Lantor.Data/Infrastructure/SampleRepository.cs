@@ -19,7 +19,7 @@ namespace Lantor.Data.Infrastructure
 
         public MultilingualSample GetDefaultSamples()
         {
-            return context.MultilingualSamples.AsNoTracking().First(s => s.Name == "Default");
+            return context.MultilingualSamples.AsNoTracking().Include(ms => ms.Languages).First(s => s.Name == "Default");
         }
     }
 }

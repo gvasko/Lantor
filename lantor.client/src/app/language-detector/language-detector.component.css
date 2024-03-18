@@ -30,8 +30,9 @@ select {
 }
 
 .sample-text {
-    display: flex;
-    justify-content: center;  
+  display: flex;
+  flex-flow: column;
+  align-items: center;
 }
 
 textarea {
