@@ -1,5 +1,7 @@
 
 using Lantor.Data;
+using Lantor.Data.Infrastructure;
+using Lantor.DomainModel;
 using Microsoft.EntityFrameworkCore;
 
 namespace Lantor.Server
@@ -19,6 +21,8 @@ namespace Lantor.Server
             var tempConnStr = builder.Configuration.GetConnectionString("LantorDatabase");
             builder.Services.AddDbContext<LantorContext>(options => 
                 options.UseSqlServer(builder.Configuration.GetConnectionString("LantorDatabase")));
+            builder.Services.AddScoped<ISampleRepository, SampleRepository>();
+            builder.Services.AddScoped<ILanguageDetectorService, LanguageDetectorService>();
 
             var app = builder.Build();
 
