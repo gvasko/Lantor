@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Lantor.DomainModel.Compute
+namespace Lantor.DomainModel
 {
     internal class HiDimBipolarSumBuilder
     {
@@ -12,11 +12,11 @@ namespace Lantor.DomainModel.Compute
 
         public HiDimBipolarSumBuilder(int size)
         {
-            var adjustedSize = (size % 32 == 0) ? size : ((size / 32) + 1) * 32;
+            var adjustedSize = size % 32 == 0 ? size : (size / 32 + 1) * 32;
             _sum = new int[adjustedSize];
         }
 
-        public void Add(NaiveHiDimBipolarVector vector)
+        public void Add(HiDimBipolarVector vector)
         {
             if (vector.Length != _sum.Length)
             {
@@ -29,7 +29,7 @@ namespace Lantor.DomainModel.Compute
             }
         }
 
-        public NaiveHiDimBipolarVector BuildVector()
+        public HiDimBipolarVector BuildVector()
         {
             var intLen = _sum.Length / 32;
             var newVector = new int[intLen];
@@ -47,7 +47,7 @@ namespace Lantor.DomainModel.Compute
                 newVector[i] = newIntVal;
             }
 
-            return new NaiveHiDimBipolarVector(newVector);
+            return new HiDimBipolarVector(newVector);
         }
     }
 }

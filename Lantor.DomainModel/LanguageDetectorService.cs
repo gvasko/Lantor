@@ -1,5 +1,4 @@
-﻿using Lantor.DomainModel.Compute;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,7 +17,7 @@ namespace Lantor.DomainModel
 
         public LanguageSimilarityResult Detect(string sample)
         {
-            var alphabet = new Compute.Alphabet(5024);
+            var alphabet = sampleRepository.GetDefaultAlphabet();
             var vectorBuilder = new LanguageVectorBuilder(alphabet);
             var sampleVector = vectorBuilder.BuildLanguageVector(sample);
 
@@ -28,7 +27,12 @@ namespace Lantor.DomainModel
             int i = 0;
             foreach (var language in languageSamples.Languages) 
             {
-                var languageVector = vectorBuilder.BuildLanguageVector(language.Sample);
+                var languageVector = sampleRepository.GetLanguageVector(language, alphabet);
+                if (languageVector == null)
+                { 
+                    languageVector = vectorBuilder.BuildLanguageVector(language.Sample);
+                    sampleRepository.SetLanguageVector(language, alphabet, languageVector);
+                }
                 var similarity = languageVector.Similarity(sampleVector);
                 similarityValues[i++] = new LanguageSimilarityValue(language.Name, similarity);
             }

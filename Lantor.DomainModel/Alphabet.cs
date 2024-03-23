@@ -9,15 +9,18 @@ namespace Lantor.DomainModel
     public class Alphabet
     {
         public int Id { get; set; }
-        public List<LetterVector> LetterVectors { get; init; }
+        public string Name { get; set; }
+        public List<LetterVector> LetterVectors { get; set; }
 
         public Alphabet()
         {
+            Name = "";
             LetterVectors = [];
         }
 
-        public Alphabet(int dim)
+        public Alphabet(string name, int dim)
         {
+            Name = name;
             LetterVectors = new List<LetterVector>();
             LetterVectors.Add(new LetterVector(' ', HiDimBipolarVector.CreateRandomVector(dim)));
             for (char c = 'a'; c <= 'z'; c++)
@@ -36,7 +39,8 @@ namespace Lantor.DomainModel
 
         public HiDimBipolarVector GetVectorForLetter(char letter)
         {
-            return LetterVectors.First(x => x.Letter == letter).Vector;
+            var ll = Char.ToLower(letter);
+            return LetterVectors.First(x => x.Letter == ll).Vector;
         }
     }
 }

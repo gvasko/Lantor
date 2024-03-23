@@ -6,7 +6,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace Lantor.DomainModel.Compute
+namespace Lantor.DomainModel
 {
     internal class LanguageVectorBuilder
     {
@@ -17,7 +17,7 @@ namespace Lantor.DomainModel.Compute
             _alphabet = alphabet;
         }
 
-        public NaiveHiDimBipolarVector BuildLanguageVector(string sample)
+        public HiDimBipolarVector BuildLanguageVector(string sample)
         {
             string asciiSample = Normalize(sample);
 
