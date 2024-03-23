@@ -9,5 +9,7 @@ namespace Lantor.DomainModel
     public interface ISampleRepository
     {
         MultilingualSample GetDefaultSamples();
+        //Alphabet GetDefaultAlphabet();
+        //HiDimBipolarVector GetLanguageVector(LanguageSample languageSample, Alphabet alphabet);
     }
 }

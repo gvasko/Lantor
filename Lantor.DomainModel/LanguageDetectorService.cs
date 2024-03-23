@@ -18,7 +18,7 @@ namespace Lantor.DomainModel
 
         public LanguageSimilarityResult Detect(string sample)
         {
-            var alphabet = new Alphabet(5024);
+            var alphabet = new Compute.Alphabet(5024);
             var vectorBuilder = new LanguageVectorBuilder(alphabet);
             var sampleVector = vectorBuilder.BuildLanguageVector(sample);
 

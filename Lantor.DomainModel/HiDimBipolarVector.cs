@@ -1,34 +1,23 @@
-﻿using System;
+﻿using Lantor.DomainModel.Compute;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace Lantor.DomainModel.Compute
+namespace Lantor.DomainModel
 {
-    internal class NaiveHiDimBipolarVector
+    /// <summary>
+    /// VO
+    /// </summary>
+    public class HiDimBipolarVector
     {
-        private int _size;
-        private BitArray _data;
+        //private int Size { get; init; }
 
-        public int[] BinData
-        {
-            get
-            {
-                var intArray = new int[_size / 32 + (_size % 32 == 0 ? 0 : 1)];
-                _data.CopyTo(intArray, 0);
-                return intArray;
-            }
+        public BitArray Data { get; init; }
 
-            set
-            {
-                SetBitData(value);
-            }
-        }
-
-        public static NaiveHiDimBipolarVector CreateRandomVector(int size)
+        public static HiDimBipolarVector CreateRandomVector(int size)
         {
             var v = new BitArray(size);
 
@@ -51,56 +40,47 @@ namespace Lantor.DomainModel.Compute
                 }
             }
 
-            return new NaiveHiDimBipolarVector(v);
+            return new HiDimBipolarVector(v);
         }
 
-        public NaiveHiDimBipolarVector()
-            : this(32)
+        public HiDimBipolarVector()
+            : this(8, 0)
         {
+            
         }
 
-        public NaiveHiDimBipolarVector(int size)
+        public HiDimBipolarVector(int[] data)
         {
-            _size = size;
-            _data = new BitArray(size);
+            //Size = data.Length * 32;
+            Data = new BitArray(data);
         }
 
-        public NaiveHiDimBipolarVector(int[] data)
+        public HiDimBipolarVector(byte[] data)
         {
-            SetBitData(data);
+            //Size = data.Length * 8;
+            Data = new BitArray(data);
         }
 
-        private void SetBitData(int[] data)
+        public HiDimBipolarVector(int size, int data)
         {
-            _size = data.Length * 32;
-            _data = new BitArray(data);
-        }
-
-        /// <summary>
-        /// For low dimensions
-        /// </summary>
-        /// <param name="size"></param>
-        /// <param name="data"></param>
-        public NaiveHiDimBipolarVector(int size, int data)
-        {
-            _size = size;
-            _data = new BitArray(size);
+            //Size = size;
+            Data = new BitArray(size);
             for (int i = 0; i < size; i++)
             {
                 var value = (((data >> i) & 1) == 1);
-                _data[i] = value;
+                Data[i] = value;
             }
         }
 
-        private NaiveHiDimBipolarVector(BitArray data)
+        private HiDimBipolarVector(BitArray data)
         {
-            _size = data.Length;
-            _data = data;
+            //Size = data.Length;
+            Data = data;
         }
 
         public int Length
         {
-            get { return _data.Length; }
+            get { return Data.Length; }
         }
 
         public int this[int index]
@@ -113,7 +93,7 @@ namespace Lantor.DomainModel.Compute
 
         private bool IsPositive(int index)
         {
-            return !_data[index];
+            return !Data[index];
         }
 
         //public NaiveHiDimBipolarVector Add(NaiveHiDimBipolarVector other)
@@ -122,24 +102,24 @@ namespace Lantor.DomainModel.Compute
         //    throw new NotImplementedException();
         //}
 
-        public NaiveHiDimBipolarVector Multiply(NaiveHiDimBipolarVector other)
+        public HiDimBipolarVector Multiply(HiDimBipolarVector other)
         {
-            var newData = new BitArray(_data);
+            var newData = new BitArray(Data);
             // TODO: var otherData = new BitArray(other.BinData);
-            newData.Xor(other._data);
-            return new NaiveHiDimBipolarVector(newData);
+            newData.Xor(other.Data);
+            return new HiDimBipolarVector(newData);
         }
 
-        public NaiveHiDimBipolarVector Permute()
+        public HiDimBipolarVector Permute()
         {
-            var highestBit = _data[^1];
-            var newData = new BitArray(_data);
+            var highestBit = Data[^1];
+            var newData = new BitArray(Data);
             newData.LeftShift(1);
             newData[0] = highestBit;
-            return new NaiveHiDimBipolarVector(newData);
+            return new HiDimBipolarVector(newData);
         }
 
-        public double Similarity(NaiveHiDimBipolarVector other)
+        public double Similarity(HiDimBipolarVector other)
         {
             if (Length != other.Length)
             {
@@ -172,5 +152,6 @@ namespace Lantor.DomainModel.Compute
         {
             return NumberOfPositives();
         }
+
     }
 }
