@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace Lantor.Data.Infrastructure
 {
+    /// <summary>
+    /// also UOW
+    /// </summary>
     public class SampleRepository : ISampleRepository
     {
         private readonly LantorContext context;
