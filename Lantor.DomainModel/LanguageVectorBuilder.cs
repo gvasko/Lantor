@@ -61,12 +61,14 @@ namespace Lantor.DomainModel
             var noSS = ssRegex.Replace(singleWSp, "ss");
 
             // Polish
-            var lStrokeRegex1 = new Regex(@"\u0141");
-            var noLStroke1 = lStrokeRegex1.Replace(noSS, "L");
-            var lStrokeRegex2 = new Regex(@"\u0142");
-            var noLStroke2 = lStrokeRegex2.Replace(noLStroke1, "l");
+            var lStrokeRegex = new Regex(@"\u0141|\u0142");
+            var noLStroke = lStrokeRegex.Replace(noSS, "l");
 
-            return noLStroke2;
+            // French
+            var oeRegex = new Regex(@"\u0152|\u0153|\u0276");
+            var noOe = oeRegex.Replace(noLStroke, "oe");
+
+            return noOe;
         }
 
     }
