@@ -54,21 +54,34 @@ namespace Lantor.DomainModel
                 c => CharUnicodeInfo.GetUnicodeCategory(c) != UnicodeCategory.NonSpacingMark &&
                 (char.IsLetter(c) || char.IsWhiteSpace(c))));
             var whitespacesRegex = new Regex(@"\s+");
-            var singleWSp = whitespacesRegex.Replace(only26str, " ");
+            var lastFix = whitespacesRegex.Replace(only26str, " ");
+            lastFix = lastFix.ToLower();
 
             // German
             var ssRegex = new Regex(@"\u00DF");
-            var noSS = ssRegex.Replace(singleWSp, "ss");
+            lastFix = ssRegex.Replace(lastFix, "ss");
 
             // Polish
             var lStrokeRegex = new Regex(@"\u0141|\u0142");
-            var noLStroke = lStrokeRegex.Replace(noSS, "l");
+            lastFix = lStrokeRegex.Replace(lastFix, "l");
 
             // French
             var oeRegex = new Regex(@"\u0152|\u0153|\u0276");
-            var noOe = oeRegex.Replace(noLStroke, "oe");
+            lastFix = oeRegex.Replace(lastFix, "oe");
 
-            return noOe;
+            var illegalRegex = new Regex("[^ a-z]");
+            var illegalChars = illegalRegex.Matches(lastFix);
+            if (illegalChars.Count > 0)
+            {
+                var illegals = new StringBuilder();
+                foreach (var illegalChar in illegalChars)
+                {
+                    illegals.Append(illegalChar);
+                }
+                Console.WriteLine($"WARNING! Illegal characters found: {illegals}");
+                lastFix = illegalRegex.Replace(lastFix, " ");
+            }
+            return lastFix;
         }
 
     }
