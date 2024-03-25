@@ -12,9 +12,19 @@ namespace Lantor.DomainModel
     /// </summary>
     public class HiDimBipolarVector
     {
-        //private int Size { get; init; }
-
-        public BitArray Data { get; init; }
+        private BitArray _data;
+        public BitArray Data { 
+            get
+            {
+                // defensive copy
+                return new BitArray(_data);
+            }
+            init
+            {
+                // defensive copy
+                _data = new BitArray(value);
+            }
+        }
 
         public static HiDimBipolarVector CreateRandomVector(int size)
         {
@@ -50,31 +60,28 @@ namespace Lantor.DomainModel
 
         public HiDimBipolarVector(int[] data)
         {
-            //Size = data.Length * 32;
-            Data = new BitArray(data);
+            _data = new BitArray(data);
         }
 
         public HiDimBipolarVector(byte[] data)
         {
-            //Size = data.Length * 8;
-            Data = new BitArray(data);
+            _data = new BitArray(data);
         }
 
         public HiDimBipolarVector(int size, int data)
         {
-            //Size = size;
-            Data = new BitArray(size);
+            var bitData = new BitArray(size);
             for (int i = 0; i < size; i++)
             {
                 var value = (((data >> i) & 1) == 1);
-                Data[i] = value;
+                bitData[i] = value;
             }
+            _data = bitData;
         }
 
         private HiDimBipolarVector(BitArray data)
         {
-            //Size = data.Length;
-            Data = data;
+            _data = new BitArray(data);
         }
 
         public int Length
@@ -103,17 +110,15 @@ namespace Lantor.DomainModel
 
         public HiDimBipolarVector Multiply(HiDimBipolarVector other)
         {
-            var newData = new BitArray(Data);
-            // TODO: var otherData = new BitArray(other.BinData);
-            newData.Xor(other.Data);
+            // implicit defensive copies are used
+            var newData = Data.Xor(other.Data);
             return new HiDimBipolarVector(newData);
         }
 
         public HiDimBipolarVector Permute()
         {
-            var highestBit = Data[^1];
-            var newData = new BitArray(Data);
-            newData.LeftShift(1);
+            var highestBit = _data[^1];
+            var newData = Data.LeftShift(1);    // using defensive copy
             newData[0] = highestBit;
             return new HiDimBipolarVector(newData);
         }
