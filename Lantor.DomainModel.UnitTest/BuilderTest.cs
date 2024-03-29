@@ -39,15 +39,46 @@ namespace Lantor.DomainModel.UnitTest
         }
 
         [Test]
-        public void TestLanguageVectorBuilder()
+        public void WhenTestTheSameSamples_ThenItGivesHighestSimilarity()
         {
-            Alphabet abc = new("Test", 128);
+            // TODO: do not generate a random alphabet in testing
+            Alphabet abc = new("Test", 512);
             LanguageVectorBuilder lvb = new(abc);
             var loremIpsum = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.";
             var v1 = lvb.BuildLanguageVector(loremIpsum);
             var v2 = lvb.BuildLanguageVector(loremIpsum);
             var eps = 0.001;
             Assert.That(v1.Similarity(v2), Is.EqualTo(1.0).Within(eps));
+        }
+
+        [Test]
+        public void WhenTestSameLanguage_ThenItGivesHighSimilarity()
+        {
+            // TODO: do not generate a random alphabet in testing
+            Alphabet abc = new("Test", 512);
+            LanguageVectorBuilder lvb = new(abc);
+            var loremIpsum1 = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
+            var loremIpsum2 = "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
+            var v1 = lvb.BuildLanguageVector(loremIpsum1);
+            var v2 = lvb.BuildLanguageVector(loremIpsum2);
+            var eps = 0.1;
+            var similarity = v1.Similarity(v2);
+            Assert.That(similarity, Is.EqualTo(0.55).Within(eps));
+        }
+
+        [Test]
+        public void WhenTestVeryFarLanguages_ThenItGivesLowSimilarity()
+        {
+            // TODO: do not generate a random alphabet in testing
+            Alphabet abc = new("Test", 512);
+            LanguageVectorBuilder lvb = new(abc);
+            var loremIpsum = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
+            var differentSample = "A Vadászat a vadász számára egyrészt alkalom a szigorú önfegyelem gyakorlására, másrészt eszköz a többi élőlény megismeréséhez és megértéséhez.";
+            var v1 = lvb.BuildLanguageVector(loremIpsum);
+            var v2 = lvb.BuildLanguageVector(differentSample);
+            var eps = 0.1;
+            var similarity = v1.Similarity(v2);
+            Assert.That(similarity, Is.EqualTo(0.1).Within(eps));
         }
 
     }

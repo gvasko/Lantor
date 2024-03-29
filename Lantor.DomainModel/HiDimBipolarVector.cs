@@ -157,5 +157,30 @@ namespace Lantor.DomainModel
             return NumberOfPositives();
         }
 
+        public int[] ToIntArray()
+        {
+            var additionalInt = _data.Length % 32 == 0 ? 0 : 1;
+            int[] intData = new int[_data.Length / 32 + additionalInt];
+            _data.CopyTo(intData, 0);
+            return intData;
+        }
+
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            int[] intData = ToIntArray();
+            bool first = true;
+            foreach (var i in intData)
+            {
+                if (!first)
+                {
+                    sb.Append(", ");
+                }
+                sb.Append(i);
+                first = false;
+            }
+            return sb.ToString();
+        }
+
     }
 }
