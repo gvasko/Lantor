@@ -1,5 +1,5 @@
 ﻿using Lantor.DomainModel;
-using Lantor.Server.Model;
+using Lantor.Server.DTO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 

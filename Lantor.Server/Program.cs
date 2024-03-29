@@ -2,7 +2,9 @@
 using Lantor.Data;
 using Lantor.Data.Infrastructure;
 using Lantor.DomainModel;
+using Lantor.Server.Infrastructure;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 namespace Lantor.Server
 {
@@ -10,6 +12,9 @@ namespace Lantor.Server
     {
         public static void Main(string[] args)
         {
+            Log.Logger = new LoggerConfiguration().MinimumLevel.Debug().WriteTo.Console().CreateLogger();
+            LoggerService.Logger = new SeriLogger();
+
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.

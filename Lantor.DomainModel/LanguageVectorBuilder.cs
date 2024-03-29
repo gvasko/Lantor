@@ -78,7 +78,7 @@ namespace Lantor.DomainModel
                 {
                     illegals.Append(illegalChar);
                 }
-                Console.WriteLine($"WARNING! Illegal characters found: {illegals}");
+                LoggerService.Logger.Warning("WARNING! Illegal characters found: {illegals}", illegals);
                 lastFix = illegalRegex.Replace(lastFix, " ");
             }
             return lastFix;

@@ -1,4 +1,4 @@
-﻿namespace Lantor.Server.Model
+﻿namespace Lantor.Server.DTO
 {
     public class LanguageDetectorRequest
     {
