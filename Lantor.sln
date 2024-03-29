@@ -7,9 +7,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lantor.Server", "Lantor.Ser
 EndProject
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "lantor.client", "lantor.client\lantor.client.esproj", "{5D7DB113-684F-4ED3-AA9A-1700149CC714}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lantor.DomainModel", "Lantor.DomainModel\Lantor.DomainModel.csproj", "{60EAC5BC-F51E-4E6A-A93C-82C101E4DDF9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lantor.DomainModel", "Lantor.DomainModel\Lantor.DomainModel.csproj", "{60EAC5BC-F51E-4E6A-A93C-82C101E4DDF9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lantor.Data", "Lantor.Data\Lantor.Data.csproj", "{2C819BEF-C808-461D-86D2-47117CC7DF5C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lantor.Data", "Lantor.Data\Lantor.Data.csproj", "{2C819BEF-C808-461D-86D2-47117CC7DF5C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lantor.DomainModel.UnitTest", "Lantor.DomainModel.UnitTest\Lantor.DomainModel.UnitTest.csproj", "{7583D1BB-0CA4-4B58-AEA4-5989836FBDB0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,6 +37,10 @@ Global
 		{2C819BEF-C808-461D-86D2-47117CC7DF5C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2C819BEF-C808-461D-86D2-47117CC7DF5C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2C819BEF-C808-461D-86D2-47117CC7DF5C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7583D1BB-0CA4-4B58-AEA4-5989836FBDB0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7583D1BB-0CA4-4B58-AEA4-5989836FBDB0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7583D1BB-0CA4-4B58-AEA4-5989836FBDB0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7583D1BB-0CA4-4B58-AEA4-5989836FBDB0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
