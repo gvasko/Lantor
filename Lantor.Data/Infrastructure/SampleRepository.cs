@@ -22,7 +22,7 @@ namespace Lantor.Data.Infrastructure
 
         public Alphabet GetDefaultAlphabet()
         {
-            return context.Alphabets.First(a => a.Name == "Default");
+            return context.Alphabets.AsNoTracking().First(a => a.Name == "Default");
         }
 
         public MultilingualSample GetDefaultSamples()
