@@ -18,14 +18,14 @@ namespace Lantor.DomainModel
             LetterVectors = [];
         }
 
-        public Alphabet(string name, int dim)
+        internal Alphabet(string name, int dim, IVectorFactory vectorFactory)
         {
             Name = name;
             LetterVectors = new List<LetterVector>();
-            LetterVectors.Add(new LetterVector(' ', HiDimBipolarVector.CreateRandomVector(dim)));
+            LetterVectors.Add(new LetterVector(' ', vectorFactory.CreateLetterVectorFor(dim, ' ')));
             for (char c = 'a'; c <= 'z'; c++)
             {
-                LetterVectors.Add(new LetterVector(c, HiDimBipolarVector.CreateRandomVector(dim)));
+                LetterVectors.Add(new LetterVector(c, vectorFactory.CreateLetterVectorFor(dim, c)));
             }
         }
 
@@ -41,6 +41,21 @@ namespace Lantor.DomainModel
         {
             var ll = Char.ToLower(letter);
             return LetterVectors.First(x => x.Letter == ll).Vector;
+        }
+
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append(Name);
+            sb.Append(Environment.NewLine);
+            sb.Append(Dim);
+            sb.Append(Environment.NewLine);
+            foreach (var letter in LetterVectors) 
+            {
+                sb.Append($"{letter.Letter}: [{letter.Vector.ToString()}]");
+                sb.Append(Environment.NewLine);
+            }
+            return sb.ToString();
         }
     }
 }

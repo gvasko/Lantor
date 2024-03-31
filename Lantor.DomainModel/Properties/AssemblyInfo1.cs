@@ -17,4 +17,5 @@ using System.Runtime.InteropServices;
 
 [assembly: Guid("63eccde7-08e9-4804-ad28-87e110d325f0")]
 
+[assembly:InternalsVisibleTo("Lantor.Data")]
 [assembly:InternalsVisibleTo("Lantor.DomainModel.UnitTest")]

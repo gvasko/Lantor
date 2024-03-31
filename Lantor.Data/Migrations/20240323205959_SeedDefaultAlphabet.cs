@@ -11,7 +11,7 @@ namespace Lantor.Data.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            var defaultAlphabet = new Alphabet("Default", 5024);
+            var defaultAlphabet = new Alphabet("Default", 5024, new RandomVectorFactory());
             migrationBuilder.InsertData(
                 table: "Alphabets",
                 columns: new[] { "Id", "Name" },
