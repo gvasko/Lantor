@@ -23,6 +23,39 @@ namespace Lantor.DomainModel
         {
         }
 
+        public LanguageSimilarityResult AlphabetOrthoTest()
+        {
+            var abc = sampleRepository.GetDefaultAlphabet();
+            LanguageSimilarityValue[] similarityValues = new LanguageSimilarityValue[abc.LetterVectors.Count];
+
+            var i = 0;
+            foreach (var lv1 in abc.LetterVectors)
+            {
+                var maxSim = 0.0;
+
+                foreach (var lv2 in abc.LetterVectors)
+                {
+                    if (lv1.Letter == lv2.Letter)
+                    {
+                        continue;
+                    }
+                    var similarity = lv1.Vector.Similarity(lv2.Vector);
+                    var absSim = Math.Abs(similarity);
+                    if (absSim > maxSim)
+                    {
+                        maxSim = absSim;
+                    }
+                }
+                similarityValues[i++] = new LanguageSimilarityValue
+                {
+                    Name = char.ToString(lv1.Letter),
+                    Value = maxSim
+                };
+            }
+
+            return new LanguageSimilarityResult(similarityValues);
+        }
+
         /// <summary>
         /// Detects languages for the given text, using the default alphabet and default language samples.
         /// </summary>
@@ -66,8 +99,6 @@ namespace Lantor.DomainModel
                 LoggerService.Logger.Debug("Language vector similarity for {lang} calculated.", language.Name);
             }
 
-            Array.Sort(similarityValues, (x, y) => x.Value < y.Value ? 1 : x.Value > y.Value ? -1 : 0);
-
             LoggerService.Logger.Debug("Similarity results sorted.");
             stopWatch.Stop();
             LoggerService.Logger.Debug("Detected in {elapsed} ms.", stopWatch.ElapsedMilliseconds);
@@ -75,5 +106,7 @@ namespace Lantor.DomainModel
 
             return new LanguageSimilarityResult(similarityValues);
         }
+
+
     }
 }

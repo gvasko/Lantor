@@ -10,9 +10,6 @@ namespace Lantor.DomainModel.UnitTest
 {
     public class LanguageDetectorServiceTest
     {
-        private static readonly string SAMPLE_EN = "Covariance in probability theory and statistics is a measure of the joint variability of two random variables.";
-        private static readonly string SAMPLE_DE = "Die Kovarianz ist in der Stochastik ein nichtstandardisiertes Zusammenhangsmaß für einen monotonen Zusammenhang zweier Zufallsvariablen mit gemeinsamer Wahrscheinlichkeitsverteilung.";
-        private static readonly string SAMPLE_HU = "A kovariancia a valószínűségszámítás és a statisztika tárgykörébe tartozó mennyiség, ami megadja két egymástól különböző változó együttmozgását. Kis értékei gyenge, nagy értékei erős lineáris összefüggésre utalnak.";
         private LanguageDetectorService _sut;
         private Mock<ISampleRepository> _sampleRepo;
         private Mock<ILanguageVectorBuilder> _vectorBuilderMock;
@@ -20,9 +17,9 @@ namespace Lantor.DomainModel.UnitTest
 
         [SetUp] public void SetUp()
         {
-            LanguageSample ls1 = new("en", SAMPLE_EN);
-            LanguageSample ls2 = new("de", SAMPLE_DE);
-            LanguageSample ls3 = new("hu", SAMPLE_HU);
+            LanguageSample ls1 = new("en", FakeSamples.SAMPLE_EN);
+            LanguageSample ls2 = new("de", FakeSamples.SAMPLE_DE);
+            LanguageSample ls3 = new("hu", FakeSamples.SAMPLE_HU);
 
             _multiSample = new("test-multi");
             _multiSample.Languages.Add(ls1);
@@ -60,11 +57,12 @@ namespace Lantor.DomainModel.UnitTest
             var result = _sut.Detect("Lorem ipsum.");
             _sampleRepo.Verify(sr => sr.GetLanguageVectorFromCache(It.IsAny<LanguageSample>(), It.IsAny<Alphabet>()), Times.Exactly(_multiSample.Languages.Count));
             _vectorBuilderMock.Verify(vb => vb.BuildLanguageVector(It.IsAny<string>()), Times.Exactly(2));
-            _vectorBuilderMock.Verify(vb => vb.BuildLanguageVector(It.Is<string>(s => s == SAMPLE_HU)), Times.Once);
-            _sampleRepo.Verify(sr => sr.AddLanguageVectorToCache(It.Is<LanguageSample>(s => s.Sample == SAMPLE_HU), It.IsAny<Alphabet>(), It.IsAny<HiDimBipolarVector>()), Times.Once);
+            _vectorBuilderMock.Verify(vb => vb.BuildLanguageVector(It.Is<string>(s => s == FakeSamples.SAMPLE_HU)), Times.Once);
+            _sampleRepo.Verify(sr => sr.AddLanguageVectorToCache(It.Is<LanguageSample>(s => s.Sample == FakeSamples.SAMPLE_HU), It.IsAny<Alphabet>(), It.IsAny<HiDimBipolarVector>()), Times.Once);
         }
 
         [Test]
+        // TODO: can be narrowed to LanguageSimilarityResult
         public void ResultIsOrderedBySimilarityValuesDesc()
         {
             var result = _sut.Detect("Lorem ipsum.");

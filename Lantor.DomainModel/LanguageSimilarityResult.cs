@@ -10,7 +10,10 @@
     {
         public LanguageSimilarityResult(params LanguageSimilarityValue[] similarityValues)
         {
-            SimilarityValues = similarityValues;
+            var values = similarityValues;
+            Array.Sort(values, (x, y) => x.Value < y.Value ? 1 : x.Value > y.Value ? -1 : 0);
+
+            SimilarityValues = values;
         }
 
         public LanguageSimilarityValue[] SimilarityValues { get; init; }
