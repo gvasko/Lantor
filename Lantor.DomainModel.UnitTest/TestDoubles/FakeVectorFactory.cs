@@ -8,6 +8,8 @@ namespace Lantor.DomainModel.UnitTest.TestDoubles
 {
     internal class FakeVectorFactory : IVectorFactory
     {
+        public static readonly int DIM = 512;
+
         private IDictionary<char, int[]> vectors = new Dictionary<char, int[]>();
 
         public FakeVectorFactory()
@@ -43,14 +45,14 @@ namespace Lantor.DomainModel.UnitTest.TestDoubles
 
         public HiDimBipolarVector CreateLetterVectorFor(int dim, char letter)
         {
-            if (dim != 512)
+            if (dim != DIM)
             {
-                throw new ArgumentException("Only 512 dim is supported");
+                throw new ArgumentException($"Only {DIM} dim is supported");
             }
 
-            if (vectors.ContainsKey(letter))
+            if (vectors.TryGetValue(letter, out int[]? value))
             {
-                return new HiDimBipolarVector(vectors[letter]);
+                return new HiDimBipolarVector(value);
             }
 
             throw new ArgumentException($"Letter {letter} is undefined");

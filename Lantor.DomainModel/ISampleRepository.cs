@@ -10,7 +10,7 @@ namespace Lantor.DomainModel
     {
         MultilingualSample GetDefaultSamples();
         Alphabet GetDefaultAlphabet();
-        HiDimBipolarVector? GetLanguageVector(LanguageSample languageSample, Alphabet alphabet);
-        void SetLanguageVector(LanguageSample languageSample, Alphabet alphabet, HiDimBipolarVector vector);
+        HiDimBipolarVector? GetLanguageVectorFromCache(LanguageSample languageSample, Alphabet alphabet);
+        void AddLanguageVectorToCache(LanguageSample languageSample, Alphabet alphabet, HiDimBipolarVector vector);
     }
 }

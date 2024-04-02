@@ -10,24 +10,35 @@ namespace Lantor.DomainModel
     public class LanguageDetectorService : ILanguageDetectorService
     {
         private readonly ISampleRepository sampleRepository;
+        private readonly ILanguageVectorBuilder languageVectorBuilder;
 
-        public LanguageDetectorService(ISampleRepository sampleRepository) 
+        internal LanguageDetectorService(ISampleRepository sampleRepository, ILanguageVectorBuilder languageVectorBuilder) 
         {
             this.sampleRepository = sampleRepository;
+            this.languageVectorBuilder = languageVectorBuilder;
         }
 
-        public LanguageSimilarityResult Detect(string sample)
+        public LanguageDetectorService(ISampleRepository sampleRepository)
+            : this(sampleRepository, new LanguageVectorBuilder(sampleRepository.GetDefaultAlphabet()))
         {
-            Stopwatch stopWatch = new Stopwatch();
+        }
+
+        /// <summary>
+        /// Detects languages for the given text, using the default alphabet and default language samples.
+        /// </summary>
+        /// <param name="text">The text, clients want to know which language it is written in</param>
+        /// <returns>A list of languages with a correlation value, ordered descended, the most probable language first</returns>
+        public LanguageSimilarityResult Detect(string text)
+        {
+            Stopwatch stopWatch = new();
             stopWatch.Start();
 
-            LoggerService.Logger.Debug("Default detection begins: {samplePrefix}", sample[..16]);
+            LoggerService.Logger.Debug("Default detection begins: {samplePrefix}", text.Substring(0, Math.Min(16, text.Length)));
 
             var alphabet = sampleRepository.GetDefaultAlphabet();
             LoggerService.Logger.Debug("Default alphabet loaded");
 
-            var vectorBuilder = new LanguageVectorBuilder(alphabet);
-            var sampleVector = vectorBuilder.BuildLanguageVector(sample);
+            var sampleVector = languageVectorBuilder.BuildLanguageVector(text);
             LoggerService.Logger.Debug("Sample vector built.");
 
             var languageSamples = sampleRepository.GetDefaultSamples();
@@ -37,13 +48,13 @@ namespace Lantor.DomainModel
             int i = 0;
             foreach (var language in languageSamples.Languages) 
             {
-                var languageVector = sampleRepository.GetLanguageVector(language, alphabet);
+                var languageVector = sampleRepository.GetLanguageVectorFromCache(language, alphabet);
                 if (languageVector == null)
                 {
                     LoggerService.Logger.Debug("Language vector for {lang} not found in cache.", language.Name);
-                    languageVector = vectorBuilder.BuildLanguageVector(language.Sample);
+                    languageVector = languageVectorBuilder.BuildLanguageVector(language.Sample);
                     LoggerService.Logger.Debug("Language vector for {lang} generated.", language.Name);
-                    sampleRepository.SetLanguageVector(language, alphabet, languageVector);
+                    sampleRepository.AddLanguageVectorToCache(language, alphabet, languageVector);
                     LoggerService.Logger.Debug("Language vector for {lang} stored in cache.", language.Name);
                 }
                 else

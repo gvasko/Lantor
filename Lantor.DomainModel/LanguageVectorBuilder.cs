@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Lantor.DomainModel
 {
-    internal class LanguageVectorBuilder
+    internal class LanguageVectorBuilder : ILanguageVectorBuilder
     {
         private readonly Alphabet _alphabet;
 

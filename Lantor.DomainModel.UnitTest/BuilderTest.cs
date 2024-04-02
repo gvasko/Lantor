@@ -15,7 +15,7 @@ namespace Lantor.DomainModel.UnitTest
         [SetUp]
         public void SetUp()
         {
-            abc = new("Test", 512, new FakeVectorFactory());
+            abc = new("Test", FakeVectorFactory.DIM, new FakeVectorFactory());
             lvb = new(abc);
             //Console.WriteLine(abc.ToString());
         }

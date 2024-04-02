@@ -15,7 +15,7 @@ namespace Lantor.DomainModel
         public MultilingualSample(string name) 
         {
             Name = name;
-            Languages = new List<LanguageSample>();
+            Languages = [];
         }
     }
 }

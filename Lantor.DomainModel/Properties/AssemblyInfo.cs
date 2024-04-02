@@ -19,3 +19,4 @@ using System.Runtime.InteropServices;
 
 [assembly:InternalsVisibleTo("Lantor.Data")]
 [assembly:InternalsVisibleTo("Lantor.DomainModel.UnitTest")]
+[assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]
