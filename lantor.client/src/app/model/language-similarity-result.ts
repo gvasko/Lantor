@@ -7,4 +7,5 @@ export class LanguageSimilarityValue {
 export class LanguageSimilarityResult {
   similarityValues: Array<LanguageSimilarityValue> = [];
   durationMillisec: number = 0;
+  significantCount: number = 0;
 }

@@ -8,16 +8,20 @@
 
     public readonly struct LanguageSimilarityResult
     {
-        public LanguageSimilarityResult(LanguageSimilarityValue[] similarityValues, long duration)
+        public LanguageSimilarityResult(LanguageSimilarityValue[] similarityValues, long duration, int significantCount = 0)
         {
             var values = similarityValues;
             Array.Sort(values, (x, y) => x.Value < y.Value ? 1 : x.Value > y.Value ? -1 : 0);
 
             SimilarityValues = values;
             DurationMillisec = duration;
+            SignificantCount = significantCount;
         }
 
         public LanguageSimilarityValue[] SimilarityValues { get; init; }
+
         public long DurationMillisec { get; init; }
+
+        public int SignificantCount { get; init; }
     }
 }

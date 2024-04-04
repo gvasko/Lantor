@@ -32,7 +32,7 @@
           <th>Language Name</th>
           <th>Similarity Value</th>
         </tr>
-        <tr *ngFor="let res of result.similarityValues">
+        <tr *ngFor="let res of result.similarityValues; index as i" [ngClass]="{'significant': isSignificant(i)}">
           <td>{{res.name}}</td>
           <td>{{res.value}}</td>
         </tr>

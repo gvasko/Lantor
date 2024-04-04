@@ -24,6 +24,13 @@ export class LanguageDetectorComponent {
     return false;
   }
 
+  isSignificant(i: number): boolean {
+    if (!this.result) {
+      return false;
+    }
+    return i < this.result.significantCount;
+  }
+
   onClear() {
     this.text = "";
     this.result = null;

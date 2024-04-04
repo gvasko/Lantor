@@ -85,6 +85,11 @@ tr:hover {
     background-color: #ddd;
 }
 
+tr.significant {
+    font-size: larger;
+    font-weight: bold;
+}
+
 th {
     padding-top: 12px;
     padding-bottom: 12px;

@@ -104,9 +104,33 @@ namespace Lantor.DomainModel
             LoggerService.Logger.Debug("Detected in {elapsed} ms.", stopWatch.ElapsedMilliseconds);
 
 
-            return new LanguageSimilarityResult(similarityValues, stopWatch.ElapsedMilliseconds);
+            return new LanguageSimilarityResult(similarityValues, stopWatch.ElapsedMilliseconds, GetSignificantCount(similarityValues));
         }
 
+        private static int GetSignificantCount(LanguageSimilarityValue[] similarityValues)
+        {
+            double mean = 0.0;
+            foreach (var similarityValue in similarityValues)
+            {
+                mean += similarityValue.Value;
+            }
+            mean /= similarityValues.Length;
 
+            double stdDeviation = 0.0;
+            foreach (var similarityValue in similarityValues)
+            {
+                var diff = similarityValue.Value - mean;
+                stdDeviation += diff * diff;
+            }
+            stdDeviation = Math.Sqrt(stdDeviation / similarityValues.Length);
+
+            int count = 0;
+            foreach (var similarityValue in similarityValues)
+            {
+                if (similarityValue.Value - mean - stdDeviation > 0) count++;
+            }
+
+            return count;
+        }
     }
 }
