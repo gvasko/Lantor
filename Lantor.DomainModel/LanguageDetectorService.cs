@@ -53,7 +53,7 @@ namespace Lantor.DomainModel
                 };
             }
 
-            return new LanguageSimilarityResult(similarityValues);
+            return new LanguageSimilarityResult(similarityValues, 0);
         }
 
         /// <summary>
@@ -104,7 +104,7 @@ namespace Lantor.DomainModel
             LoggerService.Logger.Debug("Detected in {elapsed} ms.", stopWatch.ElapsedMilliseconds);
 
 
-            return new LanguageSimilarityResult(similarityValues);
+            return new LanguageSimilarityResult(similarityValues, stopWatch.ElapsedMilliseconds);
         }
 
 

@@ -48,6 +48,14 @@ textarea {
   padding: 5px;
 }
 
+.duration {
+  display: flex;
+  flex-flow: row;
+  justify-content: center;
+  gap: 4px;
+  padding: 5px;
+}
+
 .result-content {
   flex-grow: 1;
   min-width: 300px;

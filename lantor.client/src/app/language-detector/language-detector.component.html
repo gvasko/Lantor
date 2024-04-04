@@ -17,6 +17,9 @@
       <button type="button" (click)="onClear()" [disabled]="!buttonsEnabled">Clear</button>
       <button type="button" (click)="onDetect()" [disabled]="!buttonsEnabled">Detect</button>
     </div>
+    <div class="duration" *ngIf="!!result">
+      <p>Duration: {{result.durationMillisec}} ms</p>
+    </div>
   </div>
   <div class="result-content">
     <div class="result-table" *ngIf="!result">
