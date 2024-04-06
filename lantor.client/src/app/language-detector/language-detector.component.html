@@ -1,42 +1,52 @@
-<div class="main-content">
-  <div class="input-content">
-    <div class="lang-collection-selector" *ngIf="samplesSelectorEnabled">
-      <p>Using language collection</p>
-      <select disabled>
-        <option value="default">Default</option>
-      </select>
-    </div>
-    <div class="dimension" *ngIf="dimensionsEnabled">
-      <p>Dimension: {{ dimension }}</p>
-    </div>
-    <div class="sample-text">
-      <h3>Sample text</h3>
-      <textarea rows="20" [(ngModel)]="text"></textarea>
-    </div>
-    <div class="buttons">
-      <button type="button" (click)="onClear()" [disabled]="!buttonsEnabled">Clear</button>
-      <button type="button" (click)="onDetect()" [disabled]="!buttonsEnabled">Detect</button>
-    </div>
-    <div class="duration" *ngIf="!!result">
-      <p>Duration: {{result.durationMillisec}} ms</p>
-    </div>
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12 col-md-6">
+      <!--<div class="lang-collection-selector" *ngIf="samplesSelectorEnabled">
+    <p>Using language collection</p>
+    <select disabled>
+      <option value="default">Default</option>
+    </select>
   </div>
-  <div class="result-content">
-    <div class="result-table" *ngIf="!result">
-      <h3>No result</h3>
+  <div class="dimension" *ngIf="dimensionsEnabled">
+    <p>Dimension: {{ dimension }}</p>
+  </div>-->
+      <div class="mb-3 mt-3">
+        <h3>Sample text</h3>
+      </div>
+      <div class="mb-3">
+        <textarea class="form-control" rows="10" [(ngModel)]="text"></textarea>
+      </div>
+      <div class="mb-3">
+        <button type="button" class="btn btn-primary m-1" role="group" (click)="onDetect()" [disabled]="!buttonsEnabled">Detect</button>
+        <button type="button" class="btn btn-secondary m-1" role="group" (click)="onClear()" [disabled]="!buttonsEnabled">Clear</button>
+      </div>
+      <div class="mb-3 m-1" *ngIf="!!result">
+        <p>Duration: {{result.durationMillisec}} ms</p>
+      </div>
     </div>
-    <div class="result-table" *ngIf="result">
-      <h3>Results</h3>
-      <table>
-        <tr>
-          <th>Language Name</th>
-          <th>Similarity Value</th>
-        </tr>
-        <tr *ngFor="let res of result.similarityValues; index as i" [ngClass]="{'significant': isSignificant(i)}">
-          <td>{{res.name}}</td>
-          <td>{{res.value}}</td>
-        </tr>
-      </table>
+    <div class="col-sm-12 col-md-6">
+      <div class="mb-3 mt-3" *ngIf="!result">
+        <h3>No result</h3>
+      </div>
+      <div class="mb-3 mt-3" *ngIf="result">
+        <h3>Results</h3>
+      </div>
+      <div class="mb-3" *ngIf="result">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>Language Name</th>
+              <th>Similarity Value</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let res of result.similarityValues; index as i" [ngClass]="{'table-info significant': isSignificant(i)}">
+              <td>{{res.name}}</td>
+              <td>{{res.value}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </div>
