@@ -1,6 +1,6 @@
 <div class="container">
   <div class="row">
-    <div class="col-sm-12 col-md-6">
+    <div class="col-sm-12 col-md-8">
       <!--<div class="lang-collection-selector" *ngIf="samplesSelectorEnabled">
     <p>Using language collection</p>
     <select disabled>
@@ -14,7 +14,7 @@
         <h3>Sample text</h3>
       </div>
       <div class="mb-3">
-        <textarea class="form-control" rows="10" [(ngModel)]="text"></textarea>
+        <textarea class="form-control" rows="14" [(ngModel)]="text"></textarea>
       </div>
       <div class="mb-3">
         <button type="button" class="btn btn-primary m-1" role="group" (click)="onDetect()" [disabled]="!buttonsEnabled">Detect</button>
@@ -24,7 +24,7 @@
         <p>Duration: {{result.durationMillisec}} ms</p>
       </div>
     </div>
-    <div class="col-sm-12 col-md-6">
+    <div class="col-sm-12 col-md-4">
       <div class="mb-3 mt-3" *ngIf="!result">
         <h3>No result</h3>
       </div>
@@ -42,7 +42,7 @@
           <tbody>
             <tr *ngFor="let res of result.similarityValues; index as i" [ngClass]="{'table-info significant': isSignificant(i)}">
               <td>{{res.name}}</td>
-              <td>{{res.value}}</td>
+              <td>{{res.value | number: '1.4-4'}}</td>
             </tr>
           </tbody>
         </table>
