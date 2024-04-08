@@ -2,7 +2,7 @@
 
 Playing with language detection, using naive implementation of high-dimensional bipolar vectors.
 
-[A screenshot](screenshot.png)
+![A screenshot](screenshot.png)
 
 Background:
 - https://web.stanford.edu/class/ee380/Abstracts/171025-slides.pdf
