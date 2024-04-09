@@ -3,3 +3,7 @@ tr.significant {
     font-weight: 500;
     font-style: italic;
 }
+
+.language-dropdown {
+  min-width: 200px;
+}

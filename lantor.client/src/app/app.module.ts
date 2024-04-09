@@ -6,7 +6,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
 import { LanguageDetectorComponent } from './language-detector/language-detector.component';
 import { NavbarComponent } from './navbar/navbar.component';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDropdown, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { SpinnerComponent } from './spinner/spinner.component';
 import { LoadingInterceptor } from './services/loading.interceptor';
 import { CustomDetectorComponent } from './custom-detector/custom-detector.component';
@@ -14,6 +14,7 @@ import { LanguageAdminComponent } from './language-admin/language-admin.componen
 
 import { routes } from './app.routes';
 import { provideRouter, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { DefaultDetectorComponent } from './default-detector/default-detector.component';
 
 @NgModule({
   declarations: [
@@ -22,10 +23,11 @@ import { provideRouter, RouterLink, RouterLinkActive, RouterOutlet } from '@angu
     NavbarComponent,
     SpinnerComponent,
     CustomDetectorComponent,
-    LanguageAdminComponent
+    LanguageAdminComponent,
+    DefaultDetectorComponent
   ],
   imports: [
-    BrowserModule, HttpClientModule, FormsModule, NgbModule, RouterOutlet, RouterLink, RouterLinkActive
+    BrowserModule, HttpClientModule, FormsModule, NgbModule, NgbDropdown, RouterOutlet, RouterLink, RouterLinkActive
   ],
   providers: [
     {

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { LanguageSimilarityResult, LanguageSimilarityValue } from '../model/language-similarity-result';
 import { LanguageDetectorService } from '../services/language-detector.service';
 
@@ -8,20 +8,20 @@ import { LanguageDetectorService } from '../services/language-detector.service';
   styleUrls: ['./language-detector.component.css']
 })
 export class LanguageDetectorComponent {
+  @Input() selectionEnabled: boolean = false;
+
   dimension: number = 10;
   text: string = "";
   result: LanguageSimilarityResult | null = null;
+  languageSamples: string[] = ["Default", "Custom1"];
+  selectedSample: string = "Language Samples";
 
   constructor(private languageDetector: LanguageDetectorService) {
 
   }
 
-  get samplesSelectorEnabled(): boolean {
-    return false;
-  }
-
-  get dimensionsEnabled(): boolean {
-    return false;
+  onSampleSelect(selected: string) {
+    this.selectedSample = selected;
   }
 
   isSignificant(i: number): boolean {
