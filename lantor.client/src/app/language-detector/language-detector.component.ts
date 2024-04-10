@@ -1,5 +1,8 @@
 import { Component, Input } from '@angular/core';
+import { Observable } from 'rxjs';
+import { AlphabetListInfo } from '../model/alphabet-list-info';
 import { LanguageSimilarityResult, LanguageSimilarityValue } from '../model/language-similarity-result';
+import { MultilingualSampleListInfo } from '../model/multilingual-sample-list-info';
 import { LanguageDetectorService } from '../services/language-detector.service';
 
 @Component({
@@ -8,20 +11,35 @@ import { LanguageDetectorService } from '../services/language-detector.service';
   styleUrls: ['./language-detector.component.css']
 })
 export class LanguageDetectorComponent {
-  @Input() selectionEnabled: boolean = false;
+  @Input() detectorConfigurationEnabled: boolean = false;
 
-  dimension: number = 10;
   text: string = "";
   result: LanguageSimilarityResult | null = null;
-  languageSamples: string[] = ["Default", "Custom1"];
-  selectedSample: string = "Language Samples";
+  languageSamples: MultilingualSampleListInfo[] = [];
+  selectedSample: MultilingualSampleListInfo = new MultilingualSampleListInfo(0, "Language Samples", 0);
+  alphabets: AlphabetListInfo[] = [];
+  selectedAlphabet: AlphabetListInfo = new AlphabetListInfo(0, "Alphabets", 0);
 
   constructor(private languageDetector: LanguageDetectorService) {
 
   }
 
-  onSampleSelect(selected: string) {
+  ngOnInit() {
+    this.languageDetector.getMultilingualSamples().subscribe(s => {
+      this.languageSamples = s;
+    });
+
+    this.languageDetector.getAlphabets().subscribe(abc => {
+      this.alphabets = abc;
+    });
+  }
+
+  onSampleSelect(selected: MultilingualSampleListInfo) {
     this.selectedSample = selected;
+  }
+
+  onAlphabetSelect(selected: AlphabetListInfo) {
+    this.selectedAlphabet = selected;
   }
 
   isSignificant(i: number): boolean {
@@ -37,11 +55,28 @@ export class LanguageDetectorComponent {
   }
 
   get buttonsEnabled(): boolean {
-    return this.text !== "";
+    let enabled = true;
+    if (this.detectorConfigurationEnabled) {
+      enabled = this.selectedSample.id > 0 && this.selectedAlphabet.id > 0;
+    }
+    enabled = enabled && this.text !== ""
+    return enabled;
   }
 
   onDetect() {
-    this.languageDetector.calculateSimilarityValues(this.text).subscribe({
+    let result: Observable<LanguageSimilarityResult>;
+    if (this.detectorConfigurationEnabled) {
+      if (this.selectedSample.id === 0) {
+        throw "Invalid sample selection";
+      }
+      if (this.selectedAlphabet.id === 0) {
+        throw "Invalid alphabet selection";
+      }
+      result = this.languageDetector.calculateCustomSimilarityValues(this.text, this.selectedSample.id, this.selectedAlphabet.id);
+    } else {
+      result = this.languageDetector.calculateDefaultSimilarityValues(this.text);
+    }
+    result.subscribe({
       next: (result: LanguageSimilarityResult) => {
         this.result = result;
       },

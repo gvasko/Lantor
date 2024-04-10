@@ -4,21 +4,34 @@
       <div class="mb-3 mt-3">
         <h3>Sample text</h3>
       </div>
-      <div class="mb-3" *ngIf="selectionEnabled">
+      <div class="mb-3" *ngIf="detectorConfigurationEnabled">
         <div class="row">
           <div class="col">
             <div ngbDropdown class="d-inline-block">
-              <button type="button" class="btn btn-outline-primary language-dropdown" id="multilingualSample" ngbDropdownToggle>{{selectedSample}}</button>
+              <button type="button" class="btn btn-outline-primary language-dropdown" id="multilingualSample" ngbDropdownToggle>{{selectedSample.name}}</button>
               <div ngbDropdownMenu aria-labelledby="multilingualSample">
                 <button ngbDropdownItem
-                        *ngFor="let sampleName of languageSamples"
-                        (click)="onSampleSelect(sampleName)"
-                        >{{sampleName}}</button>
+                        *ngFor="let sample of languageSamples"
+                        (click)="onSampleSelect(sample)">
+                  {{sample.name}}
+                </button>
               </div>
             </div>
           </div>
           <div class="col">
-            <p>Dimensions: {{ dimension }}</p>
+            <div ngbDropdown class="d-inline-block">
+              <button type="button" class="btn btn-outline-primary language-dropdown" id="alphabet" ngbDropdownToggle>{{selectedAlphabet.name}}</button>
+              <div ngbDropdownMenu aria-labelledby="alphabet">
+                <button ngbDropdownItem
+                        *ngFor="let alphabet of alphabets"
+                        (click)="onAlphabetSelect(alphabet)">
+                  {{alphabet.name}}
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <p *ngIf="selectedAlphabet.dim > 0">Dimensions: {{ selectedAlphabet.dim }}</p>
           </div>
         </div>
       </div>
