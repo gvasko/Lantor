@@ -3,6 +3,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ConfirmationComponent } from '../confirmation/confirmation.component';
 import { AlphabetListInfo } from '../model/alphabet-list-info';
 import { MultilingualSampleListInfo } from '../model/multilingual-sample-list-info';
+import { SampleCollectionComponent } from '../sample-collection/sample-collection.component';
 import { LanguageDetectorService } from '../services/language-detector.service';
 
 @Component({
@@ -62,6 +63,8 @@ export class LanguageAdminComponent {
 
   onOpenSelectedSample() {
     console.log("Open sample");
+    let ref = this.modalService.open(SampleCollectionComponent);
+    ref.componentInstance.selectedSample = this.selectedSample;
 
   }
 
@@ -71,7 +74,7 @@ export class LanguageAdminComponent {
     ref.componentInstance.title = "Delete Sample";
     ref.componentInstance.messages = ["Would you like to delete the following sample:", this.selectedSample.name, "This cannot be undone."];
     ref.componentInstance.mainAction = () => {
-      console.log("DELETE");
+      console.log("DELETE SAMPLE");
     };
   }
 
@@ -81,5 +84,11 @@ export class LanguageAdminComponent {
 
   onDeleteSelectedAlphabet() {
     console.log("Delete aplhabet");
+    let ref = this.modalService.open(ConfirmationComponent);
+    ref.componentInstance.title = "Delete Alphabet";
+    ref.componentInstance.messages = ["Would you like to delete the following alphabet:", this.selectedAlphabet.name, "This cannot be undone."];
+    ref.componentInstance.mainAction = () => {
+      console.log("DELETE ALPHABET");
+    };
   }
 }

@@ -16,6 +16,7 @@ import { routes } from './app.routes';
 import { provideRouter, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { DefaultDetectorComponent } from './default-detector/default-detector.component';
 import { ConfirmationComponent } from './confirmation/confirmation.component';
+import { SampleCollectionComponent } from './sample-collection/sample-collection.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { ConfirmationComponent } from './confirmation/confirmation.component';
     CustomDetectorComponent,
     LanguageAdminComponent,
     DefaultDetectorComponent,
-    ConfirmationComponent
+    ConfirmationComponent,
+    SampleCollectionComponent
   ],
   imports: [
     BrowserModule, HttpClientModule, FormsModule, RouterOutlet, RouterLink, RouterLinkActive,
