@@ -6,7 +6,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
 import { LanguageDetectorComponent } from './language-detector/language-detector.component';
 import { NavbarComponent } from './navbar/navbar.component';
-import { NgbDropdown, NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDropdownModule, NgbModalModule, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { SpinnerComponent } from './spinner/spinner.component';
 import { LoadingInterceptor } from './services/loading.interceptor';
 import { CustomDetectorComponent } from './custom-detector/custom-detector.component';
@@ -15,6 +15,7 @@ import { LanguageAdminComponent } from './language-admin/language-admin.componen
 import { routes } from './app.routes';
 import { provideRouter, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { DefaultDetectorComponent } from './default-detector/default-detector.component';
+import { ConfirmationComponent } from './confirmation/confirmation.component';
 
 @NgModule({
   declarations: [
@@ -24,10 +25,12 @@ import { DefaultDetectorComponent } from './default-detector/default-detector.co
     SpinnerComponent,
     CustomDetectorComponent,
     LanguageAdminComponent,
-    DefaultDetectorComponent
+    DefaultDetectorComponent,
+    ConfirmationComponent
   ],
   imports: [
-    BrowserModule, HttpClientModule, FormsModule, NgbModule, NgbDropdown, RouterOutlet, RouterLink, RouterLinkActive
+    BrowserModule, HttpClientModule, FormsModule, RouterOutlet, RouterLink, RouterLinkActive,
+    NgbModule, NgbDropdownModule, NgbModalModule
   ],
   providers: [
     {

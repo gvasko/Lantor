@@ -1,0 +1,16 @@
+<div class="modal-header">
+  <h4 class="modal-title" id="modal-title">{{title}}</h4>
+  <button type="button"
+          class="btn-close"
+          aria-label="Close button"
+          aria-describedby="modal-title"
+          (click)="onClickCrossButton()"></button>
+</div>
+<div class="modal-body">
+  <p *ngFor="let message of messages">{{message}}</p>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-outline-primary" (click)="onClickMainButton()">{{mainButtonLabel}}</button>
+  <button type="button" class="btn btn-outline-secondary" (click)="onClickSecondaryButton()">{{secondaryButtonLabel}}</button>
+  <button type="button" ngbAutofocus class="btn btn-secondary" (click)="onClickCancelButton()">{{cancelButtonLabel}}</button>
+</div>

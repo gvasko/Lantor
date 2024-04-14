@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ConfirmationComponent } from '../confirmation/confirmation.component';
 import { AlphabetListInfo } from '../model/alphabet-list-info';
 import { MultilingualSampleListInfo } from '../model/multilingual-sample-list-info';
 import { LanguageDetectorService } from '../services/language-detector.service';
@@ -17,7 +19,7 @@ export class LanguageAdminComponent {
   nullAlphabet: AlphabetListInfo = new AlphabetListInfo(0, "Alphabets", 0);
   selectedAlphabet: AlphabetListInfo = this.nullAlphabet;
 
-  constructor(private languageDetector: LanguageDetectorService) {
+  constructor(private languageDetector: LanguageDetectorService, private modalService: NgbModal) {
   }
 
   ngOnInit() {
@@ -65,7 +67,12 @@ export class LanguageAdminComponent {
 
   onDeleteSelectedSample() {
     console.log("Delete sample");
-
+    let ref = this.modalService.open(ConfirmationComponent);
+    ref.componentInstance.title = "Delete Sample";
+    ref.componentInstance.messages = ["Would you like to delete the following sample:", this.selectedSample.name, "This cannot be undone."];
+    ref.componentInstance.mainAction = () => {
+      console.log("DELETE");
+    };
   }
 
   onCreateAlphabet() {
@@ -74,6 +81,5 @@ export class LanguageAdminComponent {
 
   onDeleteSelectedAlphabet() {
     console.log("Delete aplhabet");
-
   }
 }
