@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ConfirmationComponent } from '../confirmation/confirmation.component';
 import { AlphabetListInfo } from '../model/alphabet-list-info';
@@ -20,7 +21,7 @@ export class LanguageAdminComponent {
   nullAlphabet: AlphabetListInfo = new AlphabetListInfo(0, "Alphabets", 0);
   selectedAlphabet: AlphabetListInfo = this.nullAlphabet;
 
-  constructor(private languageDetector: LanguageDetectorService, private modalService: NgbModal) {
+  constructor(private languageDetector: LanguageDetectorService, private modalService: NgbModal, private router: Router) {
   }
 
   ngOnInit() {
@@ -63,8 +64,9 @@ export class LanguageAdminComponent {
 
   onOpenSelectedSample() {
     console.log("Open sample");
-    let ref = this.modalService.open(SampleCollectionComponent);
-    ref.componentInstance.selectedSample = this.selectedSample;
+    const newUrl = "/sample-editor/" + this.selectedSample.id;
+    this.router.navigateByUrl(newUrl);
+    //ref.componentInstance.selectedSampleId = this.selectedSample.id;
 
   }
 

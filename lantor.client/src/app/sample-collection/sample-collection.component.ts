@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ActivatedRoute, Router } from '@angular/router';
 import { LanguageSample } from '../model/language-sample';
 import { MultilingualSample } from '../model/multilingual-sample';
 import { MultilingualSampleListInfo } from '../model/multilingual-sample-list-info';
@@ -11,19 +11,20 @@ import { LanguageDetectorService } from '../services/language-detector.service';
   styleUrls: ['./sample-collection.component.css']
 })
 export class SampleCollectionComponent implements OnInit {
-  @Input() selectedSample: MultilingualSampleListInfo | null = null;
-
   public selectedLanguageSample: LanguageSample | null = null;
-  private languageSamples: MultilingualSample | null = null;
+  public languageSamples: MultilingualSample | null = null;
 
-  constructor(private languageDetector: LanguageDetectorService, private activeModal: NgbActiveModal) {
+  constructor(private languageDetector: LanguageDetectorService, private router: Router, private route: ActivatedRoute) {
 
   }
 
   ngOnInit() {
     this.languageDetector.getMultilingualSamples().subscribe(s => {
-      if (this.selectedSample !== null) {
-        this.languageDetector.getMultilingualSample(this.selectedSample.id).subscribe(s => {
+      const sampleIdParam = this.route.snapshot.paramMap.get("selectedSampleId");
+      const sampleId = sampleIdParam === null ? 0 : +sampleIdParam;
+
+      if (sampleId !== 0) {
+        this.languageDetector.getMultilingualSample(sampleId).subscribe(s => {
           this.languageSamples = s;
         });
       }
@@ -54,17 +55,19 @@ export class SampleCollectionComponent implements OnInit {
   }
 
   onClickSaveButton() {
-    this.activeModal.close('Save click');
+    this.closeComponent();
   }
 
   onClickCancelButton() {
-    this.activeModal.close('Cancel click');
-
+    this.closeComponent();
   }
 
   onClickCrossButton() {
-    this.activeModal.close('Cross-button click');
+    this.closeComponent();
+  }
 
+  private closeComponent() {
+    this.router.navigateByUrl("/language-admin");
   }
 
 }
