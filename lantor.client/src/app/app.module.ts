@@ -1,6 +1,6 @@
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
@@ -16,7 +16,8 @@ import { routes } from './app.routes';
 import { provideRouter, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { DefaultDetectorComponent } from './default-detector/default-detector.component';
 import { ConfirmationComponent } from './confirmation/confirmation.component';
-import { SampleCollectionComponent } from './sample-collection/sample-collection.component';
+import { LanguageSampleCollectionComponent } from './language-sample-collection/language-sample-collection.component';
+import { LanguageSampleComponent } from './language-sample/language-sample.component';
 
 @NgModule({
   declarations: [
@@ -28,11 +29,12 @@ import { SampleCollectionComponent } from './sample-collection/sample-collection
     LanguageAdminComponent,
     DefaultDetectorComponent,
     ConfirmationComponent,
-    SampleCollectionComponent
+    LanguageSampleCollectionComponent,
+    LanguageSampleComponent
   ],
   imports: [
     BrowserModule, HttpClientModule, FormsModule, RouterOutlet, RouterLink, RouterLinkActive,
-    NgbModule, NgbDropdownModule, NgbModalModule
+    NgbModule, NgbDropdownModule, NgbModalModule, ReactiveFormsModule
   ],
   providers: [
     {

@@ -47,7 +47,9 @@ export class LanguageDetectorService {
 
   getMultilingualSample(id: number): Observable<MultilingualSample | null> {
     let language1 = new LanguageSample(1, "English", "I am an Englishman in New York.");
-    let fakeData = new MultilingualSample(1, "Default", [language1]);
+    let language2 = new LanguageSample(2, "German", "I am an Englishman in New York.");
+    let language3 = new LanguageSample(3, "French", "I am an Englishman in New York.");
+    let fakeData = new MultilingualSample(1, "Default", [language1, language2, language3]);
     return of(fakeData);
   }
 }

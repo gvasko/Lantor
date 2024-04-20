@@ -1,0 +1,45 @@
+<div class="container">
+  <div class="row my-2">
+    <div class="d-flex">
+      <h3>Langauge Sample Collection Details</h3>
+      <button type="button" class="btn-close ms-auto" aria-label="Close button" aria-describedby="modal-title" (click)="onClickCrossButton()"></button>
+    </div>
+  </div>
+  <div class="row mb-5">
+    <form>
+      <section class="my-3">
+        <label for="collectionName" class="mb-1">Collection Name</label>
+        <input id="collectionName" type="text" class="form-control" placeholder="Enter collection name" />
+      </section>
+      <section class="my-3">
+        <label for="collectionComment" class="mb-1">Comment</label>
+        <input id="collectionComment" type="text" class="form-control" placeholder="Enter comment" />
+      </section>
+      <section class="my-3">
+        <button type="button" class="btn btn-primary me-3" (click)="saveCollectionDetails()">Save</button>
+        <button type="button" class="btn btn-secondary" (click)="cancelCollectionsDetails()">Cancel</button>
+      </section>
+    </form>
+  </div>
+  <div class="row mb-3">
+    <h4>Langauge Samples</h4>
+  </div>
+  <div class="row mb-3">
+    <div class="container">
+      <div class="row mb-2" *ngFor="let languageSample of getLanguages()">
+        <div class="col ms-3">
+          <p>{{languageSample.name}}</p>
+        </div>
+        <div class="col">
+          <button type="button" class="btn btn-outline-primary me-3" (click)="openLanguageSample(languageSample.id)">Open</button>
+          <button type="button" class="btn btn-outline-danger me-3" (click)="removeLanguageSample(languageSample.id)">Remove</button>
+        </div>
+      </div>
+      <div class="row mt-2">
+        <section>
+          <button type="button" class="btn btn-primary me-3" (click)="addNewLanguage()">Add New Language</button>
+        </section>
+      </div>
+    </div>
+  </div>
+</div>

@@ -4,7 +4,6 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ConfirmationComponent } from '../confirmation/confirmation.component';
 import { AlphabetListInfo } from '../model/alphabet-list-info';
 import { MultilingualSampleListInfo } from '../model/multilingual-sample-list-info';
-import { SampleCollectionComponent } from '../sample-collection/sample-collection.component';
 import { LanguageDetectorService } from '../services/language-detector.service';
 
 @Component({
@@ -64,9 +63,7 @@ export class LanguageAdminComponent {
 
   onOpenSelectedSample() {
     console.log("Open sample");
-    const newUrl = "/sample-editor/" + this.selectedSample.id;
-    this.router.navigateByUrl(newUrl);
-    //ref.componentInstance.selectedSampleId = this.selectedSample.id;
+    this.router.navigate(["/language-sample-collection", this.selectedSample.id]);
 
   }
 

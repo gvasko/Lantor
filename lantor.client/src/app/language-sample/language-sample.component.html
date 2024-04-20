@@ -1,0 +1,21 @@
+<div class="container">
+  <div class="row my-2">
+    <h3>Langauge Sample Details</h3>
+  </div>
+  <div class="row mb-5">
+    <form>
+      <section class="my-3">
+        <label for="languageName" class="mb-1">Language Name</label>
+        <input id="languageName" type="text" class="form-control" placeholder="Enter language name" />
+      </section>
+      <section class="my-3">
+        <label for="sampleText" class="mb-1">Comment</label>
+        <textarea id="sampleText" class="form-control" rows="5" placeholder="Enter language sample"></textarea>
+      </section>
+      <section class="my-3">
+        <button type="button" class="btn btn-primary me-3" (click)="saveLanguageSampleDetails()">Save</button>
+        <button type="button" class="btn btn-secondary" (click)="cancelLanguageSampleDetails()">Cancel</button>
+      </section>
+    </form>
+  </div>
+</div>
