@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { LanguageDetectorService } from '../services/language-detector.service';
+import { SampleRepositoryService } from '../services/sample-repository.service';
 
 @Component({
   selector: 'lantor-language-sample',
@@ -11,7 +12,14 @@ export class LanguageSampleComponent implements OnInit {
 
   private collectionId = 0;
   private languageId = 0;
-  constructor(private languageDetector: LanguageDetectorService, private router: Router, private route: ActivatedRoute) { }
+  public formGroup = new FormGroup({
+    id: new FormControl(0),
+    name: new FormControl(""),
+    sample: new FormControl("")
+  });
+
+
+  constructor(private sampleRepository: SampleRepositoryService, private router: Router, private route: ActivatedRoute) { }
 
   ngOnInit() {
     const collectionIdParam = this.route.snapshot.paramMap.get("id");
@@ -19,6 +27,14 @@ export class LanguageSampleComponent implements OnInit {
 
     const languageIdParam = this.route.snapshot.paramMap.get("languageId");
     this.languageId = languageIdParam === null ? 0 : +languageIdParam;
+
+    if (this.languageId > 0) {
+      this.sampleRepository.getLanguageSample(this.languageId).subscribe(ls => {
+        if (ls === null) return;
+        this.formGroup.setValue(ls);
+      });
+
+    }
 
   }
 

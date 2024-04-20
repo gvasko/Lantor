@@ -4,6 +4,7 @@ import { AlphabetListInfo } from '../model/alphabet-list-info';
 import { LanguageSimilarityResult, LanguageSimilarityValue } from '../model/language-similarity-result';
 import { MultilingualSampleListInfo } from '../model/multilingual-sample-list-info';
 import { LanguageDetectorService } from '../services/language-detector.service';
+import { SampleRepositoryService } from '../services/sample-repository.service';
 
 @Component({
   selector: 'lantor-language-detector',
@@ -20,16 +21,16 @@ export class LanguageDetectorComponent {
   alphabets: AlphabetListInfo[] = [];
   selectedAlphabet: AlphabetListInfo = new AlphabetListInfo(0, "Alphabets", 0);
 
-  constructor(private languageDetector: LanguageDetectorService) {
+  constructor(private languageDetector: LanguageDetectorService, private sampleRepository: SampleRepositoryService) {
 
   }
 
   ngOnInit() {
-    this.languageDetector.getMultilingualSamples().subscribe(s => {
+    this.sampleRepository.getMultilingualSamples().subscribe(s => {
       this.languageSamples = s;
     });
 
-    this.languageDetector.getAlphabets().subscribe(abc => {
+    this.sampleRepository.getAlphabets().subscribe(abc => {
       this.alphabets = abc;
     });
   }

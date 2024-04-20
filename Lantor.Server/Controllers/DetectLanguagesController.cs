@@ -17,7 +17,7 @@ namespace Lantor.Server.Controllers
         }
 
         [HttpPost(Name = "DetectLanguages")]
-        public LanguageSimilarityResult Post(LanguageDetectorRequest request)
+        public LanguageSimilarityResult Post(LanguageDetectorRequestDTO request)
         {
             if (request.Text == null)
             {

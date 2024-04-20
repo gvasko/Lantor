@@ -3,14 +3,14 @@
     <h3>Langauge Sample Details</h3>
   </div>
   <div class="row mb-5">
-    <form>
+    <form [formGroup]="formGroup">
       <section class="my-3">
         <label for="languageName" class="mb-1">Language Name</label>
-        <input id="languageName" type="text" class="form-control" placeholder="Enter language name" />
+        <input id="languageName" type="text" class="form-control" placeholder="Enter language name" formControlName="name"/>
       </section>
       <section class="my-3">
         <label for="sampleText" class="mb-1">Sample Text</label>
-        <textarea id="sampleText" class="form-control" rows="5" placeholder="Enter language sample"></textarea>
+        <textarea id="sampleText" class="form-control" rows="5" placeholder="Enter language sample" formControlName="sample"></textarea>
       </section>
       <section class="my-3">
         <button type="button" class="btn btn-primary me-3" (click)="saveLanguageSampleDetails()">Save</button>

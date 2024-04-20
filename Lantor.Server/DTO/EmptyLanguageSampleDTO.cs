@@ -1,0 +1,8 @@
+﻿namespace Lantor.Server.DTO
+{
+    public class EmptyLanguageSampleDTO
+    {
+        public int Id { get; set; }
+        public string? Name { get; set; }
+    }
+}

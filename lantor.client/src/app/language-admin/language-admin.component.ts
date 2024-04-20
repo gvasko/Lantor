@@ -4,7 +4,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ConfirmationComponent } from '../confirmation/confirmation.component';
 import { AlphabetListInfo } from '../model/alphabet-list-info';
 import { MultilingualSampleListInfo } from '../model/multilingual-sample-list-info';
-import { LanguageDetectorService } from '../services/language-detector.service';
+import { SampleRepositoryService } from '../services/sample-repository.service';
 
 @Component({
   selector: 'lantor-language-admin',
@@ -20,15 +20,15 @@ export class LanguageAdminComponent {
   nullAlphabet: AlphabetListInfo = new AlphabetListInfo(0, "Alphabets", 0);
   selectedAlphabet: AlphabetListInfo = this.nullAlphabet;
 
-  constructor(private languageDetector: LanguageDetectorService, private modalService: NgbModal, private router: Router) {
+  constructor(private sampleRepository: SampleRepositoryService, private modalService: NgbModal, private router: Router) {
   }
 
   ngOnInit() {
-    this.languageDetector.getMultilingualSamples().subscribe(s => {
+    this.sampleRepository.getMultilingualSamples().subscribe(s => {
       this.languageSamples = s;
     });
 
-    this.languageDetector.getAlphabets().subscribe(abc => {
+    this.sampleRepository.getAlphabets().subscribe(abc => {
       this.alphabets = abc;
     });
   }

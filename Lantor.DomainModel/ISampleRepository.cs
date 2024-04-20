@@ -12,5 +12,8 @@ namespace Lantor.DomainModel
         Alphabet GetDefaultAlphabet();
         HiDimBipolarVector? GetLanguageVectorFromCache(LanguageSample languageSample, Alphabet alphabet);
         void AddLanguageVectorToCache(LanguageSample languageSample, Alphabet alphabet, HiDimBipolarVector vector);
+        Task<IList<MultilingualSample>> GetAllMultilingualSamplesAsync();
+        Task<MultilingualSample?> GetMultilingualSampleAsync(int id);
+        Task<LanguageSample?> GetLanguageSampleAsync(int id);
     }
 }

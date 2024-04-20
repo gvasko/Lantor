@@ -41,5 +41,20 @@ namespace Lantor.Data.Infrastructure
             context.LanguageVectorCache.Add(new LanguageVectorCache(languageSample.Id, alphabet.Id, vector));
             context.SaveChanges();
         }
+
+        public async Task<IList<MultilingualSample>> GetAllMultilingualSamplesAsync()
+        {
+            return await context.MultilingualSamples.AsNoTracking().Include(mls => mls.Languages).ToListAsync();
+        }
+
+        public async Task<MultilingualSample?> GetMultilingualSampleAsync(int id)
+        {
+            return await context.MultilingualSamples.AsNoTracking().Include(mls => mls.Languages).Where(mls => mls.Id == id).FirstOrDefaultAsync();
+        }
+
+        public async Task<LanguageSample?> GetLanguageSampleAsync(int id)
+        {
+            return await context.LanguageSamples.AsNoTracking().Where(ls => ls.Id == id).FirstOrDefaultAsync();
+        }
     }
 }

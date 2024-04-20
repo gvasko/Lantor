@@ -2,6 +2,7 @@
 using Lantor.Data;
 using Lantor.Data.Infrastructure;
 using Lantor.DomainModel;
+using Lantor.Server.DTO;
 using Lantor.Server.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
@@ -27,6 +28,7 @@ namespace Lantor.Server
                 options.UseSqlServer(builder.Configuration.GetConnectionString("LantorDatabase")));
             builder.Services.AddScoped<ISampleRepository, SampleRepository>();
             builder.Services.AddScoped<ILanguageDetectorService, LanguageDetectorService>();
+            builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 
             var app = builder.Build();
 
