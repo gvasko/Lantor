@@ -17,7 +17,7 @@ export class LanguageDetectorComponent {
   text: string = "";
   result: LanguageSimilarityResult | null = null;
   languageSamples: MultilingualSampleListInfo[] = [];
-  selectedSample: MultilingualSampleListInfo = new MultilingualSampleListInfo(0, "Language Samples", 0);
+  selectedSample: MultilingualSampleListInfo = new MultilingualSampleListInfo(0, "Language Samples", "", 0);
   alphabets: AlphabetListInfo[] = [];
   selectedAlphabet: AlphabetListInfo = new AlphabetListInfo(0, "Alphabets", 0);
 

@@ -19,7 +19,7 @@ namespace Lantor.DomainModel.UnitTest
             LanguageSample ls2 = new("de", FakeSamples.SAMPLE_DE);
             LanguageSample ls3 = new("hu", FakeSamples.SAMPLE_HU);
 
-            _multiSample = new("test-multi");
+            _multiSample = new("test-multi", "some comment");
             _multiSample.Languages.Add(ls1);
             _multiSample.Languages.Add(ls2);
             _multiSample.Languages.Add(ls3);

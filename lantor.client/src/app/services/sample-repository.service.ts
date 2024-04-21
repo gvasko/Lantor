@@ -4,7 +4,6 @@ import { Observable, of } from 'rxjs';
 import { AlphabetListInfo } from '../model/alphabet-list-info';
 import { EmptyMultilingualSample } from '../model/empty-multilingual-sample';
 import { LanguageSample } from '../model/language-sample';
-import { MultilingualSample } from '../model/multilingual-sample';
 import { MultilingualSampleListInfo } from '../model/multilingual-sample-list-info';
 
 @Injectable({

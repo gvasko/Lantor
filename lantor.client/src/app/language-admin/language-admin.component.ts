@@ -13,7 +13,7 @@ import { SampleRepositoryService } from '../services/sample-repository.service';
 })
 export class LanguageAdminComponent {
   languageSamples: MultilingualSampleListInfo[] = [];
-  nullSample: MultilingualSampleListInfo = new MultilingualSampleListInfo(0, "Language Samples", 0);
+  nullSample: MultilingualSampleListInfo = new MultilingualSampleListInfo(0, "Language Samples", "", 0);
   selectedSample: MultilingualSampleListInfo = this.nullSample;
 
   alphabets: AlphabetListInfo[] = [];

@@ -18,7 +18,8 @@ export class LanguageSampleCollectionComponent implements OnInit {
   public formGroup = new FormGroup({
     id: new FormControl(0),
     name: new FormControl(""),
-    comment: new FormControl("")
+    comment: new FormControl(""),
+    languages: new FormControl()
   });
 
   constructor(private sampleRepository: SampleRepositoryService, private router: Router, private route: ActivatedRoute) { }
@@ -33,8 +34,7 @@ export class LanguageSampleCollectionComponent implements OnInit {
           if (s === null) return;
 
           this.languageSamples = s;
-          this.formGroup.controls.name.setValue(s.name);
-          this.formGroup.controls.comment.setValue("");
+          this.formGroup.setValue(s);
         });
       }
     });
