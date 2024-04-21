@@ -9,9 +9,10 @@ namespace Lantor.Server.DTO
         {
             CreateMap<MultilingualSample, MultilingualSampleListInfoDTO>()
                 .ForMember(dest => dest.LanguageCount, opt => opt.MapFrom(src => src.Languages.Count));
-            CreateMap<MultilingualSample, EmptyMultilingualSampleDTO>();
-            CreateMap<LanguageSample, EmptyLanguageSampleDTO>();
-            CreateMap<LanguageSample, LanguageSampleDTO>();
+            CreateMap<MultilingualSampleListInfoDTO, MultilingualSample>();
+            CreateMap<MultilingualSample, EmptyMultilingualSampleDTO>().ReverseMap();
+            CreateMap<LanguageSample, EmptyLanguageSampleDTO>().ReverseMap();
+            CreateMap<LanguageSample, LanguageSampleDTO>().ReverseMap();
         }
     }
 }

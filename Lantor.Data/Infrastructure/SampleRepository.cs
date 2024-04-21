@@ -56,5 +56,11 @@ namespace Lantor.Data.Infrastructure
         {
             return await context.LanguageSamples.AsNoTracking().Where(ls => ls.Id == id).FirstOrDefaultAsync();
         }
+
+        public async Task UpdateMultilingualSample(MultilingualSample updated)
+        {
+            context.MultilingualSamples.Update(updated);
+            await context.SaveChangesAsync();
+        }
     }
 }

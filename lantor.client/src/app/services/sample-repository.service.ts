@@ -34,4 +34,8 @@ export class SampleRepositoryService {
     return this.http.get<LanguageSample>(`/api/languagesample/${id}`);
   }
 
+  updateMultilingualSample(mls: EmptyMultilingualSample): Observable<void> {
+    return this.http.put<void>("/api/multilingualsample", mls);
+  }
+
 }

@@ -34,5 +34,13 @@ namespace Lantor.Server.Controllers
             var result = mapper.Map<EmptyMultilingualSampleDTO>(mls);
             return Ok(result);
         }
+
+        [HttpPut]
+        public async Task<IActionResult> Put(EmptyMultilingualSampleDTO updatedDTO)
+        {
+            var updatedDM = mapper.Map<MultilingualSample>(updatedDTO);
+            await sampleRepository.UpdateMultilingualSample(updatedDM);
+            return Ok();
+        }
     }
 }

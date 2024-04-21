@@ -1,9 +1,21 @@
 ﻿namespace Lantor.DomainModel
 {
-    public class LanguageSample(string name, string sample)
+    public class LanguageSample
     {
         public int Id { get; set; }
-        public string Name { get; set; } = name;
-        public string Sample { get; set; } = sample;
+        public string Name { get; set; }
+        public string Sample { get; set; }
+
+        public LanguageSample()
+        {
+            Name = "";
+            Sample = "";
+        }
+
+        public LanguageSample(string name, string sample)
+        {
+            Name = name;
+            Sample = sample;
+        }
     }
 }

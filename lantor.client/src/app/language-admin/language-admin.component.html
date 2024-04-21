@@ -9,7 +9,7 @@
           <thead>
             <tr>
               <th>Name</th>
-              <th>Number of languages</th>
+              <th>Languages</th>
               <th>Comment</th>
             </tr>
           </thead>
@@ -17,7 +17,7 @@
             <tr *ngFor="let sample of languageSamples" (click)="onSampleSelect(sample)" [ngClass]="{'table-info': isSelectedSample(sample)}">
               <td>{{sample.name}}</td>
               <td>{{sample.languageCount}}</td>
-              <td></td>
+              <td>{{sample.comment}}</td>
             </tr>
           </tbody>
         </table>

@@ -19,7 +19,7 @@ export class LanguageSampleCollectionComponent implements OnInit {
     id: new FormControl(0),
     name: new FormControl(""),
     comment: new FormControl(""),
-    languages: new FormControl()
+    languages: new FormControl<EmptyLanguageSample[]>([])
   });
 
   constructor(private sampleRepository: SampleRepositoryService, private router: Router, private route: ActivatedRoute) { }
@@ -45,7 +45,15 @@ export class LanguageSampleCollectionComponent implements OnInit {
   }
 
   saveCollectionDetails() {
-
+    const rawValue = this.formGroup.getRawValue();
+    if (rawValue.id === null || rawValue.name === null || rawValue.comment === null || rawValue.languages === null) {
+      console.log("Cannot update with null values.");
+      return;
+    }
+    const mls: EmptyMultilingualSample = rawValue as EmptyMultilingualSample;
+    this.sampleRepository.updateMultilingualSample(mls).subscribe(() => {
+      console.log("Updated successfully.");
+    });
   }
 
   cancelCollectionsDetails() {
