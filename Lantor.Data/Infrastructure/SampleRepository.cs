@@ -59,6 +59,8 @@ namespace Lantor.Data.Infrastructure
 
         public async Task UpdateMultilingualSample(MultilingualSample updated)
         {
+            // Do not update related objects
+            updated.Languages = [];
             context.MultilingualSamples.Update(updated);
             await context.SaveChangesAsync();
         }
