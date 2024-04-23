@@ -13,11 +13,8 @@ namespace Lantor.DomainModel
         public string Comment { get; set; }
         public List<LanguageSample> Languages { get; set; }
 
-        public MultilingualSample()
+        public MultilingualSample(): this("", "")
         {
-            Name = "";
-            Comment = "";
-            Languages = [];
         }
 
         public MultilingualSample(string name, string comment) 

@@ -38,4 +38,8 @@ export class SampleRepositoryService {
     return this.http.put<void>("/api/multilingualsample", mls);
   }
 
+  createMultilingualSample(mls: EmptyMultilingualSample): Observable<EmptyMultilingualSample> {
+    return this.http.post<EmptyMultilingualSample>("/api/multilingualsample", mls);
+  }
+
 }

@@ -6,10 +6,8 @@
         public string Name { get; set; }
         public string Sample { get; set; }
 
-        public LanguageSample()
+        public LanguageSample(): this("", "")
         {
-            Name = "";
-            Sample = "";
         }
 
         public LanguageSample(string name, string sample)

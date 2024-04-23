@@ -59,6 +59,7 @@ export class LanguageAdminComponent {
 
   onCreateSample() {
     console.log("Create sample");
+    this.router.navigate(["/language-sample-collection"]);
   }
 
   onOpenSelectedSample() {

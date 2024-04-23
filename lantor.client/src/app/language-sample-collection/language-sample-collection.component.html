@@ -48,7 +48,7 @@
       </div>
       <div class="row mt-2">
         <div>
-          <button type="button" class="btn btn-primary me-3" (click)="addNewLanguage()">Add New Language</button>
+          <button type="button" class="btn btn-primary me-3" (click)="addNewLanguage()" [disabled]="!addNewLanguageEnabled()">Add New Language</button>
         </div>
       </div>
     </div>

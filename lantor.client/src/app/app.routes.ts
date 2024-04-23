@@ -9,6 +9,7 @@ export const routes: Routes = [
   { path: 'default-detector', component: DefaultDetectorComponent },
   { path: 'custom-detector', component: CustomDetectorComponent },
   { path: 'language-admin', component: LanguageAdminComponent },
+  { path: 'language-sample-collection', component: LanguageSampleCollectionComponent },
   { path: 'language-sample-collection/:id', component: LanguageSampleCollectionComponent },
   { path: 'language-sample-collection/:id/language/:languageId', component: LanguageSampleComponent },
   { path: '', redirectTo: '/default-detector', pathMatch: 'full' }

@@ -16,5 +16,6 @@ namespace Lantor.DomainModel
         Task<MultilingualSample?> GetMultilingualSampleAsync(int id);
         Task<LanguageSample?> GetLanguageSampleAsync(int id);
         Task UpdateMultilingualSample(MultilingualSample updated);
+        Task<MultilingualSample> CreateMultilingualSample(MultilingualSample sample);
     }
 }

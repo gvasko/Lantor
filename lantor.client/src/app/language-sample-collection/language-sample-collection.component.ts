@@ -28,15 +28,16 @@ export class LanguageSampleCollectionComponent implements OnInit {
     const collectionIdParam = this.route.snapshot.paramMap.get("id");
     this.collectionId = collectionIdParam === null ? 0 : +collectionIdParam;
 
-    this.sampleRepository.getMultilingualSamples().subscribe(s => {
-      if (this.collectionId !== 0) {
-        this.sampleRepository.getMultilingualSample(this.collectionId).subscribe(s => {
-          if (s === null) return;
+    if (this.collectionId === 0)
+      return;
 
-          this.languageSamples = s;
-          this.formGroup.setValue(s);
-        });
-      }
+    this.sampleRepository.getMultilingualSamples().subscribe(s => {
+      this.sampleRepository.getMultilingualSample(this.collectionId).subscribe(s => {
+        if (s === null) return;
+
+        this.languageSamples = s;
+        this.formGroup.setValue(s);
+      });
     });
   }
 
@@ -51,9 +52,18 @@ export class LanguageSampleCollectionComponent implements OnInit {
       return;
     }
     const mls: EmptyMultilingualSample = rawValue as EmptyMultilingualSample;
-    this.sampleRepository.updateMultilingualSample(mls).subscribe(() => {
-      console.log("Updated successfully.");
-    });
+    if (mls.id === 0) {
+      this.sampleRepository.createMultilingualSample(mls).subscribe((newMls) => {
+        console.log("Created successfully.");
+        this.languageSamples = newMls;
+        this.formGroup.setValue(newMls);
+      });
+
+    } else {
+      this.sampleRepository.updateMultilingualSample(mls).subscribe(() => {
+        console.log("Updated successfully.");
+      });
+    }
   }
 
   cancelCollectionsDetails() {
@@ -71,6 +81,10 @@ export class LanguageSampleCollectionComponent implements OnInit {
 
   addNewLanguage() {
 
+  }
+
+  addNewLanguageEnabled(): boolean {
+    return this.languageSamples === null ? false : this.languageSamples.id !== 0;
   }
 
   onClickCrossButton() {

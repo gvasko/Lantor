@@ -64,5 +64,14 @@ namespace Lantor.Data.Infrastructure
             context.MultilingualSamples.Update(updated);
             await context.SaveChangesAsync();
         }
+
+        public async Task<MultilingualSample> CreateMultilingualSample(MultilingualSample sample)
+        {
+            sample.Id = 0;
+            sample.Languages = [];
+            var added = context.MultilingualSamples.Add(sample);
+            await context.SaveChangesAsync();
+            return added.Entity;
+        }
     }
 }
