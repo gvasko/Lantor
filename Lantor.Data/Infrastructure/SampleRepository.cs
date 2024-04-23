@@ -73,5 +73,23 @@ namespace Lantor.Data.Infrastructure
             await context.SaveChangesAsync();
             return added.Entity;
         }
+
+        public async Task UpdateLanguageSample(LanguageSample updated)
+        {
+            context.LanguageSamples.Update(updated);
+            await context.SaveChangesAsync();
+        }
+
+        public async Task<LanguageSample> CreateLanguageSample(LanguageSample sample)
+        {
+            if (sample.MultilingualSampleId == 0)
+            {
+                throw new Exception("Invalid language sample: no parent specified");
+            }
+            sample.Id = 0;
+            var added = context.Add(sample);
+            await context.SaveChangesAsync();
+            return added.Entity;
+        }
     }
 }

@@ -1,3 +1,9 @@
 export class LanguageSample {
-  constructor(public id: number, public name: string, public sample: string) { }
+  constructor(
+    public id: number,
+    public name: string,
+    public sample: string,
+    public multilingualSampleId: number
+  )
+  { }
 }

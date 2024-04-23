@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { LanguageSample } from '../model/language-sample';
 import { SampleRepositoryService } from '../services/sample-repository.service';
 
 @Component({
@@ -15,7 +16,8 @@ export class LanguageSampleComponent implements OnInit {
   public formGroup = new FormGroup({
     id: new FormControl(0),
     name: new FormControl(""),
-    sample: new FormControl("")
+    sample: new FormControl(""),
+    multilingualSampleId: new FormControl(0)
   });
 
 
@@ -33,13 +35,30 @@ export class LanguageSampleComponent implements OnInit {
         if (ls === null) return;
         this.formGroup.setValue(ls);
       });
-
+    } else {
+      this.formGroup.controls.multilingualSampleId.setValue(this.collectionId);
     }
 
   }
 
   saveLanguageSampleDetails() {
+    const rawValue = this.formGroup.getRawValue();
+    if (rawValue.id === null || rawValue.name === null || rawValue.sample === null || rawValue.multilingualSampleId === null) {
+      console.log("Cannot process with null values.");
+      return;
+    }
 
+    const ls: LanguageSample = rawValue as LanguageSample;
+    if (ls.id === 0) {
+      this.sampleRepository.createLanguageSample(ls).subscribe((newLs) => {
+        console.log("LanguageSample created successfully.");
+        this.formGroup.setValue(newLs);
+      })
+    } else {
+      this.sampleRepository.updateLanguageSample(ls).subscribe(() => {
+        console.log("LanguageSample updated successfully.");
+      });
+    }
   }
 
   cancelLanguageSampleDetails() {

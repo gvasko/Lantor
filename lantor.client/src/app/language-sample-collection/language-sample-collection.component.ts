@@ -48,20 +48,21 @@ export class LanguageSampleCollectionComponent implements OnInit {
   saveCollectionDetails() {
     const rawValue = this.formGroup.getRawValue();
     if (rawValue.id === null || rawValue.name === null || rawValue.comment === null || rawValue.languages === null) {
-      console.log("Cannot update with null values.");
+      console.log("Cannot process with null values.");
       return;
     }
+
     const mls: EmptyMultilingualSample = rawValue as EmptyMultilingualSample;
     if (mls.id === 0) {
       this.sampleRepository.createMultilingualSample(mls).subscribe((newMls) => {
-        console.log("Created successfully.");
+        console.log("MultilingualSample created successfully.");
         this.languageSamples = newMls;
         this.formGroup.setValue(newMls);
       });
 
     } else {
       this.sampleRepository.updateMultilingualSample(mls).subscribe(() => {
-        console.log("Updated successfully.");
+        console.log("MultilingualSample updated successfully.");
       });
     }
   }
@@ -72,7 +73,6 @@ export class LanguageSampleCollectionComponent implements OnInit {
 
   openLanguageSample(id: number) {
     this.router.navigate(["/language-sample-collection", this.collectionId, 'language', id]);
-
   }
 
   removeLanguageSample(id: number) {
@@ -80,7 +80,7 @@ export class LanguageSampleCollectionComponent implements OnInit {
   }
 
   addNewLanguage() {
-
+    this.router.navigate(["/language-sample-collection", this.collectionId, 'language']);
   }
 
   addNewLanguageEnabled(): boolean {

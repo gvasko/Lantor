@@ -5,6 +5,7 @@
         public int Id { get; set; }
         public string Name { get; set; }
         public string Sample { get; set; }
+        public int MultilingualSampleId { get; set; }
 
         public LanguageSample(): this("", "")
         {

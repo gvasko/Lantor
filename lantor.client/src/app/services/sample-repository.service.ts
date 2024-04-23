@@ -30,16 +30,24 @@ export class SampleRepositoryService {
     return this.http.get<EmptyMultilingualSample>(`/api/multilingualsample/${id}`);
   }
 
-  getLanguageSample(id: number): Observable<LanguageSample | null> {
-    return this.http.get<LanguageSample>(`/api/languagesample/${id}`);
-  }
-
   updateMultilingualSample(mls: EmptyMultilingualSample): Observable<void> {
     return this.http.put<void>("/api/multilingualsample", mls);
   }
 
   createMultilingualSample(mls: EmptyMultilingualSample): Observable<EmptyMultilingualSample> {
     return this.http.post<EmptyMultilingualSample>("/api/multilingualsample", mls);
+  }
+
+  getLanguageSample(id: number): Observable<LanguageSample | null> {
+    return this.http.get<LanguageSample>(`/api/languagesample/${id}`);
+  }
+
+  updateLanguageSample(ls: LanguageSample): Observable<void> {
+    return this.http.put<void>("/api/languagesample", ls);
+  }
+
+  createLanguageSample(ls: LanguageSample): Observable<LanguageSample> {
+    return this.http.post<LanguageSample>("/api/languagesample", ls);
   }
 
 }

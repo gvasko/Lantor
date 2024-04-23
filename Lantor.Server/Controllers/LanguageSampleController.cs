@@ -27,5 +27,23 @@ namespace Lantor.Server.Controllers
             var result = mapper.Map<LanguageSampleDTO>(mls);
             return Ok(result);
         }
+
+        [HttpPut]
+        public async Task<IActionResult> Update(LanguageSampleDTO updatedDTO)
+        {
+            var updatedDM = mapper.Map<LanguageSample>(updatedDTO);
+            await sampleRepository.UpdateLanguageSample(updatedDM);
+            return Ok();
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<LanguageSampleDTO>> Create(LanguageSampleDTO newDTO)
+        {
+            var newDM = mapper.Map<LanguageSample>(newDTO);
+            var newEntity = await sampleRepository.CreateLanguageSample(newDM);
+            var newEntityDTO = mapper.Map<LanguageSampleDTO>(newEntity);
+            return Ok(newEntityDTO);
+        }
+
     }
 }
