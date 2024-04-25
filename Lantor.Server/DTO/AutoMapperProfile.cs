@@ -13,6 +13,8 @@ namespace Lantor.Server.DTO
             CreateMap<MultilingualSample, EmptyMultilingualSampleDTO>().ReverseMap();
             CreateMap<LanguageSample, EmptyLanguageSampleDTO>().ReverseMap();
             CreateMap<LanguageSample, LanguageSampleDTO>().ReverseMap();
+            CreateMap<Alphabet, AlphabetListInfoDTO>().ForMember(dest => dest.Dim, opt => opt.MapFrom(src => src.Dim));
+            CreateMap<AlphabetListInfoDTO, Alphabet>();
         }
     }
 }

@@ -19,5 +19,6 @@ namespace Lantor.DomainModel
         Task<LanguageSample?> GetLanguageSampleAsync(int id);
         Task UpdateLanguageSample(LanguageSample updated);
         Task<LanguageSample> CreateLanguageSample(LanguageSample sample);
+        IList<Alphabet> GetAllAlphabets();
     }
 }

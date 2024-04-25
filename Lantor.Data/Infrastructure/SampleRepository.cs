@@ -91,5 +91,10 @@ namespace Lantor.Data.Infrastructure
             await context.SaveChangesAsync();
             return added.Entity;
         }
+
+        public IList<Alphabet> GetAllAlphabets()
+        {
+            return context.Alphabets.AsNoTracking().ToList();
+        }
     }
 }

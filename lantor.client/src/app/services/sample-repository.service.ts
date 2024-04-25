@@ -18,12 +18,7 @@ export class SampleRepositoryService {
   }
 
   getAlphabets(): Observable<AlphabetListInfo[]> {
-    let fakeData = [
-      new AlphabetListInfo(1, "Default", 500),
-      new AlphabetListInfo(2, "Medium", 5000),
-      new AlphabetListInfo(3, "Large", 10000)
-    ];
-    return of(fakeData);
+    return this.http.get<AlphabetListInfo[]>('/api/alphabet');
   }
 
   getMultilingualSample(id: number): Observable<EmptyMultilingualSample | null> {
