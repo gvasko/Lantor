@@ -1,0 +1,21 @@
+<div class="modal-header">
+  <h4 class="modal-title" id="modal-title">Create New Alphabet</h4>
+  <button type="button"
+          class="btn-close"
+          aria-label="Close button"
+          aria-describedby="modal-title"
+          (click)="onClickCrossButton()"></button>
+</div>
+<div class="modal-body">
+  <p>What vector size should vectors have in the alphabet?</p>
+  <section class="my-3">
+    <label for="dimension" class="mb-1">Dimension</label>
+    <input id="dimension" type="number" class="form-control" placeholder="500-20000" [(ngModel)]="dimension" (ngModelChange)="dimChanged($event)"/>
+    <p class="mt-3">Adjusted dimension: {{adjustedDimension}}</p>
+  </section>
+
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-primary" (click)="onClickCreateButton()">Create</button>
+  <button type="button" ngbAutofocus class="btn btn-secondary" (click)="onClickCancelButton()">Cancel</button>
+</div>

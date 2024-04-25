@@ -1,3 +1,4 @@
 export enum ConfirmationType {
-  YesNoCancel = 1
+  YesNo = 1,
+  YesNoCancel = 2
 }

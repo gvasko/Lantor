@@ -18,6 +18,7 @@ import { DefaultDetectorComponent } from './default-detector/default-detector.co
 import { ConfirmationComponent } from './confirmation/confirmation.component';
 import { LanguageSampleCollectionComponent } from './language-sample-collection/language-sample-collection.component';
 import { LanguageSampleComponent } from './language-sample/language-sample.component';
+import { CreateAlphabetComponent } from './create-alphabet/create-alphabet.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { LanguageSampleComponent } from './language-sample/language-sample.compo
     DefaultDetectorComponent,
     ConfirmationComponent,
     LanguageSampleCollectionComponent,
-    LanguageSampleComponent
+    LanguageSampleComponent,
+    CreateAlphabetComponent
   ],
   imports: [
     BrowserModule, HttpClientModule, FormsModule, RouterOutlet, RouterLink, RouterLinkActive,

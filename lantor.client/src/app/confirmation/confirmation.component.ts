@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { ConfirmationAction } from './confirmation-action';
+import { Action } from '../services/action';
 import { ConfirmationType } from './confirmation-type';
 
 @Component({
@@ -13,9 +13,9 @@ export class ConfirmationComponent implements OnInit {
   @Input() public title: string = "";
   @Input() public messages: string[] = [ "" ];
   @Input() public confirmationType: ConfirmationType = ConfirmationType.YesNoCancel;
-  @Input() public mainAction: ConfirmationAction | null = null;
-  @Input() public secondaryAction: ConfirmationAction | null = null;
-  @Input() public cancelAction: ConfirmationAction | null = null;
+  @Input() public mainAction: Action | null = null;
+  @Input() public secondaryAction: Action | null = null;
+  @Input() public cancelAction: Action | null = null;
 
   public mainButtonLabel: string = "Main";
   public secondaryButtonLabel: string = "Secondary";
@@ -27,6 +27,7 @@ export class ConfirmationComponent implements OnInit {
 
   ngOnInit() {
     switch (this.confirmationType) {
+      case ConfirmationType.YesNo:
       case ConfirmationType.YesNoCancel: {
         this.mainButtonLabel = "Yes";
         this.secondaryButtonLabel = "No";
@@ -66,6 +67,10 @@ export class ConfirmationComponent implements OnInit {
     if (this.cancelAction !== null) {
       this.cancelAction();
     }
+  }
+
+  cancelButtonAllowed(): boolean {
+    return this.confirmationType === ConfirmationType.YesNoCancel;
   }
 
 }

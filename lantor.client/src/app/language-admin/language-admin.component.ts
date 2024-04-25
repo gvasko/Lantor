@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ConfirmationType } from '../confirmation/confirmation-type';
 import { ConfirmationComponent } from '../confirmation/confirmation.component';
+import { CreateAlphabetComponent } from '../create-alphabet/create-alphabet.component';
 import { AlphabetListInfo } from '../model/alphabet-list-info';
 import { MultilingualSampleListInfo } from '../model/multilingual-sample-list-info';
 import { SampleRepositoryService } from '../services/sample-repository.service';
@@ -73,13 +75,17 @@ export class LanguageAdminComponent {
     let ref = this.modalService.open(ConfirmationComponent);
     ref.componentInstance.title = "Delete Sample";
     ref.componentInstance.messages = ["Would you like to delete the following sample:", this.selectedSample.name, "This cannot be undone."];
+    ref.componentInstance.confirmationType = ConfirmationType.YesNo;
     ref.componentInstance.mainAction = () => {
       console.log("DELETE SAMPLE");
     };
   }
 
   onCreateAlphabet() {
-    console.log("Create alphabet");
+    let ref = this.modalService.open(CreateAlphabetComponent);
+    ref.componentInstance.createAction = (dim: number) => {
+      console.log("CREATE ALPHABET with dim = " + dim);
+    };
   }
 
   onDeleteSelectedAlphabet() {
@@ -87,6 +93,7 @@ export class LanguageAdminComponent {
     let ref = this.modalService.open(ConfirmationComponent);
     ref.componentInstance.title = "Delete Alphabet";
     ref.componentInstance.messages = ["Would you like to delete the following alphabet:", this.selectedAlphabet.name, "This cannot be undone."];
+    ref.componentInstance.confirmationType = ConfirmationType.YesNo;
     ref.componentInstance.mainAction = () => {
       console.log("DELETE ALPHABET");
     };
