@@ -25,7 +25,13 @@ namespace Lantor.Server.Controllers
             }
             else
             {
-                return languageDetectorService.Detect(request.Text);
+                if (request.SampleId == 0 || request.AlphabetId == 0)
+                {
+                    return languageDetectorService.Detect(request.Text);
+                } else
+                {
+                    return languageDetectorService.Detect(request.SampleId, request.AlphabetId, request.Text);
+                }
             }
         }
     }

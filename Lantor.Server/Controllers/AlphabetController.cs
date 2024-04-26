@@ -27,5 +27,17 @@ namespace Lantor.Server.Controllers
             return Ok(result);
         }
 
+        [HttpPost]
+        public async Task<ActionResult<AlphabetListInfoDTO>> Create(AlphabetListInfoDTO newDTO)
+        {
+            if (string.IsNullOrEmpty(newDTO.Name))
+            {
+                return BadRequest("Alphabet name cannot be null or empty");
+            }
+            var newEntity = await sampleRepository.CreateAlphabet(newDTO.Name, newDTO.Dim);
+            var newEntityDTO = mapper.Map<AlphabetListInfoDTO>(newEntity);
+            return Ok(newEntityDTO);
+        }
+
     }
 }

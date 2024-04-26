@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Lantor.DomainModel
 {
-    internal interface ILanguageVectorBuilder
+    public interface ILanguageVectorBuilder
     {
-        HiDimBipolarVector BuildLanguageVector(string sample);
+        HiDimBipolarVector BuildLanguageVector(Alphabet alphabet, string sample);
     }
 }

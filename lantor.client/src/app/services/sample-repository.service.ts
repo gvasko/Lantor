@@ -13,12 +13,16 @@ export class SampleRepositoryService {
 
   constructor(private http: HttpClient) { }
 
-  getMultilingualSamples(): Observable<MultilingualSampleListInfo[]> {
-    return this.http.get<MultilingualSampleListInfo[]>('/api/multilingualsample');
-  }
-
   getAlphabets(): Observable<AlphabetListInfo[]> {
     return this.http.get<AlphabetListInfo[]>('/api/alphabet');
+  }
+
+  createAlphabet(name: string, dim: number): Observable<AlphabetListInfo> {
+    return this.http.post<AlphabetListInfo>('/api/alphabet', new AlphabetListInfo(0, name, dim));
+  }
+
+  getMultilingualSamples(): Observable<MultilingualSampleListInfo[]> {
+    return this.http.get<MultilingualSampleListInfo[]>('/api/multilingualsample');
   }
 
   getMultilingualSample(id: number): Observable<EmptyMultilingualSample | null> {

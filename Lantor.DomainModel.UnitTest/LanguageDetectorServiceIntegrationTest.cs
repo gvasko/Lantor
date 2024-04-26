@@ -30,7 +30,8 @@ namespace Lantor.DomainModel.UnitTest
             _sampleRepo.Setup(sr => sr.GetDefaultAlphabet()).Returns(abc);
             _sampleRepo.Setup(sr => sr.GetDefaultSamples()).Returns(_multiSample);
 
-            _sut = new LanguageDetectorService(_sampleRepo.Object);
+            // TODO: why the new?
+            _sut = new LanguageDetectorService(_sampleRepo.Object, new LanguageVectorBuilder());
         }
 
         [Test]

@@ -30,13 +30,13 @@ namespace Lantor.DomainModel.UnitTest
 
             _vectorBuilderMock = new Mock<ILanguageVectorBuilder>();
             var randomLangVector1 = HiDimBipolarVector.CreateRandomVector(FakeVectorFactory.DIM);
-            _vectorBuilderMock.Setup(vb => vb.BuildLanguageVector(It.Is((string s) => s == ls1.Sample))).Returns(randomLangVector1);
+            _vectorBuilderMock.Setup(vb => vb.BuildLanguageVector(It.IsAny<Alphabet>(), It.Is((string s) => s == ls1.Sample))).Returns(randomLangVector1);
             var randomLangVector2 = HiDimBipolarVector.CreateRandomVector(FakeVectorFactory.DIM);
-            _vectorBuilderMock.Setup(vb => vb.BuildLanguageVector(It.Is((string s) => s == ls2.Sample))).Returns(randomLangVector2);
+            _vectorBuilderMock.Setup(vb => vb.BuildLanguageVector(It.IsAny<Alphabet>(), It.Is((string s) => s == ls2.Sample))).Returns(randomLangVector2);
             var randomLangVector3 = HiDimBipolarVector.CreateRandomVector(FakeVectorFactory.DIM);
-            _vectorBuilderMock.Setup(vb => vb.BuildLanguageVector(It.Is((string s) => s == ls3.Sample))).Returns(randomLangVector3);
+            _vectorBuilderMock.Setup(vb => vb.BuildLanguageVector(It.IsAny<Alphabet>(), It.Is((string s) => s == ls3.Sample))).Returns(randomLangVector3);
             var randomLangVector4 = HiDimBipolarVector.CreateRandomVector(FakeVectorFactory.DIM);
-            _vectorBuilderMock.Setup(vb => vb.BuildLanguageVector(It.IsAny<string>())).Returns(randomLangVector4);
+            _vectorBuilderMock.Setup(vb => vb.BuildLanguageVector(It.IsAny<Alphabet>(), It.IsAny<string>())).Returns(randomLangVector4);
 
             _sampleRepo = new Mock<ISampleRepository>();
             _sampleRepo.Setup(sr => sr.GetDefaultAlphabet()).Returns(abc);
@@ -56,8 +56,8 @@ namespace Lantor.DomainModel.UnitTest
         {
             var result = _sut.Detect("Lorem ipsum.");
             _sampleRepo.Verify(sr => sr.GetLanguageVectorFromCache(It.IsAny<LanguageSample>(), It.IsAny<Alphabet>()), Times.Exactly(_multiSample.Languages.Count));
-            _vectorBuilderMock.Verify(vb => vb.BuildLanguageVector(It.IsAny<string>()), Times.Exactly(2));
-            _vectorBuilderMock.Verify(vb => vb.BuildLanguageVector(It.Is<string>(s => s == FakeSamples.SAMPLE_HU)), Times.Once);
+            _vectorBuilderMock.Verify(vb => vb.BuildLanguageVector(It.IsAny<Alphabet>(), It.IsAny<string>()), Times.Exactly(2));
+            _vectorBuilderMock.Verify(vb => vb.BuildLanguageVector(It.IsAny<Alphabet>(), It.Is<string>(s => s == FakeSamples.SAMPLE_HU)), Times.Once);
             _sampleRepo.Verify(sr => sr.AddLanguageVectorToCache(It.Is<LanguageSample>(s => s.Sample == FakeSamples.SAMPLE_HU), It.IsAny<Alphabet>(), It.IsAny<HiDimBipolarVector>()), Times.Once);
         }
 

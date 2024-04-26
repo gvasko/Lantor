@@ -16,7 +16,7 @@ namespace Lantor.DomainModel.UnitTest
         public void SetUp()
         {
             abc = new("Test", FakeVectorFactory.DIM, new FakeVectorFactory());
-            lvb = new(abc);
+            lvb = new();
             //Console.WriteLine(abc.ToString());
         }
 
@@ -54,8 +54,8 @@ namespace Lantor.DomainModel.UnitTest
         public void WhenTestTheSameSamples_ThenItGivesHighestSimilarity()
         {
             var loremIpsum = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.";
-            var v1 = lvb.BuildLanguageVector(loremIpsum);
-            var v2 = lvb.BuildLanguageVector(loremIpsum);
+            var v1 = lvb.BuildLanguageVector(abc, loremIpsum);
+            var v2 = lvb.BuildLanguageVector(abc, loremIpsum);
             var eps = 0.001;
             var similarity = v1.Similarity(v2);
             Assert.That(similarity, Is.EqualTo(1.0).Within(eps));
@@ -66,8 +66,8 @@ namespace Lantor.DomainModel.UnitTest
         {
             var loremIpsum1 = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
             var loremIpsum2 = "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
-            var v1 = lvb.BuildLanguageVector(loremIpsum1);
-            var v2 = lvb.BuildLanguageVector(loremIpsum2);
+            var v1 = lvb.BuildLanguageVector(abc, loremIpsum1);
+            var v2 = lvb.BuildLanguageVector(abc, loremIpsum2);
             var eps = 0.01;
             var similarity = v1.Similarity(v2);
             Assert.That(similarity, Is.EqualTo(0.57).Within(eps));
@@ -78,8 +78,8 @@ namespace Lantor.DomainModel.UnitTest
         {
             var loremIpsum = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
             var differentSample = "A Vadászat a vadász számára egyrészt alkalom a szigorú önfegyelem gyakorlására, másrészt eszköz a többi élőlény megismeréséhez és megértéséhez.";
-            var v1 = lvb.BuildLanguageVector(loremIpsum);
-            var v2 = lvb.BuildLanguageVector(differentSample);
+            var v1 = lvb.BuildLanguageVector(abc, loremIpsum);
+            var v2 = lvb.BuildLanguageVector(abc, differentSample);
             var eps = 0.1;
             var similarity = v1.Similarity(v2);
             Assert.That(similarity, Is.EqualTo(0.1).Within(eps));

@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { AlphabetListInfo } from '../model/alphabet-list-info';
 import { ActionT } from '../services/action';
 
 @Component({
@@ -8,10 +9,11 @@ import { ActionT } from '../services/action';
   styleUrls: ['./create-alphabet.component.css']
 })
 export class CreateAlphabetComponent {
-  @Input() public createAction: ActionT<number> | null = null;
+  @Input() public createAction: ActionT<AlphabetListInfo> | null = null;
 
   dimension: number | null = null;
   adjustedDimension: number | null = null;
+  alphabetName: string | null = null;
 
   constructor(private activeModal: NgbActiveModal) {
 
@@ -24,11 +26,19 @@ export class CreateAlphabetComponent {
     this.adjustedDimension = Math.floor(this.dimension / 32) * 32 + additional32;
   }
 
+  nameChanged(event: any) {
+
+  }
+
   onClickCreateButton() {
     this.activeModal.close('Create click')
-    if (this.createAction !== null) {
-      this.createAction(this.adjustedDimension ?? 0);
+    if (this.createAction !== null && this.createEnabled()) {
+      this.createAction(new AlphabetListInfo(0, this.alphabetName!, this.adjustedDimension!));
     }
+  }
+
+  createEnabled(): boolean {
+    return this.alphabetName !== null && this.adjustedDimension !== null;
   }
 
   onClickCancelButton() {

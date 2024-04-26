@@ -8,16 +8,13 @@ using System.Threading.Tasks;
 
 namespace Lantor.DomainModel
 {
-    internal class LanguageVectorBuilder : ILanguageVectorBuilder
+    public class LanguageVectorBuilder : ILanguageVectorBuilder
     {
-        private readonly Alphabet _alphabet;
-
-        public LanguageVectorBuilder(Alphabet alphabet)
+        public LanguageVectorBuilder()
         {
-            _alphabet = alphabet;
         }
 
-        public HiDimBipolarVector BuildLanguageVector(string sample)
+        public HiDimBipolarVector BuildLanguageVector(Alphabet alphabet, string sample)
         {
             string asciiSample = Normalize(sample);
 
@@ -28,14 +25,14 @@ namespace Lantor.DomainModel
 
             var steps = asciiSample.Length - 2;
 
-            var sumBuilder = new HiDimBipolarSumBuilder(_alphabet.Dim);
+            var sumBuilder = new HiDimBipolarSumBuilder(alphabet.Dim);
 
             for (int i = 0; i < steps; i++)
             {
                 var tri = asciiSample.Substring(i, 3);
-                var c0 = _alphabet.GetVectorForLetter(tri[0]);
-                var c1 = _alphabet.GetVectorForLetter(tri[1]);
-                var c2 = _alphabet.GetVectorForLetter(tri[2]);
+                var c0 = alphabet.GetVectorForLetter(tri[0]);
+                var c1 = alphabet.GetVectorForLetter(tri[1]);
+                var c2 = alphabet.GetVectorForLetter(tri[2]);
                 var pc0 = c0.Permute().Permute();
                 var pc1 = c1.Permute();
                 var pc2 = c2;

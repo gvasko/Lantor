@@ -25,6 +25,11 @@ namespace Lantor.Data.Infrastructure
             return context.Alphabets.AsNoTracking().First(a => a.Name == "Default");
         }
 
+        public Alphabet GetAlphabet(int id)
+        {
+            return context.Alphabets.AsNoTracking().First(a => a.Id == id);
+        }
+
         public MultilingualSample GetDefaultSamples()
         {
             return context.MultilingualSamples.AsNoTracking().Include(ms => ms.Languages).First(s => s.Name == "Default");
@@ -95,6 +100,14 @@ namespace Lantor.Data.Infrastructure
         public IList<Alphabet> GetAllAlphabets()
         {
             return context.Alphabets.AsNoTracking().ToList();
+        }
+
+        public async Task<Alphabet> CreateAlphabet(string name, int dim)
+        {
+            var abc = new Alphabet(name, dim, new RandomVectorFactory());
+            var added = context.Alphabets.Add(abc);
+            await context.SaveChangesAsync();
+            return added.Entity;
         }
     }
 }

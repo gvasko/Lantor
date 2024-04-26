@@ -83,8 +83,10 @@ export class LanguageAdminComponent {
 
   onCreateAlphabet() {
     let ref = this.modalService.open(CreateAlphabetComponent);
-    ref.componentInstance.createAction = (dim: number) => {
-      console.log("CREATE ALPHABET with dim = " + dim);
+    ref.componentInstance.createAction = (abc: AlphabetListInfo) => {
+      this.sampleRepository.createAlphabet(abc.name, abc.dim).subscribe((newAlphabet: AlphabetListInfo) => {
+        this.alphabets.push(newAlphabet);
+      });
     };
   }
 
