@@ -51,6 +51,7 @@
       </div>
       <div class="mb-3">
         <button type="button" class="btn btn-primary m-1" role="group" (click)="onCreateAlphabet()">New</button>
+        <button type="button" class="btn btn-primary m-1" role="group" (click)="onOpenAlphabet()" [disabled]="selectedAlphabet.id === 0">Open</button>
         <button type="button" class="btn btn-primary m-1" role="group" (click)="onDeleteSelectedAlphabet()" [disabled]="selectedAlphabet.id === 0">Delete</button>
       </div>
     </div>

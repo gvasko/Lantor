@@ -90,6 +90,10 @@ export class LanguageAdminComponent {
     };
   }
 
+  onOpenAlphabet() {
+
+  }
+
   onDeleteSelectedAlphabet() {
     console.log("Delete aplhabet");
     let ref = this.modalService.open(ConfirmationComponent);
