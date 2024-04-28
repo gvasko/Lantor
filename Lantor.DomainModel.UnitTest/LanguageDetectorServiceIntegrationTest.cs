@@ -23,21 +23,22 @@ namespace Lantor.DomainModel.UnitTest
             _multiSample.Languages.Add(ls1);
             _multiSample.Languages.Add(ls2);
             _multiSample.Languages.Add(ls3);
+            var multiSampleTask = Task.FromResult<MultilingualSample>(_multiSample);
 
-            Alphabet abc = new("testABC", FakeVectorFactory.DIM, new FakeVectorFactory());
+            var abc = Task.FromResult<Alphabet>(new("testABC", FakeVectorFactory.DIM, new FakeVectorFactory()));
 
             Mock<ISampleRepository> _sampleRepo = new();
-            _sampleRepo.Setup(sr => sr.GetDefaultAlphabet()).Returns(abc);
-            _sampleRepo.Setup(sr => sr.GetDefaultSamples()).Returns(_multiSample);
+            _sampleRepo.Setup(sr => sr.GetDefaultAlphabetAsync()).Returns(abc);
+            _sampleRepo.Setup(sr => sr.GetDefaultSamplesAsync()).Returns(multiSampleTask);
 
             // TODO: why the new?
             _sut = new LanguageDetectorService(_sampleRepo.Object, new LanguageVectorBuilder());
         }
 
         [Test]
-        public void TestFakeAlphabetOrthogonality()
+        public async Task TestFakeAlphabetOrthogonality()
         {
-            var orthoResult = _sut.AlphabetOrthoTest();
+            var orthoResult = await _sut.AlphabetOrthoTest();
             foreach (var letterResult in orthoResult.SimilarityValues)
             {
                 Assert.That(letterResult.Value, Is.LessThanOrEqualTo(0.15), $"Similarity value should be smaller for {letterResult.Name}");

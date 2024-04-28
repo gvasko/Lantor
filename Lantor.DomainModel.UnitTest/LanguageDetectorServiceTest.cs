@@ -25,8 +25,9 @@ namespace Lantor.DomainModel.UnitTest
             _multiSample.Languages.Add(ls1);
             _multiSample.Languages.Add(ls2);
             _multiSample.Languages.Add(ls3);
+            var multiSampleTask = Task.FromResult<MultilingualSample>(_multiSample);
 
-            Alphabet abc = new("testABC", FakeVectorFactory.DIM, new FakeVectorFactory());
+            var abc = Task.FromResult<Alphabet>(new("testABC", FakeVectorFactory.DIM, new FakeVectorFactory()));
 
             _vectorBuilderMock = new Mock<ILanguageVectorBuilder>();
             var randomLangVector1 = HiDimBipolarVector.CreateRandomVector(FakeVectorFactory.DIM);
@@ -39,33 +40,33 @@ namespace Lantor.DomainModel.UnitTest
             _vectorBuilderMock.Setup(vb => vb.BuildLanguageVector(It.IsAny<Alphabet>(), It.IsAny<string>())).Returns(randomLangVector4);
 
             _sampleRepo = new Mock<ISampleRepository>();
-            _sampleRepo.Setup(sr => sr.GetDefaultAlphabet()).Returns(abc);
-            _sampleRepo.Setup(sr => sr.GetDefaultSamples()).Returns(_multiSample);
+            _sampleRepo.Setup(sr => sr.GetDefaultAlphabetAsync()).Returns(abc);
+            _sampleRepo.Setup(sr => sr.GetDefaultSamplesAsync()).Returns(multiSampleTask);
 
             var randomCachedVector1 = HiDimBipolarVector.CreateRandomVector(FakeVectorFactory.DIM);
-            _sampleRepo.Setup(sr => sr.GetLanguageVectorFromCache(It.Is((LanguageSample ls) => ls.Sample == ls1.Sample), It.IsAny<Alphabet>())).Returns(randomCachedVector1);
+            _sampleRepo.Setup(sr => sr.GetLanguageVectorFromCacheAsync(It.Is((LanguageSample ls) => ls.Sample == ls1.Sample), It.IsAny<Alphabet>())).Returns(Task.FromResult<HiDimBipolarVector?>(randomCachedVector1));
             var randomCachedVector2 = HiDimBipolarVector.CreateRandomVector(FakeVectorFactory.DIM);
-            _sampleRepo.Setup(sr => sr.GetLanguageVectorFromCache(It.Is((LanguageSample ls) => ls.Sample == ls2.Sample), It.IsAny<Alphabet>())).Returns(randomCachedVector2);
+            _sampleRepo.Setup(sr => sr.GetLanguageVectorFromCacheAsync(It.Is((LanguageSample ls) => ls.Sample == ls2.Sample), It.IsAny<Alphabet>())).Returns(Task.FromResult<HiDimBipolarVector?>(randomCachedVector2));
             // GetLanguageVectorFromCache(ls3.Sample), It.IsAny<Alphabet>())) -- returns null
 
             _sut = new LanguageDetectorService(_sampleRepo.Object, _vectorBuilderMock.Object);
         }
 
         [Test]
-        public void WhenLanguageVectorNotFoundInCache_ThenItGeneratesAndAddToCache()
+        public async Task WhenLanguageVectorNotFoundInCache_ThenItGeneratesAndAddToCache()
         {
-            var result = _sut.Detect("Lorem ipsum.");
-            _sampleRepo.Verify(sr => sr.GetLanguageVectorFromCache(It.IsAny<LanguageSample>(), It.IsAny<Alphabet>()), Times.Exactly(_multiSample.Languages.Count));
+            var result = await _sut.Detect("Lorem ipsum.");
+            _sampleRepo.Verify(sr => sr.GetLanguageVectorFromCacheAsync(It.IsAny<LanguageSample>(), It.IsAny<Alphabet>()), Times.Exactly(_multiSample.Languages.Count));
             _vectorBuilderMock.Verify(vb => vb.BuildLanguageVector(It.IsAny<Alphabet>(), It.IsAny<string>()), Times.Exactly(2));
             _vectorBuilderMock.Verify(vb => vb.BuildLanguageVector(It.IsAny<Alphabet>(), It.Is<string>(s => s == FakeSamples.SAMPLE_HU)), Times.Once);
-            _sampleRepo.Verify(sr => sr.AddLanguageVectorToCache(It.Is<LanguageSample>(s => s.Sample == FakeSamples.SAMPLE_HU), It.IsAny<Alphabet>(), It.IsAny<HiDimBipolarVector>()), Times.Once);
+            _sampleRepo.Verify(sr => sr.AddLanguageVectorToCacheAsync(It.Is<LanguageSample>(s => s.Sample == FakeSamples.SAMPLE_HU), It.IsAny<Alphabet>(), It.IsAny<HiDimBipolarVector>()), Times.Once);
         }
 
         [Test]
         // TODO: can be narrowed to LanguageSimilarityResult
-        public void ResultIsOrderedBySimilarityValuesDesc()
+        public async Task ResultIsOrderedBySimilarityValuesDesc()
         {
-            var result = _sut.Detect("Lorem ipsum.");
+            var result = await _sut.Detect("Lorem ipsum.");
             Assert.Multiple(() =>
             {
                 Assert.That(_multiSample.Languages.Count, Is.EqualTo(3));

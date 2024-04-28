@@ -19,9 +19,9 @@ namespace Lantor.DomainModel
             this.languageVectorBuilder = languageVectorBuilder;
         }
 
-        public LanguageSimilarityResult AlphabetOrthoTest()
+        public async Task<LanguageSimilarityResult> AlphabetOrthoTest()
         {
-            var abc = sampleRepository.GetDefaultAlphabet();
+            var abc = await sampleRepository.GetDefaultAlphabetAsync();
             LanguageSimilarityValue[] similarityValues = new LanguageSimilarityValue[abc.LetterVectors.Count];
 
             var i = 0;
@@ -57,72 +57,81 @@ namespace Lantor.DomainModel
         /// </summary>
         /// <param name="text">The text, clients want to know which language it is written in</param>
         /// <returns>A list of languages with a correlation value, ordered descended, the most probable language first</returns>
-        public LanguageSimilarityResult Detect(string text)
+        public async Task<LanguageSimilarityResult> Detect(string text)
         {
-            var alphabet = sampleRepository.GetDefaultAlphabet();
+            var alphabet = await sampleRepository.GetDefaultAlphabetAsync();
             LoggerService.Logger.Debug("Default alphabet loaded");
 
-            var languageSamples = sampleRepository.GetDefaultSamples();
+            var languageSamples = await sampleRepository.GetDefaultSamplesAsync();
             LoggerService.Logger.Debug("Default samples loaded, count = {count}.", languageSamples.Languages.Count);
 
-            return Detect(alphabet, languageSamples, text);
+            return await Detect(alphabet, languageSamples, text);
         }
 
-        public LanguageSimilarityResult Detect(int sampleId, int alphabetId, string text)
+        public async Task<LanguageSimilarityResult> Detect(int sampleId, int alphabetId, string text)
         {
-            var alphabet = sampleRepository.GetAlphabet(alphabetId);
+            var alphabet = await sampleRepository.GetAlphabetAsync(alphabetId);
             LoggerService.Logger.Debug("Default alphabet loaded");
 
-            var languageSamples = sampleRepository.GetMultilingualSampleAsync(sampleId);
-            languageSamples.Wait();
+            var languageSamples = await sampleRepository.GetMultilingualSampleAsync(sampleId);
 
-            if (languageSamples.Result == null)
+            if (alphabet == null || languageSamples == null)
             {
+                LoggerService.Logger.Error("No alphabet or language samples found");
                 return new LanguageSimilarityResult();
             }
 
-            LoggerService.Logger.Debug("Default samples loaded, count = {count}.", languageSamples.Result.Languages.Count);
+            LoggerService.Logger.Debug("Samples loaded, count = {count}.", languageSamples.Languages.Count);
 
-            return Detect(alphabet, languageSamples.Result, text);
+            return await Detect(alphabet, languageSamples, text);
         }
 
-        private LanguageSimilarityResult Detect(Alphabet alphabet, MultilingualSample languageSamples, string text)
+        private Task<LanguageSimilarityResult> Detect(Alphabet alphabet, MultilingualSample languageSamples, string text)
         {
-            Stopwatch stopWatch = new();
-            stopWatch.Start();
-            LoggerService.Logger.Debug("Default detection begins: {samplePrefix}", text.Substring(0, Math.Min(16, text.Length)));
-
-            var sampleVector = languageVectorBuilder.BuildLanguageVector(alphabet, text);
-            LoggerService.Logger.Debug("Sample vector built.");
-
-            LanguageSimilarityValue[] similarityValues = new LanguageSimilarityValue[languageSamples.Languages.Count];
-            int i = 0;
-            foreach (var language in languageSamples.Languages)
+            var t = new Task<LanguageSimilarityResult>(() =>
             {
-                var languageVector = sampleRepository.GetLanguageVectorFromCache(language, alphabet);
-                if (languageVector == null)
+                Stopwatch stopWatch = new();
+                stopWatch.Start();
+                LoggerService.Logger.Debug("Detection begins: {samplePrefix}", text.Substring(0, Math.Min(16, text.Length)));
+
+                var sampleVector = languageVectorBuilder.BuildLanguageVector(alphabet, text);
+                LoggerService.Logger.Debug("Sample vector built.");
+
+                LanguageSimilarityValue[] similarityValues = new LanguageSimilarityValue[languageSamples.Languages.Count];
+                int i = 0;
+                foreach (var language in languageSamples.Languages)
                 {
-                    LoggerService.Logger.Debug("Language vector for {lang} not found in cache.", language.Name);
-                    languageVector = languageVectorBuilder.BuildLanguageVector(alphabet, language.Sample);
-                    LoggerService.Logger.Debug("Language vector for {lang} generated.", language.Name);
-                    sampleRepository.AddLanguageVectorToCache(language, alphabet, languageVector);
-                    LoggerService.Logger.Debug("Language vector for {lang} stored in cache.", language.Name);
+                    var languageVectorTask = sampleRepository.GetLanguageVectorFromCacheAsync(language, alphabet);
+                    languageVectorTask.Wait();
+                    var languageVector = languageVectorTask.Result;
+
+                    if (languageVector == null)
+                    {
+                        LoggerService.Logger.Debug("Language vector for {lang} not found in cache.", language.Name);
+                        languageVector = languageVectorBuilder.BuildLanguageVector(alphabet, language.Sample);
+                        LoggerService.Logger.Debug("Language vector for {lang} generated.", language.Name);
+                        var addToCacheTask = sampleRepository.AddLanguageVectorToCacheAsync(language, alphabet, languageVector);
+                        addToCacheTask.Wait();
+                        LoggerService.Logger.Debug("Language vector for {lang} stored in cache.", language.Name);
+                    }
+                    else
+                    {
+                        LoggerService.Logger.Debug("Language vector for {lang} loaded from cache.", language.Name);
+                    }
+                    var similarity = languageVector.Similarity(sampleVector);
+                    similarityValues[i++] = new LanguageSimilarityValue(language.Name, similarity);
+                    LoggerService.Logger.Debug("Language vector similarity for {lang} calculated.", language.Name);
                 }
-                else
-                {
-                    LoggerService.Logger.Debug("Language vector for {lang} loaded from cache.", language.Name);
-                }
-                var similarity = languageVector.Similarity(sampleVector);
-                similarityValues[i++] = new LanguageSimilarityValue(language.Name, similarity);
-                LoggerService.Logger.Debug("Language vector similarity for {lang} calculated.", language.Name);
-            }
 
-            LoggerService.Logger.Debug("Similarity results sorted.");
-            stopWatch.Stop();
-            LoggerService.Logger.Debug("Detected in {elapsed} ms.", stopWatch.ElapsedMilliseconds);
+                LoggerService.Logger.Debug("Similarity results sorted.");
+                stopWatch.Stop();
+                LoggerService.Logger.Debug("Detected in {elapsed} ms.", stopWatch.ElapsedMilliseconds);
 
 
-            return new LanguageSimilarityResult(similarityValues, stopWatch.ElapsedMilliseconds, GetSignificantCount(similarityValues));
+                return new LanguageSimilarityResult(similarityValues, stopWatch.ElapsedMilliseconds, GetSignificantCount(similarityValues));
+            });
+            t.Start();
+            return t;
         }
 
         private static int GetSignificantCount(LanguageSimilarityValue[] similarityValues)

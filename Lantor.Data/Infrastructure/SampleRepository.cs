@@ -20,31 +20,40 @@ namespace Lantor.Data.Infrastructure
             this.context = context;
         }
 
-        public Alphabet GetDefaultAlphabet()
+        public async Task<Alphabet> GetDefaultAlphabetAsync()
         {
-            return context.Alphabets.AsNoTracking().First(a => a.Name == "Default");
+            return await context.Alphabets.AsNoTracking().FirstAsync(a => a.Name == "Default");
         }
 
-        public Alphabet GetAlphabet(int id)
+        public async Task<Alphabet?> GetAlphabetAsync(int id)
         {
-            return context.Alphabets.AsNoTracking().First(a => a.Id == id);
+            return await context.Alphabets.AsNoTracking().FirstOrDefaultAsync(a => a.Id == id);
         }
 
-        public MultilingualSample GetDefaultSamples()
+        public async Task<MultilingualSample> GetDefaultSamplesAsync()
         {
-            return context.MultilingualSamples.AsNoTracking().Include(ms => ms.Languages).First(s => s.Name == "Default");
+            return await context.MultilingualSamples.AsNoTracking().Include(ms => ms.Languages).FirstAsync(s => s.Name == "Default");
         }
 
-        public HiDimBipolarVector? GetLanguageVectorFromCache(LanguageSample languageSample, Alphabet alphabet)
+        public Task<HiDimBipolarVector?> GetLanguageVectorFromCacheAsync(LanguageSample languageSample, Alphabet alphabet)
         {
-            return context.LanguageVectorCache.AsNoTracking().FirstOrDefault(c => 
-                c.LanguageSampleId == languageSample.Id && c.AlphabetId == alphabet.Id)?.Vector;
+            var t = new Task<HiDimBipolarVector?>(() =>
+            {
+                var result = context.LanguageVectorCache.AsNoTracking().FirstOrDefaultAsync(c =>
+                    c.LanguageSampleId == languageSample.Id && c.AlphabetId == alphabet.Id);
+                
+                result.Wait();
+
+                return result.Result?.Vector;
+            });
+            t.Start();
+            return t;
         }
 
-        public void AddLanguageVectorToCache(LanguageSample languageSample, Alphabet alphabet, HiDimBipolarVector vector)
+        public async Task AddLanguageVectorToCacheAsync(LanguageSample languageSample, Alphabet alphabet, HiDimBipolarVector vector)
         {
             context.LanguageVectorCache.Add(new LanguageVectorCache(languageSample.Id, alphabet.Id, vector));
-            context.SaveChanges();
+            await context.SaveChangesAsync();
         }
 
         public async Task<IList<MultilingualSample>> GetAllMultilingualSamplesAsync()
@@ -62,7 +71,7 @@ namespace Lantor.Data.Infrastructure
             return await context.LanguageSamples.AsNoTracking().Where(ls => ls.Id == id).FirstOrDefaultAsync();
         }
 
-        public async Task UpdateMultilingualSample(MultilingualSample updated)
+        public async Task UpdateMultilingualSampleAsync(MultilingualSample updated)
         {
             // Do not update related objects
             updated.Languages = [];
@@ -70,7 +79,7 @@ namespace Lantor.Data.Infrastructure
             await context.SaveChangesAsync();
         }
 
-        public async Task<MultilingualSample> CreateMultilingualSample(MultilingualSample sample)
+        public async Task<MultilingualSample> CreateMultilingualSampleAsync(MultilingualSample sample)
         {
             sample.Id = 0;
             sample.Languages = [];
@@ -79,13 +88,13 @@ namespace Lantor.Data.Infrastructure
             return added.Entity;
         }
 
-        public async Task UpdateLanguageSample(LanguageSample updated)
+        public async Task UpdateLanguageSampleAsync(LanguageSample updated)
         {
             context.LanguageSamples.Update(updated);
             await context.SaveChangesAsync();
         }
 
-        public async Task<LanguageSample> CreateLanguageSample(LanguageSample sample)
+        public async Task<LanguageSample> CreateLanguageSampleAsync(LanguageSample sample)
         {
             if (sample.MultilingualSampleId == 0)
             {
@@ -97,12 +106,12 @@ namespace Lantor.Data.Infrastructure
             return added.Entity;
         }
 
-        public IList<Alphabet> GetAllAlphabets()
+        public async Task<IList<Alphabet>> GetAllAlphabetsAsync()
         {
-            return context.Alphabets.AsNoTracking().ToList();
+            return await context.Alphabets.AsNoTracking().ToListAsync();
         }
 
-        public async Task<Alphabet> CreateAlphabet(string name, int dim)
+        public async Task<Alphabet> CreateAlphabetAsync(string name, int dim)
         {
             var abc = new Alphabet(name, dim, new RandomVectorFactory());
             var added = context.Alphabets.Add(abc);

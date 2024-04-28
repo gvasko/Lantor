@@ -16,8 +16,9 @@ namespace Lantor.Server.Controllers
             this.languageDetectorService = languageDetectorService;
         }
 
+        // TODO: LanguageSimilarityResultDTO?   
         [HttpPost(Name = "DetectLanguages")]
-        public LanguageSimilarityResult Post(LanguageDetectorRequestDTO request)
+        public async Task<LanguageSimilarityResult> Post(LanguageDetectorRequestDTO request)
         {
             if (request.Text == null)
             {
@@ -27,10 +28,10 @@ namespace Lantor.Server.Controllers
             {
                 if (request.SampleId == 0 || request.AlphabetId == 0)
                 {
-                    return languageDetectorService.Detect(request.Text);
+                    return await languageDetectorService.Detect(request.Text);
                 } else
                 {
-                    return languageDetectorService.Detect(request.SampleId, request.AlphabetId, request.Text);
+                    return await languageDetectorService.Detect(request.SampleId, request.AlphabetId, request.Text);
                 }
             }
         }
