@@ -35,19 +35,10 @@ namespace Lantor.Data.Infrastructure
             return await context.MultilingualSamples.AsNoTracking().Include(ms => ms.Languages).FirstAsync(s => s.Name == "Default");
         }
 
-        public Task<HiDimBipolarVector?> GetLanguageVectorFromCacheAsync(LanguageSample languageSample, Alphabet alphabet)
+        public async Task<HiDimBipolarVector?> GetLanguageVectorFromCacheAsync(LanguageSample languageSample, Alphabet alphabet)
         {
-            var t = new Task<HiDimBipolarVector?>(() =>
-            {
-                var result = context.LanguageVectorCache.AsNoTracking().FirstOrDefaultAsync(c =>
-                    c.LanguageSampleId == languageSample.Id && c.AlphabetId == alphabet.Id);
-                
-                result.Wait();
-
-                return result.Result?.Vector;
-            });
-            t.Start();
-            return t;
+            return (await context.LanguageVectorCache.AsNoTracking().FirstOrDefaultAsync(c =>
+                c.LanguageSampleId == languageSample.Id && c.AlphabetId == alphabet.Id))?.Vector;
         }
 
         public async Task AddLanguageVectorToCacheAsync(LanguageSample languageSample, Alphabet alphabet, HiDimBipolarVector vector)
