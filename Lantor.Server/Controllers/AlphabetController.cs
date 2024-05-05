@@ -22,7 +22,7 @@ namespace Lantor.Server.Controllers
         [HttpGet]
         public async Task<ActionResult<List<AlphabetListInfoDTO>>> GetAll()
         {
-            var all = await sampleRepository.GetAllAlphabetsAsync();
+            var all = await sampleRepository.GetAllAlphabetListInfoAsync();
             var result = mapper.Map<List<AlphabetListInfoDTO>>(all);
             return Ok(result);
         }

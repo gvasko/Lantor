@@ -39,6 +39,7 @@ namespace Lantor.Data
                     });
                 });
             });
+            modelBuilder.Entity<Alphabet>().Navigation(a => a.LetterVectors).AutoInclude(false);
         }
 
         private static byte[] ConvertToBytes(BitArray bitArray)

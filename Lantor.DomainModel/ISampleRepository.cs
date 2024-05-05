@@ -11,20 +11,26 @@ namespace Lantor.DomainModel
     {
         Task<Alphabet> GetDefaultAlphabetAsync();
         Task<Alphabet?> GetAlphabetAsync(int id);
-        Task<IList<Alphabet>> GetAllAlphabetsAsync();
+        Task<IList<Alphabet>> GetAllAlphabetListInfoAsync();
         Task<Alphabet> CreateAlphabetAsync(string name, int dim);
+        //Task RemoveAlphabetAsync(int alphabetId);
 
         Task<MultilingualSample> GetDefaultSamplesAsync();
         Task<IList<MultilingualSample>> GetAllMultilingualSamplesAsync();
         Task<MultilingualSample?> GetMultilingualSampleAsync(int id);
         Task UpdateMultilingualSampleAsync(MultilingualSample updated);
         Task<MultilingualSample> CreateMultilingualSampleAsync(MultilingualSample sample);
+        //Task RemoveMultilingualSampleAsync(int multilingualSampleId);
 
         Task<LanguageSample?> GetLanguageSampleAsync(int id);
         Task UpdateLanguageSampleAsync(LanguageSample updated);
         Task<LanguageSample> CreateLanguageSampleAsync(LanguageSample sample);
+        //Task RemoveLanguageSampleAsync(int sampleId);
 
         Task<HiDimBipolarVector?> GetLanguageVectorFromCacheAsync(LanguageSample languageSample, Alphabet alphabet);
         Task AddLanguageVectorToCacheAsync(LanguageSample languageSample, Alphabet alphabet, HiDimBipolarVector vector);
+        //Task RemoveMultilingualSampleFromCacheAsync(int multilingualSampleId);
+        //Task RemoveLanguageSampleFromCacheAsync(int languageSampleId);
+        //Task RemoveAlphabetFromCacheAsync(int alphabetId);
     }
 }

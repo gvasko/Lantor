@@ -22,12 +22,12 @@ namespace Lantor.Data.Infrastructure
 
         public async Task<Alphabet> GetDefaultAlphabetAsync()
         {
-            return await context.Alphabets.AsNoTracking().FirstAsync(a => a.Name == "Default");
+            return await context.Alphabets.AsNoTracking().Include(a => a.LetterVectors).FirstAsync(a => a.Name == "Default");
         }
 
         public async Task<Alphabet?> GetAlphabetAsync(int id)
         {
-            return await context.Alphabets.AsNoTracking().FirstOrDefaultAsync(a => a.Id == id);
+            return await context.Alphabets.AsNoTracking().Include(a => a.LetterVectors).FirstOrDefaultAsync(a => a.Id == id);
         }
 
         public async Task<MultilingualSample> GetDefaultSamplesAsync()
@@ -97,7 +97,7 @@ namespace Lantor.Data.Infrastructure
             return added.Entity;
         }
 
-        public async Task<IList<Alphabet>> GetAllAlphabetsAsync()
+        public async Task<IList<Alphabet>> GetAllAlphabetListInfoAsync()
         {
             return await context.Alphabets.AsNoTracking().ToListAsync();
         }
