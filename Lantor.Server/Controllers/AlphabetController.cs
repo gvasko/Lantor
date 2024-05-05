@@ -10,19 +10,19 @@ namespace Lantor.Server.Controllers
     [ApiController]
     public class AlphabetController : ControllerBase
     {
-        private readonly ISampleRepository sampleRepository;
+        private readonly IDomainUnitOfWork domainUow;
         private readonly IMapper mapper;
 
-        public AlphabetController(ISampleRepository sampleRepository, IMapper mapper)
+        public AlphabetController(IDomainUnitOfWork domainUow, IMapper mapper)
         {
-            this.sampleRepository = sampleRepository;
+            this.domainUow = domainUow;
             this.mapper = mapper;
         }
 
         [HttpGet]
         public async Task<ActionResult<List<AlphabetListInfoDTO>>> GetAll()
         {
-            var all = await sampleRepository.GetAllAlphabetListInfoAsync();
+            var all = await domainUow.BasicCrudOperations.GetAllAlphabetListInfoAsync();
             var result = mapper.Map<List<AlphabetListInfoDTO>>(all);
             return Ok(result);
         }
@@ -34,8 +34,8 @@ namespace Lantor.Server.Controllers
             {
                 return BadRequest("Alphabet name cannot be null or empty");
             }
-            var newEntity = await sampleRepository.CreateAlphabetAsync(newDTO.Name, newDTO.Dim);
-            await sampleRepository.Save();
+            var newEntity = await domainUow.CreateAlphabetAsync(newDTO.Name, newDTO.Dim);
+            await domainUow.Save();
             var newEntityDTO = mapper.Map<AlphabetListInfoDTO>(newEntity);
             return Ok(newEntityDTO);
         }

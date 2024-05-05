@@ -26,7 +26,8 @@ namespace Lantor.Server
             builder.Services.AddSwaggerGen();
             builder.Services.AddDbContext<LantorContext>(options => 
                 options.UseSqlServer(builder.Configuration.GetConnectionString("LantorDatabase")));
-            builder.Services.AddScoped<ISampleRepository, SampleRepository>();
+            builder.Services.AddScoped<IDomainUnitOfWork, DomainUnitOfWork>();
+            builder.Services.AddScoped<IBasicCrudUnitOfWork, BasicCrudUnitOfWork>();
             builder.Services.AddScoped<ILanguageVectorBuilder, LanguageVectorBuilder>();
             builder.Services.AddScoped<ILanguageDetectorService, LanguageDetectorService>();
             builder.Services.AddAutoMapper(typeof(AutoMapperProfile));

@@ -11,19 +11,19 @@ namespace Lantor.Server.Controllers
     [ApiController]
     public class LanguageSampleController : ControllerBase
     {
-        private readonly ISampleRepository sampleRepository;
+        private readonly IDomainUnitOfWork domainUow;
         private readonly IMapper mapper;
 
-        public LanguageSampleController(ISampleRepository sampleRepository, IMapper mapper)
+        public LanguageSampleController(IDomainUnitOfWork domainUow, IMapper mapper)
         {
-            this.sampleRepository = sampleRepository;
+            this.domainUow = domainUow;
             this.mapper = mapper;
         }
 
         [HttpGet("{id:int}")]
         public async Task<ActionResult<LanguageSampleDTO>> GetById(int id)
         {
-            var mls = await sampleRepository.GetLanguageSampleAsync(id);
+            var mls = await domainUow.BasicCrudOperations.GetLanguageSampleAsync(id);
             var result = mapper.Map<LanguageSampleDTO>(mls);
             return Ok(result);
         }
@@ -32,8 +32,8 @@ namespace Lantor.Server.Controllers
         public async Task<IActionResult> Update(LanguageSampleDTO updatedDTO)
         {
             var updatedDM = mapper.Map<LanguageSample>(updatedDTO);
-            await sampleRepository.UpdateLanguageSampleAsync(updatedDM);
-            await sampleRepository.Save();
+            domainUow.UpdateLanguageSample(updatedDM);
+            await domainUow.Save();
             return Ok();
         }
 
@@ -41,8 +41,8 @@ namespace Lantor.Server.Controllers
         public async Task<ActionResult<LanguageSampleDTO>> Create(LanguageSampleDTO newDTO)
         {
             var newDM = mapper.Map<LanguageSample>(newDTO);
-            var newEntity = await sampleRepository.CreateLanguageSampleAsync(newDM);
-            await sampleRepository.Save();
+            var newEntity = await domainUow.BasicCrudOperations.CreateLanguageSampleAsync(newDM);
+            await domainUow.Save();
             var newEntityDTO = mapper.Map<LanguageSampleDTO>(newEntity);
             return Ok(newEntityDTO);
         }

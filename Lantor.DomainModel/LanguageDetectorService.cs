@@ -10,18 +10,18 @@ namespace Lantor.DomainModel
 {
     public class LanguageDetectorService : ILanguageDetectorService
     {
-        private readonly ISampleRepository sampleRepository;
+        private readonly IDomainUnitOfWork domainUow;
         private readonly ILanguageVectorBuilder languageVectorBuilder;
 
-        public LanguageDetectorService(ISampleRepository sampleRepository, ILanguageVectorBuilder languageVectorBuilder) 
+        public LanguageDetectorService(IDomainUnitOfWork domainUow, ILanguageVectorBuilder languageVectorBuilder) 
         {
-            this.sampleRepository = sampleRepository;
+            this.domainUow = domainUow;
             this.languageVectorBuilder = languageVectorBuilder;
         }
 
         public async Task<LanguageSimilarityResult> AlphabetOrthoTest()
         {
-            var abc = await sampleRepository.GetDefaultAlphabetAsync();
+            var abc = await domainUow.GetDefaultAlphabetAsync();
             LanguageSimilarityValue[] similarityValues = new LanguageSimilarityValue[abc.LetterVectors.Count];
 
             var i = 0;
@@ -59,10 +59,10 @@ namespace Lantor.DomainModel
         /// <returns>A list of languages with a correlation value, ordered descended, the most probable language first</returns>
         public async Task<LanguageSimilarityResult> Detect(string text)
         {
-            var alphabet = await sampleRepository.GetDefaultAlphabetAsync();
+            var alphabet = await domainUow.GetDefaultAlphabetAsync();
             LoggerService.Logger.Debug("Default alphabet loaded");
 
-            var languageSamples = await sampleRepository.GetDefaultSamplesAsync();
+            var languageSamples = await domainUow.GetDefaultSamplesAsync();
             LoggerService.Logger.Debug("Default samples loaded, count = {count}.", languageSamples.Languages.Count);
 
             return await Detect(alphabet, languageSamples, text);
@@ -70,10 +70,9 @@ namespace Lantor.DomainModel
 
         public async Task<LanguageSimilarityResult> Detect(int sampleId, int alphabetId, string text)
         {
-            var alphabet = await sampleRepository.GetAlphabetAsync(alphabetId);
-            LoggerService.Logger.Debug("Alphabet loaded: {name}", alphabet.Name);
+            var alphabet = await domainUow.BasicCrudOperations.GetAlphabetAsync(alphabetId);
 
-            var languageSamples = await sampleRepository.GetMultilingualSampleAsync(sampleId);
+            var languageSamples = await domainUow.BasicCrudOperations.GetMultilingualSampleAsync(sampleId);
 
             if (alphabet == null || languageSamples == null)
             {
@@ -81,6 +80,7 @@ namespace Lantor.DomainModel
                 return new LanguageSimilarityResult();
             }
 
+            LoggerService.Logger.Debug("Alphabet loaded: {name}", alphabet.Name);
             LoggerService.Logger.Debug("Samples loaded, count = {count}.", languageSamples.Languages.Count);
 
             return await Detect(alphabet, languageSamples, text);
@@ -101,15 +101,15 @@ namespace Lantor.DomainModel
                 int i = 0;
                 foreach (var language in languageSamples.Languages)
                 {
-                    var languageVector = await sampleRepository.GetLanguageVectorFromCacheAsync(language, alphabet);
+                    var languageVector = await domainUow.BasicCrudOperations.GetLanguageVectorFromCacheAsync(language, alphabet);
 
                     if (languageVector == null)
                     {
                         LoggerService.Logger.Debug("Language vector for {lang} not found in cache. Calculating...", language.Name);
                         languageVector = languageVectorBuilder.BuildLanguageVector(alphabet, language.Sample);
                         LoggerService.Logger.Debug("Language vector for {lang} generated.", language.Name);
-                        await sampleRepository.AddLanguageVectorToCacheAsync(language, alphabet, languageVector);
-                        await sampleRepository.Save();
+                        await domainUow.BasicCrudOperations.AddLanguageVectorToCacheAsync(language, alphabet, languageVector);
+                        await domainUow.Save();
                         LoggerService.Logger.Debug("Language vector for {lang} stored in cache.", language.Name);
                     }
                     else

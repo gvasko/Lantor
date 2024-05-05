@@ -27,7 +27,7 @@ namespace Lantor.DomainModel.UnitTest
 
             var abc = Task.FromResult<Alphabet>(new("testABC", FakeVectorFactory.DIM, new FakeVectorFactory()));
 
-            Mock<ISampleRepository> _sampleRepo = new();
+            Mock<IDomainUnitOfWork> _sampleRepo = new();
             _sampleRepo.Setup(sr => sr.GetDefaultAlphabetAsync()).Returns(abc);
             _sampleRepo.Setup(sr => sr.GetDefaultSamplesAsync()).Returns(multiSampleTask);
 

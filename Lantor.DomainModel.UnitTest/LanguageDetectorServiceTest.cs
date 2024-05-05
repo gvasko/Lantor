@@ -11,7 +11,7 @@ namespace Lantor.DomainModel.UnitTest
     public class LanguageDetectorServiceTest
     {
         private LanguageDetectorService _sut;
-        private Mock<ISampleRepository> _sampleRepo;
+        private Mock<IDomainUnitOfWork> _sampleRepo;
         private Mock<ILanguageVectorBuilder> _vectorBuilderMock;
         private MultilingualSample _multiSample;
 
@@ -39,14 +39,14 @@ namespace Lantor.DomainModel.UnitTest
             var randomLangVector4 = HiDimBipolarVector.CreateRandomVector(FakeVectorFactory.DIM);
             _vectorBuilderMock.Setup(vb => vb.BuildLanguageVector(It.IsAny<Alphabet>(), It.IsAny<string>())).Returns(randomLangVector4);
 
-            _sampleRepo = new Mock<ISampleRepository>();
+            _sampleRepo = new Mock<IDomainUnitOfWork>();
             _sampleRepo.Setup(sr => sr.GetDefaultAlphabetAsync()).Returns(abc);
             _sampleRepo.Setup(sr => sr.GetDefaultSamplesAsync()).Returns(multiSampleTask);
 
             var randomCachedVector1 = HiDimBipolarVector.CreateRandomVector(FakeVectorFactory.DIM);
-            _sampleRepo.Setup(sr => sr.GetLanguageVectorFromCacheAsync(It.Is((LanguageSample ls) => ls.Sample == ls1.Sample), It.IsAny<Alphabet>())).Returns(Task.FromResult<HiDimBipolarVector?>(randomCachedVector1));
+            _sampleRepo.Setup(sr => sr.BasicCrudOperations.GetLanguageVectorFromCacheAsync(It.Is((LanguageSample ls) => ls.Sample == ls1.Sample), It.IsAny<Alphabet>())).Returns(Task.FromResult<HiDimBipolarVector?>(randomCachedVector1));
             var randomCachedVector2 = HiDimBipolarVector.CreateRandomVector(FakeVectorFactory.DIM);
-            _sampleRepo.Setup(sr => sr.GetLanguageVectorFromCacheAsync(It.Is((LanguageSample ls) => ls.Sample == ls2.Sample), It.IsAny<Alphabet>())).Returns(Task.FromResult<HiDimBipolarVector?>(randomCachedVector2));
+            _sampleRepo.Setup(sr => sr.BasicCrudOperations.GetLanguageVectorFromCacheAsync(It.Is((LanguageSample ls) => ls.Sample == ls2.Sample), It.IsAny<Alphabet>())).Returns(Task.FromResult<HiDimBipolarVector?>(randomCachedVector2));
             // GetLanguageVectorFromCache(ls3.Sample), It.IsAny<Alphabet>())) -- returns null
 
             _sut = new LanguageDetectorService(_sampleRepo.Object, _vectorBuilderMock.Object);
@@ -56,10 +56,10 @@ namespace Lantor.DomainModel.UnitTest
         public async Task WhenLanguageVectorNotFoundInCache_ThenItGeneratesAndAddToCache()
         {
             var result = await _sut.Detect("Lorem ipsum.");
-            _sampleRepo.Verify(sr => sr.GetLanguageVectorFromCacheAsync(It.IsAny<LanguageSample>(), It.IsAny<Alphabet>()), Times.Exactly(_multiSample.Languages.Count));
+            _sampleRepo.Verify(sr => sr.BasicCrudOperations.GetLanguageVectorFromCacheAsync(It.IsAny<LanguageSample>(), It.IsAny<Alphabet>()), Times.Exactly(_multiSample.Languages.Count));
             _vectorBuilderMock.Verify(vb => vb.BuildLanguageVector(It.IsAny<Alphabet>(), It.IsAny<string>()), Times.Exactly(2));
             _vectorBuilderMock.Verify(vb => vb.BuildLanguageVector(It.IsAny<Alphabet>(), It.Is<string>(s => s == FakeSamples.SAMPLE_HU)), Times.Once);
-            _sampleRepo.Verify(sr => sr.AddLanguageVectorToCacheAsync(It.Is<LanguageSample>(s => s.Sample == FakeSamples.SAMPLE_HU), It.IsAny<Alphabet>(), It.IsAny<HiDimBipolarVector>()), Times.Once);
+            _sampleRepo.Verify(sr => sr.BasicCrudOperations.AddLanguageVectorToCacheAsync(It.Is<LanguageSample>(s => s.Sample == FakeSamples.SAMPLE_HU), It.IsAny<Alphabet>(), It.IsAny<HiDimBipolarVector>()), Times.Once);
         }
 
         [Test]
