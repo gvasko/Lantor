@@ -43,12 +43,12 @@ namespace Lantor.Data.Infrastructure
 
         public async Task AddLanguageVectorToCacheAsync(LanguageSample languageSample, Alphabet alphabet, HiDimBipolarVector vector)
         {
-            context.LanguageVectorCache.Add(new LanguageVectorCache(languageSample.Id, alphabet.Id, vector));
-            await context.SaveChangesAsync();
+            await context.LanguageVectorCache.AddAsync(new LanguageVectorCache(languageSample.Id, alphabet.Id, vector));
         }
 
         public async Task<IList<MultilingualSample>> GetAllMultilingualSamplesAsync()
         {
+            // TODO: listinfo
             return await context.MultilingualSamples.AsNoTracking().Include(mls => mls.Languages).ToListAsync();
         }
 
@@ -62,27 +62,25 @@ namespace Lantor.Data.Infrastructure
             return await context.LanguageSamples.AsNoTracking().Where(ls => ls.Id == id).FirstOrDefaultAsync();
         }
 
-        public async Task UpdateMultilingualSampleAsync(MultilingualSample updated)
+        public void UpdateMultilingualSampleAsync(MultilingualSample updated)
         {
             // Do not update related objects
             updated.Languages = [];
             context.MultilingualSamples.Update(updated);
-            await context.SaveChangesAsync();
         }
 
         public async Task<MultilingualSample> CreateMultilingualSampleAsync(MultilingualSample sample)
         {
             sample.Id = 0;
             sample.Languages = [];
-            var added = context.MultilingualSamples.Add(sample);
-            await context.SaveChangesAsync();
+            var added = await context.MultilingualSamples.AddAsync(sample);
             return added.Entity;
         }
 
         public async Task UpdateLanguageSampleAsync(LanguageSample updated)
         {
             context.LanguageSamples.Update(updated);
-            await context.SaveChangesAsync();
+            await RemoveLanguageSampleAsync(updated.Id);
         }
 
         public async Task<LanguageSample> CreateLanguageSampleAsync(LanguageSample sample)
@@ -92,8 +90,7 @@ namespace Lantor.Data.Infrastructure
                 throw new Exception("Invalid language sample: no parent specified");
             }
             sample.Id = 0;
-            var added = context.Add(sample);
-            await context.SaveChangesAsync();
+            var added = await context.AddAsync(sample);
             return added.Entity;
         }
 
@@ -105,9 +102,84 @@ namespace Lantor.Data.Infrastructure
         public async Task<Alphabet> CreateAlphabetAsync(string name, int dim)
         {
             var abc = new Alphabet(name, dim, new RandomVectorFactory());
-            var added = context.Alphabets.Add(abc);
-            await context.SaveChangesAsync();
+            var added = await context.Alphabets.AddAsync(abc);
             return added.Entity;
+        }
+
+        public async Task RemoveAlphabetAsync(int alphabetId)
+        {
+            var alphabet = await GetAlphabetAsync(alphabetId);
+            if (alphabet != null)
+            {
+                this.RemoveAlphabetFromCacheAsync(alphabetId);
+                context.Alphabets.Remove(alphabet);
+            }
+        }
+
+        public async Task RemoveMultilingualSampleAsync(int multilingualSampleId)
+        {
+            var mlSample = await GetMultilingualSampleAsync(multilingualSampleId);
+            if (mlSample == null)
+            {
+                return;
+            }
+
+            foreach (var ls in mlSample.Languages)
+            {
+                RemoveLanguageSampleFromCacheAsync(ls.Id);
+                context.LanguageSamples.Remove(ls);
+            }
+
+            context.MultilingualSamples.Remove(mlSample);
+        }
+
+        public async Task RemoveLanguageSampleAsync(int sampleId)
+        {
+            var ls = await GetLanguageSampleAsync(sampleId);
+            if (ls == null)
+            {
+                return;
+            }
+
+            RemoveLanguageSampleFromCacheAsync(ls.Id);
+            context.LanguageSamples.Remove(ls);
+        }
+
+        public async Task RemoveMultilingualSampleFromCacheAsync(int multilingualSampleId)
+        {
+            var mlSample = await GetMultilingualSampleAsync(multilingualSampleId);
+            if (mlSample == null)
+            {
+                return;
+            }
+
+            foreach (var ls in mlSample.Languages)
+            {
+                RemoveLanguageSampleFromCacheAsync(ls.Id);
+            }
+        }
+
+        public void RemoveLanguageSampleFromCacheAsync(int languageSampleId)
+        {
+            var removeFromCache = context.LanguageVectorCache.Where(lv => lv.LanguageSampleId == languageSampleId);
+            foreach (var entry in removeFromCache)
+            {
+                context.LanguageVectorCache.Remove(entry);
+            }
+        }
+
+        public void RemoveAlphabetFromCacheAsync(int alphabetId)
+        {
+            var removeFromCache = context.LanguageVectorCache.Where(lv => lv.AlphabetId == alphabetId);
+            foreach (var entry in removeFromCache)
+            {
+                context.LanguageVectorCache.Remove(entry);
+            }
+        }
+
+        public async Task Save()
+        {
+            await context.SaveChangesAsync();
         }
     }
 }

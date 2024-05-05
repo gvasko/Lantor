@@ -39,7 +39,8 @@ namespace Lantor.Server.Controllers
         public async Task<IActionResult> Update(EmptyMultilingualSampleDTO updatedDTO)
         {
             var updatedDM = mapper.Map<MultilingualSample>(updatedDTO);
-            await sampleRepository.UpdateMultilingualSampleAsync(updatedDM);
+            sampleRepository.UpdateMultilingualSampleAsync(updatedDM);
+            await sampleRepository.Save();
             return Ok();
         }
 
@@ -48,6 +49,7 @@ namespace Lantor.Server.Controllers
         {
             var newDM = mapper.Map<MultilingualSample>(newDTO);
             var newEntity = await sampleRepository.CreateMultilingualSampleAsync(newDM);
+            await sampleRepository.Save();
             var newEntityDTO = mapper.Map<EmptyMultilingualSampleDTO>(newEntity);
             return Ok(newEntityDTO);
         }

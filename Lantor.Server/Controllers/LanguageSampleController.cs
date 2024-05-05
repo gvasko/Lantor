@@ -33,6 +33,7 @@ namespace Lantor.Server.Controllers
         {
             var updatedDM = mapper.Map<LanguageSample>(updatedDTO);
             await sampleRepository.UpdateLanguageSampleAsync(updatedDM);
+            await sampleRepository.Save();
             return Ok();
         }
 
@@ -41,6 +42,7 @@ namespace Lantor.Server.Controllers
         {
             var newDM = mapper.Map<LanguageSample>(newDTO);
             var newEntity = await sampleRepository.CreateLanguageSampleAsync(newDM);
+            await sampleRepository.Save();
             var newEntityDTO = mapper.Map<LanguageSampleDTO>(newEntity);
             return Ok(newEntityDTO);
         }

@@ -109,6 +109,7 @@ namespace Lantor.DomainModel
                         languageVector = languageVectorBuilder.BuildLanguageVector(alphabet, language.Sample);
                         LoggerService.Logger.Debug("Language vector for {lang} generated.", language.Name);
                         await sampleRepository.AddLanguageVectorToCacheAsync(language, alphabet, languageVector);
+                        await sampleRepository.Save();
                         LoggerService.Logger.Debug("Language vector for {lang} stored in cache.", language.Name);
                     }
                     else
