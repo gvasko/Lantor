@@ -27,7 +27,8 @@ namespace Lantor.Data.Infrastructure
 
         public async Task<IList<Alphabet>> GetAllAlphabetListInfoAsync()
         {
-            return await context.Alphabets.AsNoTracking().ToListAsync();
+            // TODO: included lettervectors to calculate dimension, can we avoid the include?
+            return await context.Alphabets.AsNoTracking().Include(a => a.LetterVectors).ToListAsync();
         }
 
         public async Task<Alphabet> CreateAlphabetAsync(Alphabet alphabet)
@@ -38,7 +39,7 @@ namespace Lantor.Data.Infrastructure
 
         public async Task RemoveAlphabetAsync(int alphabetId)
         {
-            var alphabet = await GetAlphabetAsync(alphabetId);
+            var alphabet = await context.Alphabets.Include(a => a.LetterVectors).FirstOrDefaultAsync(a => a.Id == alphabetId);
             if (alphabet == null)
             {
                 throw new ArgumentException($"Unable to delete, Alphabet not found with ID {alphabetId}");

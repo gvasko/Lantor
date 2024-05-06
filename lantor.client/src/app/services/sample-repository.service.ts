@@ -12,41 +12,56 @@ import { MultilingualSampleListInfo } from '../model/multilingual-sample-list-in
 export class SampleRepositoryService {
 
   constructor(private http: HttpClient) { }
+  private static AlphabetApiUri = '/api/alphabet';
+  private static MultilingualSampleApiUri = '/api/multilingualsample';
+  private static LanguageSampleApiUri = '/api/languagesample';
 
   getAlphabets(): Observable<AlphabetListInfo[]> {
-    return this.http.get<AlphabetListInfo[]>('/api/alphabet');
+    return this.http.get<AlphabetListInfo[]>(SampleRepositoryService.AlphabetApiUri);
+  }
+
+  deleteAlphabet(id: number): Observable<void> {
+    return this.http.delete<void>(`${SampleRepositoryService.AlphabetApiUri}/${id}`);
   }
 
   createAlphabet(name: string, dim: number): Observable<AlphabetListInfo> {
-    return this.http.post<AlphabetListInfo>('/api/alphabet', new AlphabetListInfo(0, name, dim));
+    return this.http.post<AlphabetListInfo>(SampleRepositoryService.AlphabetApiUri, new AlphabetListInfo(0, name, dim));
   }
 
   getMultilingualSamples(): Observable<MultilingualSampleListInfo[]> {
-    return this.http.get<MultilingualSampleListInfo[]>('/api/multilingualsample');
+    return this.http.get<MultilingualSampleListInfo[]>(SampleRepositoryService.MultilingualSampleApiUri);
   }
 
   getMultilingualSample(id: number): Observable<EmptyMultilingualSample | null> {
-    return this.http.get<EmptyMultilingualSample>(`/api/multilingualsample/${id}`);
+    return this.http.get<EmptyMultilingualSample>(`${SampleRepositoryService.MultilingualSampleApiUri}/${id}`);
   }
 
   updateMultilingualSample(mls: EmptyMultilingualSample): Observable<void> {
-    return this.http.put<void>("/api/multilingualsample", mls);
+    return this.http.put<void>(SampleRepositoryService.MultilingualSampleApiUri, mls);
   }
 
   createMultilingualSample(mls: EmptyMultilingualSample): Observable<EmptyMultilingualSample> {
-    return this.http.post<EmptyMultilingualSample>("/api/multilingualsample", mls);
+    return this.http.post<EmptyMultilingualSample>(SampleRepositoryService.MultilingualSampleApiUri, mls);
+  }
+
+  deleteMultilingualSample(id: number): Observable<void> {
+    return this.http.delete<void>(`${SampleRepositoryService.MultilingualSampleApiUri}/${id}`);
   }
 
   getLanguageSample(id: number): Observable<LanguageSample | null> {
-    return this.http.get<LanguageSample>(`/api/languagesample/${id}`);
+    return this.http.get<LanguageSample>(`${SampleRepositoryService.LanguageSampleApiUri}/${id}`);
   }
 
   updateLanguageSample(ls: LanguageSample): Observable<void> {
-    return this.http.put<void>("/api/languagesample", ls);
+    return this.http.put<void>(SampleRepositoryService.LanguageSampleApiUri, ls);
   }
 
   createLanguageSample(ls: LanguageSample): Observable<LanguageSample> {
-    return this.http.post<LanguageSample>("/api/languagesample", ls);
+    return this.http.post<LanguageSample>(SampleRepositoryService.LanguageSampleApiUri, ls);
+  }
+
+  deleteLanguageSample(id: number): Observable<void> {
+    return this.http.delete<void>(`${SampleRepositoryService.LanguageSampleApiUri}/${id}`);
   }
 
 }

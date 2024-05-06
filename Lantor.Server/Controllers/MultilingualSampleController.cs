@@ -53,5 +53,14 @@ namespace Lantor.Server.Controllers
             var newEntityDTO = mapper.Map<EmptyMultilingualSampleDTO>(newEntity);
             return Ok(newEntityDTO);
         }
+
+        [HttpDelete("{id:int}")]
+        public async Task<ActionResult> Delete(int id)
+        {
+            await domainUow.RemoveMultilingualSampleAsync(id);
+            await domainUow.Save();
+            return Ok();
+        }
+
     }
 }

@@ -26,10 +26,17 @@ export class LanguageAdminComponent {
   }
 
   ngOnInit() {
+    this.refreshMultiSamples();
+    this.refreshAlphabets();
+  }
+
+  refreshMultiSamples() {
     this.sampleRepository.getMultilingualSamples().subscribe(s => {
       this.languageSamples = s;
     });
+  }
 
+  refreshAlphabets() {
     this.sampleRepository.getAlphabets().subscribe(abc => {
       this.alphabets = abc;
     });
@@ -77,7 +84,10 @@ export class LanguageAdminComponent {
     ref.componentInstance.messages = ["Would you like to delete the following sample:", this.selectedSample.name, "This cannot be undone."];
     ref.componentInstance.confirmationType = ConfirmationType.YesNo;
     ref.componentInstance.mainAction = () => {
-      console.log("DELETE SAMPLE");
+      console.log(`DELETE SAMPLE ${this.selectedSample.name}`);
+      this.sampleRepository.deleteMultilingualSample(this.selectedSample.id).subscribe(() => {
+        this.refreshMultiSamples();
+      });
     };
   }
 
@@ -101,7 +111,10 @@ export class LanguageAdminComponent {
     ref.componentInstance.messages = ["Would you like to delete the following alphabet:", this.selectedAlphabet.name, "This cannot be undone."];
     ref.componentInstance.confirmationType = ConfirmationType.YesNo;
     ref.componentInstance.mainAction = () => {
-      console.log("DELETE ALPHABET");
+      console.log(`DELETE ALPHABET ${this.selectedAlphabet.name}`);
+      this.sampleRepository.deleteAlphabet(this.selectedAlphabet.id).subscribe(() => {
+        this.refreshAlphabets();
+      });
     };
   }
 }

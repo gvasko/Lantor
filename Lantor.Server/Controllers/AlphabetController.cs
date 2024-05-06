@@ -40,5 +40,12 @@ namespace Lantor.Server.Controllers
             return Ok(newEntityDTO);
         }
 
+        [HttpDelete("{id:int}")]
+        public async Task<ActionResult> Delete(int id)
+        {
+            await domainUow.RemoveAlphabetAsync(id);
+            await domainUow.Save();
+            return Ok();
+        }
     }
 }

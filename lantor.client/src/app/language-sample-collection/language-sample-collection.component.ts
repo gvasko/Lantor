@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ConfirmationType } from '../confirmation/confirmation-type';
+import { ConfirmationComponent } from '../confirmation/confirmation.component';
 import { EmptyLanguageSample } from '../model/empty-language-sample';
 import { EmptyMultilingualSample } from '../model/empty-multilingual-sample';
 import { LanguageSample } from '../model/language-sample';
@@ -22,12 +25,16 @@ export class LanguageSampleCollectionComponent implements OnInit {
     languages: new FormControl<EmptyLanguageSample[]>([])
   });
 
-  constructor(private sampleRepository: SampleRepositoryService, private router: Router, private route: ActivatedRoute) { }
+  constructor(private sampleRepository: SampleRepositoryService, private router: Router, private route: ActivatedRoute, private modalService: NgbModal) { }
 
   ngOnInit() {
     const collectionIdParam = this.route.snapshot.paramMap.get("id");
     this.collectionId = collectionIdParam === null ? 0 : +collectionIdParam;
 
+    this.refreshSamples();
+  }
+
+  refreshSamples() {
     if (this.collectionId === 0)
       return;
 
@@ -75,8 +82,18 @@ export class LanguageSampleCollectionComponent implements OnInit {
     this.router.navigate(["/language-sample-collection", this.collectionId, 'language', id]);
   }
 
-  removeLanguageSample(id: number) {
-
+  removeLanguageSample(languageSample: EmptyLanguageSample) {
+    console.log("Delete sample");
+    let ref = this.modalService.open(ConfirmationComponent);
+    ref.componentInstance.title = "Delete Sample";
+    ref.componentInstance.messages = ["Would you like to delete the following sample:", languageSample.name, "This cannot be undone."];
+    ref.componentInstance.confirmationType = ConfirmationType.YesNo;
+    ref.componentInstance.mainAction = () => {
+      console.log(`DELETE SAMPLE ${languageSample.name}`);
+      this.sampleRepository.deleteLanguageSample(languageSample.id).subscribe(() => {
+        this.refreshSamples();
+      });
+    };
   }
 
   addNewLanguage() {

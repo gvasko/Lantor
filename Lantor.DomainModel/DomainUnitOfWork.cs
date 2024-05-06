@@ -39,7 +39,8 @@ namespace Lantor.DomainModel
 
         public async Task RemoveAlphabetAsync(int alphabetId)
         {
-            _basicUow.RemoveAlphabetFromCache(alphabetId);
+            // EF Core will cascade delete
+            //_basicUow.RemoveAlphabetFromCache(alphabetId);
             await _basicUow.RemoveAlphabetAsync(alphabetId);
         }
 
@@ -52,13 +53,15 @@ namespace Lantor.DomainModel
 
         public async Task RemoveMultilingualSampleAsync(int multilingualSampleId)
         {
-            await _basicUow.RemoveMultilingualSampleFromCacheAsync(multilingualSampleId);
+            // EF Core will cascade delete
+            //await _basicUow.RemoveMultilingualSampleFromCacheAsync(multilingualSampleId);
             await _basicUow.RemoveCascadeMultilingualSampleAsync(multilingualSampleId);
         }
 
         public async Task RemoveLanguageSampleAsync(int sampleId)
         {
-            _basicUow.RemoveLanguageSampleFromCache(sampleId);
+            // EF Core will cascade delete
+            //_basicUow.RemoveLanguageSampleFromCache(sampleId);
             await _basicUow.RemoveLanguageSampleAsync(sampleId);
         }
 
