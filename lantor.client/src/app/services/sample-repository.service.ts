@@ -12,9 +12,9 @@ import { MultilingualSampleListInfo } from '../model/multilingual-sample-list-in
 export class SampleRepositoryService {
 
   constructor(private http: HttpClient) { }
-  private static AlphabetApiUri = '/api/alphabet';
-  private static MultilingualSampleApiUri = '/api/multilingualsample';
-  private static LanguageSampleApiUri = '/api/languagesample';
+  public static readonly AlphabetApiUri = '/api/alphabet';
+  public static readonly MultilingualSampleApiUri = '/api/multilingualsample';
+  public static readonly LanguageSampleApiUri = '/api/languagesample';
 
   getAlphabets(): Observable<AlphabetListInfo[]> {
     return this.http.get<AlphabetListInfo[]>(SampleRepositoryService.AlphabetApiUri);
