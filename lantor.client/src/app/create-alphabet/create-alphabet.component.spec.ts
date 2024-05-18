@@ -1,4 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormsModule } from '@angular/forms';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { CreateAlphabetComponent } from './create-alphabet.component';
 
@@ -7,8 +9,12 @@ describe('CreateAlphabetComponent', () => {
   let fixture: ComponentFixture<CreateAlphabetComponent>;
 
   beforeEach(async () => {
+    const modalSpy = jasmine.createSpyObj<NgbActiveModal>('NgbActiveModal', ['close', 'dismiss']);
+
     await TestBed.configureTestingModule({
-      declarations: [ CreateAlphabetComponent ]
+      declarations: [ CreateAlphabetComponent ],
+      imports: [FormsModule],
+      providers: [{ provide: NgbActiveModal, useValue: modalSpy }]
     })
     .compileComponents();
 
