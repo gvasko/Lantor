@@ -1,6 +1,7 @@
 <div class="modal-header">
   <h4 class="modal-title" id="modal-title">Create New Alphabet</h4>
-  <button type="button"
+  <button id="x-button"
+          type="button"
           class="btn-close"
           aria-label="Close button"
           aria-describedby="modal-title"
@@ -14,10 +15,10 @@
   <section class="my-3">
     <label for="dimension" class="mb-1">Dimension</label>
     <input id="dimension" type="number" class="form-control" placeholder="500-20000" [(ngModel)]="dimension" (ngModelChange)="dimChanged($event)" />
-    <p class="mt-3">Adjusted dimension: {{adjustedDimension}}</p>
+    <p id="adjusted-dimension" class="mt-3">Adjusted dimension: {{adjustedDimension}}</p>
   </section>
 </div>
 <div class="modal-footer">
-  <button type="button" class="btn btn-primary" (click)="onClickCreateButton()" [disabled]="!createEnabled()">Create</button>
-  <button type="button" ngbAutofocus class="btn btn-secondary" (click)="onClickCancelButton()">Cancel</button>
+  <button id="create-button" type="button" class="btn btn-primary" (click)="onClickCreateButton()" [disabled]="!createEnabled()">Create</button>
+  <button id="cancel-button" type="button" ngbAutofocus class="btn btn-secondary" (click)="onClickCancelButton()">Cancel</button>
 </div>
