@@ -1,5 +1,5 @@
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { CreateAlphabetComponent } from './create-alphabet.component';
@@ -20,7 +20,7 @@ describe('CreateAlphabetComponent', () => {
 
     await TestBed.configureTestingModule({
       declarations: [CreateAlphabetComponent],
-      imports: [FormsModule],
+      imports: [FormsModule, ReactiveFormsModule],
       providers: [{ provide: NgbActiveModal, useValue: modalSpy }]
     })
       .compileComponents();
@@ -74,6 +74,14 @@ describe('CreateAlphabetComponent', () => {
     dimInput.dispatchEvent(new Event('input'));
     fixture.detectChanges();
     expect(createButton.disabled).toBeFalsy();
+  });
+
+  it('starts with empty inputs', () => {
+
+  });
+
+  it('removes adjusted dim when input gets empty', () => {
+
   });
 
   it('does not show error at the beginning and create-button is disabled', () => {

@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { AlphabetListInfo } from '../model/alphabet-list-info';
 import { ActionT } from '../services/action';
@@ -11,21 +12,34 @@ import { ActionT } from '../services/action';
 export class CreateAlphabetComponent {
   @Input() public createAction: ActionT<AlphabetListInfo> | null = null;
 
-  readonly MinDim: number = 32;
-  readonly MaxDim: number = 10016;
-  dimension: number | null = null;
+  readonly MinDim: number = 1;
+  readonly MaxDim: number = 10000;
   adjustedDimension: number | null = null;
-  alphabetName: string | null = null;
+
+  public formGroup = new FormGroup({
+    id: new FormControl(0),
+    name: new FormControl("", Validators.required),
+    dim: new FormControl<number | null>(null, [Validators.required, Validators.min(this.MinDim), Validators.max(this.MaxDim)])
+  });
 
   constructor(private activeModal: NgbActiveModal) {
 
   }
 
-  dimChanged(event: any) {
-    if (!this.dimension) return;
+  isValueInvalid(fieldName: string): boolean {
+    const field = this.formGroup.get(fieldName);
+    if (!field) {
+      throw "Unknown field: " + fieldName;
+    }
+    return field.invalid && field.touched;
+  }
 
-    const additional32 = this.dimension % 32 === 0 ? 0 : 32;
-    this.adjustedDimension = Math.floor(this.dimension / 32) * 32 + additional32;
+  dimChanged(event: any) {
+    const dim = this.formGroup.controls.dim.value;
+    if (!dim) return;
+
+    const additional32 = dim % 32 === 0 ? 0 : 32;
+    this.adjustedDimension = Math.floor(dim / 32) * 32 + additional32;
   }
 
   nameChanged(event: any) {
@@ -34,13 +48,18 @@ export class CreateAlphabetComponent {
 
   onClickCreateButton() {
     this.activeModal.close('Create click')
-    if (this.createAction !== null && this.createEnabled()) {
-      this.createAction(new AlphabetListInfo(0, this.alphabetName!, this.adjustedDimension!));
+    let rawValue = this.formGroup.getRawValue();
+    if (this.adjustedDimension) {
+      rawValue.dim = this.adjustedDimension;
+    }
+    // TODO: check validity too
+    if (this.createAction !== null) {
+      this.createAction(rawValue as AlphabetListInfo);
     }
   }
 
-  createEnabled(): boolean {
-    return this.alphabetName !== null && this.adjustedDimension !== null;
+  isFormInvalid(): boolean {
+    return this.formGroup.invalid;
   }
 
   onClickCancelButton() {
