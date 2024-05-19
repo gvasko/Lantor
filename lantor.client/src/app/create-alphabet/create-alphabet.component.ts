@@ -31,12 +31,16 @@ export class CreateAlphabetComponent {
     if (!field) {
       throw "Unknown field: " + fieldName;
     }
+    console.log(`${fieldName}: ${field.invalid ? 'invalid' : 'valid'} ${field.touched ? 'touched' : 'untouched'}`)
     return field.invalid && field.touched;
   }
 
   dimChanged(event: any) {
     const dim = this.formGroup.controls.dim.value;
-    if (!dim) return;
+    if (!dim) {
+      this.adjustedDimension = null;
+      return;
+    }
 
     const additional32 = dim % 32 === 0 ? 0 : 32;
     this.adjustedDimension = Math.floor(dim / 32) * 32 + additional32;

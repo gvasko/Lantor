@@ -15,6 +15,50 @@ describe('CreateAlphabetComponent', () => {
   let cancelButton: any;
   let xButton: any;
 
+  const changeInput = (inputElement: any, value: string) => {
+    inputElement.dispatchEvent(new Event('focus'));
+    inputElement.value = value;
+    inputElement.dispatchEvent(new Event('input'));
+    inputElement.dispatchEvent(new Event('blur'));
+    fixture.detectChanges();
+  };
+
+  const setupSimpleValidState = () => {
+    nameInput.value = 'dummy';
+    nameInput.dispatchEvent(new Event('input'));
+    dimInput.value = '22';
+    dimInput.dispatchEvent(new Event('input'));
+    fixture.detectChanges();
+  }
+
+  const expectDimWarning = () => {
+    let dimWarning = fixture.nativeElement.querySelector('#dim-warning');
+    expect(dimWarning).not.toBeNull();
+  }
+
+  const expectNoDimWarning = () => {
+    let dimWarning = fixture.nativeElement.querySelector('#dim-warning');
+    expect(dimWarning).toBeNull();
+  }
+
+  const expectNameWarning = () => {
+    let nameWarning = fixture.nativeElement.querySelector('#name-warning');
+    expect(nameWarning).not.toBeNull();
+  }
+
+  const expectNoNameWarning = () => {
+    let nameWarning = fixture.nativeElement.querySelector('#name-warning');
+    expect(nameWarning).toBeNull();
+  }
+
+  const expectCreateButtonIsDisabled = () => {
+    expect(createButton.disabled).toBeTruthy();
+  }
+
+  const expectCreateButtonIsEnabled = () => {
+    expect(createButton.disabled).toBeFalsy();
+  }
+
   beforeEach(async () => {
     modalSpy = jasmine.createSpyObj<NgbActiveModal>('NgbActiveModal', ['close', 'dismiss']);
 
@@ -42,82 +86,99 @@ describe('CreateAlphabetComponent', () => {
   });
 
   it('maintains adjusted dimension %32', () => {
-    dimInput.value = '10';
-    dimInput.dispatchEvent(new Event('input'));
-    fixture.detectChanges();
+    changeInput(dimInput, '10');
     expect(adjustedDim.textContent).toBe('Adjusted dimension: 32');
 
-    dimInput.value = '33';
-    dimInput.dispatchEvent(new Event('input'));
-    fixture.detectChanges();
+    changeInput(dimInput, '33');
     expect(adjustedDim.textContent).toBe('Adjusted dimension: 64');
 
-    dimInput.value = '32';
-    dimInput.dispatchEvent(new Event('input'));
-    fixture.detectChanges();
+    changeInput(dimInput, '32');
     expect(adjustedDim.textContent).toBe('Adjusted dimension: 32');
 
-    dimInput.value = '100';
-    dimInput.dispatchEvent(new Event('input'));
-    fixture.detectChanges();
+    changeInput(dimInput, '100');
     expect(adjustedDim.textContent).toBe('Adjusted dimension: 128');
 
   });
 
   it('enables create-button when both name and dimension are provided', () => {
-    expect(createButton.disabled).toBeTruthy();
-    nameInput.value = 'fakename';
-    nameInput.dispatchEvent(new Event('input'));
-    fixture.detectChanges();
-    expect(createButton.disabled).toBeTruthy();
-    dimInput.value = '32';
-    dimInput.dispatchEvent(new Event('input'));
-    fixture.detectChanges();
-    expect(createButton.disabled).toBeFalsy();
+    expectCreateButtonIsDisabled();
+    changeInput(nameInput, 'dummy');
+    expectCreateButtonIsDisabled();
+    changeInput(dimInput, '22');
+    expectCreateButtonIsEnabled();
   });
 
   it('starts with empty inputs', () => {
-
+    expect(nameInput.textContent).toBe('');
+    expect(dimInput.textContent).toBe('');
   });
 
   it('removes adjusted dim when input gets empty', () => {
-
+    expect(adjustedDim.textContent).toBe('Adjusted dimension: ');
+    changeInput(dimInput, '22');
+    expect(adjustedDim.textContent).toBe('Adjusted dimension: 32');
+    changeInput(dimInput, '');
+    expect(adjustedDim.textContent).toBe('Adjusted dimension: ');
   });
 
-  it('does not show error at the beginning and create-button is disabled', () => {
-
+  it('does not show error and create-button is disabled at the beginning', () => {
+    expectNoNameWarning();
+    expectNoDimWarning();
+    expectCreateButtonIsDisabled();
   });
 
-  it('shows error when name gets empty and create-button is disabled', () => {
-
+  it('shows error and create-button is disabled when name gets empty', () => {
+    setupSimpleValidState();
+    changeInput(nameInput, '');
+    expectNameWarning();
+    expectCreateButtonIsDisabled();
   });
 
   it('hides error when name gets value back', () => {
-
+    setupSimpleValidState();
+    changeInput(nameInput, '');
+    changeInput(nameInput, 'dummy2');
+    expectNoNameWarning();
+    expectCreateButtonIsEnabled();
   });
 
   it('shows error when dimension is not positive integer number and create-button is disabled', () => {
-
+    setupSimpleValidState();
+    changeInput(dimInput, '-1');
+    expectDimWarning();
+    expectCreateButtonIsDisabled();
   });
 
   it('hides error when dimension gets valid value back', () => {
-
+    setupSimpleValidState();
+    changeInput(dimInput, '-1');
+    changeInput(dimInput, '1');
+    expectNoDimWarning();
+    expectCreateButtonIsEnabled();
   });
 
   it('shows both errors when both name and dim are invalid and create-button is disabled', () => {
-
+    setupSimpleValidState();
+    changeInput(nameInput, '');
+    changeInput(dimInput, '-1');
+    expectNameWarning();
+    expectDimWarning();
+    expectCreateButtonIsDisabled();
   });
 
   it('create-button is enabled when both name and dimenions are valid', () => {
-    // provide invalid values
+    setupSimpleValidState();
+    changeInput(nameInput, '');
+    changeInput(dimInput, '-1');
+    changeInput(nameInput, 'dummy2');
+    changeInput(dimInput, '1');
+    expectNoNameWarning();
+    expectNoDimWarning();
+    expectCreateButtonIsEnabled();
   });
 
   it('closes when clicking create', () => {
-    nameInput.value = 'fakename';
-    nameInput.dispatchEvent(new Event('input'));
-    dimInput.value = '32';
-    dimInput.dispatchEvent(new Event('input'));
-    fixture.detectChanges();
+    setupSimpleValidState();
     createButton.click();
     expect(modalSpy.close.calls.count()).toBe(1);
   });
@@ -131,4 +192,5 @@ describe('CreateAlphabetComponent', () => {
     xButton.click();
     expect(modalSpy.dismiss.calls.count()).toBe(1);
   });
+
 });

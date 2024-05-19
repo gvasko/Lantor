@@ -12,12 +12,12 @@
     <section class="my-3">
       <label for="name" class="mb-1">Name</label>
       <input id="name" type="text" class="form-control" [class.is-invalid]="isValueInvalid('name')" placeholder="Enter alphabet name" formControlName="name" (ngModelChange)="nameChanged($event)" />
-      <em [class.invalid-feedback]="isValueInvalid('name')" *ngIf="isValueInvalid('name')">Please enter a name</em>
+      <em id="name-warning" [class.invalid-feedback]="isValueInvalid('name')" *ngIf="isValueInvalid('name')">Please enter a name</em>
     </section>
     <section class="my-3">
       <label for="dimension" class="mb-1">Dimension</label>
       <input id="dimension" type="number" class="form-control" [class.is-invalid]="isValueInvalid('dim')" placeholder="{{MinDim}}-{{MaxDim}}" formControlName="dim" (ngModelChange)="dimChanged($event)" />
-      <em [class.invalid-feedback]="isValueInvalid('dim')" *ngIf="isValueInvalid('dim')">Please enter the dimension</em>
+      <em id="dim-warning" [class.invalid-feedback]="isValueInvalid('dim')" *ngIf="isValueInvalid('dim')">Please enter the dimension</em>
       <p id="adjusted-dimension" class="mt-3">Adjusted dimension: {{adjustedDimension}}</p>
     </section>
   </form>
