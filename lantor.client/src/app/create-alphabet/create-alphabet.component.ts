@@ -11,6 +11,8 @@ import { ActionT } from '../services/action';
 export class CreateAlphabetComponent {
   @Input() public createAction: ActionT<AlphabetListInfo> | null = null;
 
+  readonly MinDim: number = 32;
+  readonly MaxDim: number = 10016;
   dimension: number | null = null;
   adjustedDimension: number | null = null;
   alphabetName: string | null = null;
