@@ -7,9 +7,16 @@ import { CreateAlphabetComponent } from './create-alphabet.component';
 describe('CreateAlphabetComponent', () => {
   let component: CreateAlphabetComponent;
   let fixture: ComponentFixture<CreateAlphabetComponent>;
+  let modalSpy: jasmine.SpyObj<NgbActiveModal>;
+  let nameInput: any;
+  let dimInput: any;
+  let adjustedDim: any;
+  let createButton: any;
+  let cancelButton: any;
+  let xButton: any;
 
   beforeEach(async () => {
-    const modalSpy = jasmine.createSpyObj<NgbActiveModal>('NgbActiveModal', ['close', 'dismiss']);
+    modalSpy = jasmine.createSpyObj<NgbActiveModal>('NgbActiveModal', ['close', 'dismiss']);
 
     await TestBed.configureTestingModule({
       declarations: [CreateAlphabetComponent],
@@ -21,6 +28,13 @@ describe('CreateAlphabetComponent', () => {
     fixture = TestBed.createComponent(CreateAlphabetComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+
+    nameInput = fixture.nativeElement.querySelector('#name');
+    dimInput = fixture.nativeElement.querySelector('#dimension');
+    adjustedDim = fixture.nativeElement.querySelector('#adjusted-dimension');
+    createButton = fixture.nativeElement.querySelector('#create-button');
+    cancelButton = fixture.nativeElement.querySelector('#cancel-button');
+    xButton = fixture.nativeElement.querySelector('#x-button');
   });
 
   it('should create', () => {
@@ -28,9 +42,6 @@ describe('CreateAlphabetComponent', () => {
   });
 
   it('maintains adjusted dimension %32', () => {
-    const dimInput = fixture.nativeElement.querySelector('#dimension');
-    const adjustedDim = fixture.nativeElement.querySelector('#adjusted-dimension');
-
     dimInput.value = '10';
     dimInput.dispatchEvent(new Event('input'));
     fixture.detectChanges();
@@ -54,10 +65,7 @@ describe('CreateAlphabetComponent', () => {
   });
 
   it('enables create-button when both name and dimension are provided', () => {
-    const createButton = fixture.nativeElement.querySelector('#create-button');
     expect(createButton.disabled).toBeTruthy();
-    const nameInput = fixture.nativeElement.querySelector('#name');
-    const dimInput = fixture.nativeElement.querySelector('#dimension');
     nameInput.value = 'fakename';
     nameInput.dispatchEvent(new Event('input'));
     fixture.detectChanges();
@@ -93,18 +101,26 @@ describe('CreateAlphabetComponent', () => {
   });
 
   it('create-button is enabled when both name and dimenions are valid', () => {
-
+    // provide invalid values
   });
 
   it('closes when clicking create', () => {
-
+    nameInput.value = 'fakename';
+    nameInput.dispatchEvent(new Event('input'));
+    dimInput.value = '32';
+    dimInput.dispatchEvent(new Event('input'));
+    fixture.detectChanges();
+    createButton.click();
+    expect(modalSpy.close.calls.count()).toBe(1);
   });
 
   it('dismisses when cancelled', () => {
-
+    cancelButton.click();
+    expect(modalSpy.dismiss.calls.count()).toBe(1);
   });
 
   it('dismisses when clicking X', () => {
-
+    xButton.click();
+    expect(modalSpy.dismiss.calls.count()).toBe(1);
   });
 });
