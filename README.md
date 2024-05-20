@@ -1,5 +1,7 @@
 # Language Detector
 
+![Build and Test](https://github.com/gvasko/Lantor/actions/workflows/build-and-test.yml/badge.svg)
+
 Playing with language detection, using naive implementation of high-dimensional bipolar vectors.
 
 ![A screenshot](screenshot.png)
