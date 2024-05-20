@@ -30,12 +30,12 @@ jobs:
       run: dotnet restore
     - name: Build
       run: dotnet build --no-restore
-    - name: Test
+    - name: Run .NET tests
       run: dotnet test --no-build --verbosity normal
     - name: Install NPM dependencies
       run: npm ci
       working-directory: ./lantor.client
     - name: Run NG tests
-      run: npm test:ci
+      run: npm run test:ci
       working-directory: ./lantor.client
 
