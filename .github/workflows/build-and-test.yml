@@ -25,6 +25,7 @@ jobs:
       with:
         node-version: 18.x
         cache: 'npm'
+        cache-dependency-path: ./lantor.client/package-lock.json
     - name: Restore .NET dependencies
       run: dotnet restore
     - name: Build
