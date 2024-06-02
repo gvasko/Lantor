@@ -5,7 +5,9 @@ using Lantor.DomainModel;
 using Lantor.Server.DTO;
 using Lantor.Server.Infrastructure;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Serilog;
+using System;
 
 namespace Lantor.Server
 {
@@ -33,6 +35,12 @@ namespace Lantor.Server
             builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 
             var app = builder.Build();
+
+            using (var serviceScope = app.Services.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            {
+                var context = serviceScope.ServiceProvider.GetService<LantorContext>();
+                context?.Database.Migrate();
+            }
 
             app.UseDefaultFiles();
             app.UseStaticFiles();
