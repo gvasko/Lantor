@@ -1,5 +1,4 @@
-﻿using Azure.Core;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 using System.Reflection;
 using System.Text;
 
@@ -11,15 +10,14 @@ namespace Lantor.Data.Migrations
     public partial class SeedDefaultSamples : Migration
     {
         /// <inheritdoc />
-        /// 
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.InsertData(
                 table: "MultilingualSamples",
-                columns: new[] { "Id", "Name" },
+                columns: new[] { "Id", "Name", "Comment" },
                 values: new object[,]
                 {
-                    { 1, "Default" }
+                    { 1, "Default", "Sections about the Roman Empire From Wikipedia" }
                 });
 
             migrationBuilder.InsertData(

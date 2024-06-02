@@ -2,8 +2,8 @@
 using Lantor.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
@@ -16,22 +16,22 @@ namespace Lantor.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.3")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+                .HasAnnotation("ProductVersion", "8.0.6")
+                .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("Lantor.DomainModel.Alphabet", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -42,20 +42,20 @@ namespace Lantor.Data.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int>("MultilingualSampleId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("Sample")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -68,15 +68,15 @@ namespace Lantor.Data.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int>("AlphabetId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<int>("LanguageSampleId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -91,17 +91,17 @@ namespace Lantor.Data.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Comment")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -113,17 +113,16 @@ namespace Lantor.Data.Migrations
                     b.OwnsMany("Lantor.DomainModel.LetterVector", "LetterVectors", b1 =>
                         {
                             b1.Property<int>("AlphabetId")
-                                .HasColumnType("int");
+                                .HasColumnType("integer");
 
                             b1.Property<int>("Id")
                                 .ValueGeneratedOnAdd()
-                                .HasColumnType("int");
+                                .HasColumnType("integer");
 
-                            SqlServerPropertyBuilderExtensions.UseIdentityColumn(b1.Property<int>("Id"));
+                            NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b1.Property<int>("Id"));
 
-                            b1.Property<string>("Letter")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(1)");
+                            b1.Property<char>("Letter")
+                                .HasColumnType("character(1)");
 
                             b1.HasKey("AlphabetId", "Id");
 
@@ -135,14 +134,14 @@ namespace Lantor.Data.Migrations
                             b1.OwnsOne("Lantor.DomainModel.HiDimBipolarVector", "Vector", b2 =>
                                 {
                                     b2.Property<int>("LetterVectorAlphabetId")
-                                        .HasColumnType("int");
+                                        .HasColumnType("integer");
 
                                     b2.Property<int>("LetterVectorId")
-                                        .HasColumnType("int");
+                                        .HasColumnType("integer");
 
                                     b2.Property<byte[]>("Data")
                                         .IsRequired()
-                                        .HasColumnType("varbinary(max)");
+                                        .HasColumnType("bytea");
 
                                     b2.HasKey("LetterVectorAlphabetId", "LetterVectorId");
 
@@ -185,11 +184,11 @@ namespace Lantor.Data.Migrations
                     b.OwnsOne("Lantor.DomainModel.HiDimBipolarVector", "Vector", b1 =>
                         {
                             b1.Property<int>("LanguageVectorCacheId")
-                                .HasColumnType("int");
+                                .HasColumnType("integer");
 
                             b1.Property<byte[]>("Data")
                                 .IsRequired()
-                                .HasColumnType("varbinary(max)");
+                                .HasColumnType("bytea");
 
                             b1.HasKey("LanguageVectorCacheId");
 

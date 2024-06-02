@@ -24,8 +24,10 @@ namespace Lantor.Server
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-            builder.Services.AddDbContext<LantorContext>(options => 
-                options.UseSqlServer(builder.Configuration.GetConnectionString("LantorDatabase")));
+            //builder.Services.AddDbContext<LantorContext>(options => 
+            //    options.UseSqlServer(builder.Configuration.GetConnectionString("LantorDatabase")));
+            builder.Services.AddDbContext<LantorContext>(options =>
+                options.UseNpgsql(builder.Configuration.GetConnectionString("LantorDatabase")));
             builder.Services.AddScoped<IDomainUnitOfWork, DomainUnitOfWork>();
             builder.Services.AddScoped<IBasicCrudUnitOfWork, BasicCrudUnitOfWork>();
             builder.Services.AddScoped<ILanguageVectorBuilder, LanguageVectorBuilder>();
