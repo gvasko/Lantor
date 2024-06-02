@@ -26,8 +26,16 @@ namespace Lantor.Server
             builder.Services.AddSwaggerGen();
             //builder.Services.AddDbContext<LantorContext>(options => 
             //    options.UseSqlServer(builder.Configuration.GetConnectionString("LantorDatabase")));
+
+            string? connectionString = Environment.GetEnvironmentVariable("AZURE_POSTGRESQL_CONNECTIONSTRING");
+
+            if (string.IsNullOrEmpty(connectionString) ) 
+            {
+                connectionString = builder.Configuration.GetConnectionString("LantorDatabase");
+            }
+
             builder.Services.AddDbContext<LantorContext>(options =>
-                options.UseNpgsql(builder.Configuration.GetConnectionString("LantorDatabase")));
+                options.UseNpgsql(connectionString));
             builder.Services.AddScoped<IDomainUnitOfWork, DomainUnitOfWork>();
             builder.Services.AddScoped<IBasicCrudUnitOfWork, BasicCrudUnitOfWork>();
             builder.Services.AddScoped<ILanguageVectorBuilder, LanguageVectorBuilder>();
@@ -35,6 +43,12 @@ namespace Lantor.Server
             builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 
             var app = builder.Build();
+
+            using (var serviceScope = app.Services.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            {
+                var context = serviceScope.ServiceProvider.GetService<LantorContext>();
+                context.Database.Migrate();
+            }
 
             app.UseDefaultFiles();
             app.UseStaticFiles();
