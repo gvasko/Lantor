@@ -4,6 +4,7 @@ import { LanguageAdminComponent } from './language-admin/language-admin.componen
 import { DefaultDetectorComponent } from './default-detector/default-detector.component';
 import { LanguageSampleCollectionComponent } from './language-sample-collection/language-sample-collection.component';
 import { LanguageSampleComponent } from './language-sample/language-sample.component';
+import { MsalRedirectComponent } from '@azure/msal-angular';
 
 export const routes: Routes = [
   { path: 'default-detector', component: DefaultDetectorComponent },
@@ -13,5 +14,6 @@ export const routes: Routes = [
   { path: 'language-sample-collection/:id', component: LanguageSampleCollectionComponent },
   { path: 'language-sample-collection/:id/language', component: LanguageSampleComponent },
   { path: 'language-sample-collection/:id/language/:languageId', component: LanguageSampleComponent },
+  { path: 'auth', component: MsalRedirectComponent },
   { path: '', redirectTo: '/default-detector', pathMatch: 'full' }
 ];

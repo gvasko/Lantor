@@ -19,8 +19,9 @@ import { ConfirmationComponent } from './confirmation/confirmation.component';
 import { LanguageSampleCollectionComponent } from './language-sample-collection/language-sample-collection.component';
 import { LanguageSampleComponent } from './language-sample/language-sample.component';
 import { CreateAlphabetComponent } from './create-alphabet/create-alphabet.component';
-import { MSAL_INSTANCE } from '@azure/msal-angular';
-import { IPublicClientApplication } from '@azure/msal-browser';
+import { MsalBroadcastService, MsalRedirectComponent, MsalService, MSAL_INSTANCE } from '@azure/msal-angular';
+import { IPublicClientApplication, PublicClientApplication } from '@azure/msal-browser';
+import { msalConfig } from './auth-config';
 
 export function MSALInstanceFactory(): IPublicClientApplication {
   return new PublicClientApplication(msalConfig);
@@ -53,8 +54,9 @@ export function MSALInstanceFactory(): IPublicClientApplication {
       provide: MSAL_INSTANCE,
       useFactory: MSALInstanceFactory
     },
+    MsalService, MsalBroadcastService,
     provideRouter(routes)
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent, MsalRedirectComponent]
 })
 export class AppModule { }
