@@ -19,6 +19,13 @@ import { ConfirmationComponent } from './confirmation/confirmation.component';
 import { LanguageSampleCollectionComponent } from './language-sample-collection/language-sample-collection.component';
 import { LanguageSampleComponent } from './language-sample/language-sample.component';
 import { CreateAlphabetComponent } from './create-alphabet/create-alphabet.component';
+import { MSAL_INSTANCE } from '@azure/msal-angular';
+import { IPublicClientApplication } from '@azure/msal-browser';
+
+export function MSALInstanceFactory(): IPublicClientApplication {
+  return new PublicClientApplication(msalConfig);
+}
+
 
 @NgModule({
   declarations: [
@@ -41,6 +48,10 @@ import { CreateAlphabetComponent } from './create-alphabet/create-alphabet.compo
   providers: [
     {
       provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true
+    },
+    {
+      provide: MSAL_INSTANCE,
+      useFactory: MSALInstanceFactory
     },
     provideRouter(routes)
   ],
