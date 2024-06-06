@@ -19,14 +19,23 @@ import { ConfirmationComponent } from './confirmation/confirmation.component';
 import { LanguageSampleCollectionComponent } from './language-sample-collection/language-sample-collection.component';
 import { LanguageSampleComponent } from './language-sample/language-sample.component';
 import { CreateAlphabetComponent } from './create-alphabet/create-alphabet.component';
-import { MsalBroadcastService, MsalRedirectComponent, MsalService, MSAL_INSTANCE } from '@azure/msal-angular';
-import { IPublicClientApplication, PublicClientApplication } from '@azure/msal-browser';
+import { MsalBroadcastService, MsalGuard, MsalGuardConfiguration, MsalRedirectComponent, MsalService, MSAL_GUARD_CONFIG, MSAL_INSTANCE } from '@azure/msal-angular';
+import { InteractionType, IPublicClientApplication, PublicClientApplication } from '@azure/msal-browser';
 import { msalConfig } from './auth-config';
 
 export function MSALInstanceFactory(): IPublicClientApplication {
   return new PublicClientApplication(msalConfig);
 }
 
+export function MsalGuardConfigurationFactory(): MsalGuardConfiguration {
+  return {
+    interactionType: InteractionType.Redirect,
+    authRequest: {
+      scopes: ["user.read"]
+    },
+    loginFailedRoute: ''
+  };
+}
 
 @NgModule({
   declarations: [
@@ -54,7 +63,11 @@ export function MSALInstanceFactory(): IPublicClientApplication {
       provide: MSAL_INSTANCE,
       useFactory: MSALInstanceFactory
     },
-    MsalService, MsalBroadcastService,
+    {
+      provide: MSAL_GUARD_CONFIG,
+      useFactory: MsalGuardConfigurationFactory
+    },
+    MsalService, MsalBroadcastService, MsalGuard,
     provideRouter(routes)
   ],
   bootstrap: [AppComponent, MsalRedirectComponent]
