@@ -19,7 +19,7 @@ import { ConfirmationComponent } from './confirmation/confirmation.component';
 import { LanguageSampleCollectionComponent } from './language-sample-collection/language-sample-collection.component';
 import { LanguageSampleComponent } from './language-sample/language-sample.component';
 import { CreateAlphabetComponent } from './create-alphabet/create-alphabet.component';
-import { MsalBroadcastService, MsalGuard, MsalGuardConfiguration, MsalRedirectComponent, MsalService, MSAL_GUARD_CONFIG, MSAL_INSTANCE } from '@azure/msal-angular';
+import { MsalBroadcastService, MsalGuard, MsalGuardConfiguration, MsalInterceptor, MsalInterceptorConfiguration, MsalRedirectComponent, MsalService, MSAL_GUARD_CONFIG, MSAL_INSTANCE, MSAL_INTERCEPTOR_CONFIG, ProtectedResourceScopes } from '@azure/msal-angular';
 import { InteractionType, IPublicClientApplication, PublicClientApplication } from '@azure/msal-browser';
 import { msalConfig } from './auth-config';
 
@@ -35,6 +35,24 @@ export function MsalGuardConfigurationFactory(): MsalGuardConfiguration {
     },
     loginFailedRoute: ''
   };
+}
+
+export function MsalInterceptorConfigurationFactory(): MsalInterceptorConfiguration {
+  const myProtectedResourceMap = new Map<string, Array<string | ProtectedResourceScopes> | null>();
+
+  myProtectedResourceMap.set("https://graph.microsoft.com/v1.0/me", [
+    {
+      httpMethod: "GET",
+      scopes: ["user.read"]
+    }
+  ]);
+
+  // TODO: add more for our API
+
+  return {
+    interactionType: InteractionType.Redirect,
+    protectedResourceMap: myProtectedResourceMap
+  }
 }
 
 @NgModule({
@@ -57,7 +75,9 @@ export function MsalGuardConfigurationFactory(): MsalGuardConfiguration {
   ],
   providers: [
     {
-      provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true
+      provide: HTTP_INTERCEPTORS,
+      useClass: LoadingInterceptor,
+      multi: true
     },
     {
       provide: MSAL_INSTANCE,
@@ -66,6 +86,15 @@ export function MsalGuardConfigurationFactory(): MsalGuardConfiguration {
     {
       provide: MSAL_GUARD_CONFIG,
       useFactory: MsalGuardConfigurationFactory
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: MsalInterceptor,
+      multi: true
+    },
+    {
+      provide: MSAL_INTERCEPTOR_CONFIG,
+      useFactory: MsalInterceptorConfigurationFactory
     },
     MsalService, MsalBroadcastService, MsalGuard,
     provideRouter(routes)
