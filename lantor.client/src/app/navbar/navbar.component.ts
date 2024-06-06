@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Event, NavigationEnd, Router, RouterEvent } from '@angular/router';
 import { MsalBroadcastService, MsalService } from '@azure/msal-angular';
 import { AuthenticationResult, EventMessage, EventType, InteractionStatus } from '@azure/msal-browser';
 import { filter, Subject, takeUntil } from 'rxjs';
@@ -15,7 +16,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   private unsubscribe = new Subject<void>();
 
-  constructor(private msalService: MsalService, private msalBroadcastService: MsalBroadcastService) {
+  constructor(private msalService: MsalService, private msalBroadcastService: MsalBroadcastService, private router: Router) {
 
   }
 
@@ -34,6 +35,13 @@ export class NavbarComponent implements OnInit, OnDestroy {
       const authResult = message.payload as AuthenticationResult;
       this.msalService.instance.setActiveAccount(authResult.account);
     });
+
+    this.router.events.pipe(
+      filter((e: Event): e is NavigationEnd => e instanceof NavigationEnd),
+      takeUntil(this.unsubscribe)
+    ).subscribe((e: NavigationEnd) => {
+      this.setAuthStatus();
+    });
   }
 
   ngOnDestroy() {
@@ -48,7 +56,25 @@ export class NavbarComponent implements OnInit, OnDestroy {
   }
 
   logout(): void {
-    this.msalService.instance.logoutRedirect();
+    //this.msalService.instance.logoutRedirect();
+    // soft-logout
+    const keysToDelete = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      const key: string | null = localStorage.key(i);
+
+      if (!key) {
+        continue;
+      }
+
+      if (key.indexOf("msal.") >= 0 || key.indexOf("login.windows.net") >= 0) {
+        keysToDelete.push(key);
+      }
+    }
+
+    keysToDelete.forEach((key) => localStorage.removeItem(key));
+
+    this.router.navigate(["/"]);
+
   }
 
   setAuthStatus() {
