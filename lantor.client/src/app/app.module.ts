@@ -47,6 +47,32 @@ export function MsalInterceptorConfigurationFactory(): MsalInterceptorConfigurat
     }
   ]);
 
+  myProtectedResourceMap.set("/api/defaultdetectlanguages", [
+    {
+      httpMethod: "POST",
+      scopes: ["api://ccb2bc83-dda9-4966-9782-658ea2e8edf9/Detector.Default"]
+    }
+  ]);
+
+  //myProtectedResourceMap.set("/api/*", [
+  //  {
+  //    httpMethod:"GET",
+  //    scopes: ["Detector.Default", "Detector.Custom", "Alphabet.Manage", "Samples.Manage", "Admin.DefaultData"]
+  //  },
+  //  {
+  //    httpMethod: "POST",
+  //    scopes: ["Detector.Default", "Detector.Custom", "Alphabet.Manage", "Samples.Manage", "Admin.DefaultData"]
+  //  },
+  //  {
+  //    httpMethod: "PUT",
+  //    scopes: ["Detector.Default", "Detector.Custom", "Alphabet.Manage", "Samples.Manage", "Admin.DefaultData"]
+  //  },
+  //  {
+  //    httpMethod: "DELETE",
+  //    scopes: ["Detector.Default", "Detector.Custom", "Alphabet.Manage", "Samples.Manage", "Admin.DefaultData"]
+  //  }
+  //]);
+
   // TODO: add more for our API
 
   return {

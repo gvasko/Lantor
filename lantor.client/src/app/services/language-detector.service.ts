@@ -13,13 +13,13 @@ export class LanguageDetectorService {
   }
 
   calculateDefaultSimilarityValues(text: string): Observable<LanguageSimilarityResult> {
-    let body = new LanguageDetectorRequest(text);
-    return this.http.post<LanguageSimilarityResult>('/api/detectlanguages', body);
+    let body = text;
+    return this.http.post<LanguageSimilarityResult>('/api/defaultdetectlanguages', body);
   }
 
   calculateCustomSimilarityValues(text: string, sampleId: number, alphabetId: number): Observable<LanguageSimilarityResult> {
     let body = new LanguageDetectorRequest(text, sampleId, alphabetId);
-    return this.http.post<LanguageSimilarityResult>('/api/detectlanguages', body);
+    return this.http.post<LanguageSimilarityResult>('/api/customdetectlanguages', body);
   }
 
 }

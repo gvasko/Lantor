@@ -1,11 +1,14 @@
 ﻿using AutoMapper;
 using Lantor.DomainModel;
 using Lantor.Server.DTO;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Identity.Web.Resource;
 
 namespace Lantor.Server.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class AlphabetController : ControllerBase
@@ -20,6 +23,9 @@ namespace Lantor.Server.Controllers
         }
 
         [HttpGet]
+        [RequiredScopeOrAppPermission(
+            RequiredScopesConfigurationKey = "AzureAD:Scopes:AdvancedUsage"
+        )]
         public async Task<ActionResult<List<AlphabetListInfoDTO>>> GetAll()
         {
             var all = await domainUow.BasicCrudOperations.GetAllAlphabetListInfoAsync();
@@ -28,6 +34,9 @@ namespace Lantor.Server.Controllers
         }
 
         [HttpPost]
+        [RequiredScopeOrAppPermission(
+            RequiredScopesConfigurationKey = "AzureAD:Scopes:AdvancedUsage"
+        )]
         public async Task<ActionResult<AlphabetListInfoDTO>> Create(AlphabetListInfoDTO newDTO)
         {
             if (string.IsNullOrEmpty(newDTO.Name))
@@ -41,6 +50,9 @@ namespace Lantor.Server.Controllers
         }
 
         [HttpDelete("{id:int}")]
+        [RequiredScopeOrAppPermission(
+            RequiredScopesConfigurationKey = "AzureAD:Scopes:AdvancedUsage"
+        )]
         public async Task<ActionResult> Delete(int id)
         {
             await domainUow.RemoveAlphabetAsync(id);

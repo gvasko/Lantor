@@ -2,11 +2,13 @@
 using Lantor.Data.Infrastructure;
 using Lantor.DomainModel;
 using Lantor.Server.DTO;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Lantor.Server.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class LanguageSampleController : ControllerBase

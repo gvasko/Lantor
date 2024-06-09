@@ -4,8 +4,11 @@ using Lantor.Data.Infrastructure;
 using Lantor.DomainModel;
 using Lantor.Server.DTO;
 using Lantor.Server.Infrastructure;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Identity.Web;
+using Microsoft.IdentityModel.Logging;
 using Serilog;
 using System;
 
@@ -15,6 +18,9 @@ namespace Lantor.Server
     {
         public static void Main(string[] args)
         {
+            IdentityModelEventSource.LogCompleteSecurityArtifact = true;
+            IdentityModelEventSource.ShowPII = true;
+
             Log.Logger = new LoggerConfiguration().MinimumLevel.Debug().WriteTo.Console().CreateLogger();
             LoggerService.Logger = new SeriLogger();
 
@@ -22,7 +28,33 @@ namespace Lantor.Server
 
             // Add services to the container.
 
-            builder.Services.AddSerilog(lc => lc.ReadFrom.Configuration(builder.Configuration));
+            //builder.Services.AddSerilog(lc => lc.ReadFrom.Configuration(builder.Configuration));
+
+            builder.Services.AddHttpContextAccessor();
+            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddMicrosoftIdentityWebApi(options =>
+                    {
+                        builder.Configuration.Bind("AzureAd", options);
+                        options.Events = new JwtBearerEvents();
+
+                        options.Events.OnTokenValidated = context =>
+                        {
+
+                            string? clientappId = context?.Principal?.Claims
+                                .FirstOrDefault(x => x.Type == "azp" || x.Type == "appid")?.Value;
+
+                            //Log.Information("ClientAppId: {clientappid}", clientappId);
+                            return Task.CompletedTask;
+                        };
+
+                        options.Events.OnForbidden = context =>
+                        {
+                            Log.Warning("forbidden");
+                            return Task.CompletedTask;
+                        };
+
+                    }, options => { builder.Configuration.Bind("AzureAd", options); }
+                );
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -37,6 +69,9 @@ namespace Lantor.Server
             builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 
             var app = builder.Build();
+
+            IdentityModelEventSource.LogCompleteSecurityArtifact = true;
+            IdentityModelEventSource.ShowPII = true;
 
             using (var serviceScope = app.Services.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
@@ -55,9 +90,8 @@ namespace Lantor.Server
             }
 
             app.UseHttpsRedirection();
-
+            app.UseAuthentication();
             app.UseAuthorization();
-
 
             app.MapControllers();
 
@@ -67,3 +101,4 @@ namespace Lantor.Server
         }
     }
 }
+

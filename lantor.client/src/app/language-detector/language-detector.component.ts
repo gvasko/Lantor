@@ -26,13 +26,15 @@ export class LanguageDetectorComponent {
   }
 
   ngOnInit() {
-    this.sampleRepository.getMultilingualSamples().subscribe(s => {
-      this.languageSamples = s;
-    });
+    if (this.detectorConfigurationEnabled) {
+      this.sampleRepository.getMultilingualSamples().subscribe(s => {
+        this.languageSamples = s;
+      });
 
-    this.sampleRepository.getAlphabets().subscribe(abc => {
-      this.alphabets = abc;
-    });
+      this.sampleRepository.getAlphabets().subscribe(abc => {
+        this.alphabets = abc;
+      });
+    }
   }
 
   onSampleSelect(selected: MultilingualSampleListInfo) {
