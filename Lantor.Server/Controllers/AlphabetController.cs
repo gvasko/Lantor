@@ -8,7 +8,7 @@ using Microsoft.Identity.Web.Resource;
 
 namespace Lantor.Server.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class AlphabetController : ControllerBase
@@ -23,9 +23,9 @@ namespace Lantor.Server.Controllers
         }
 
         [HttpGet]
-        [RequiredScopeOrAppPermission(
-            RequiredScopesConfigurationKey = "AzureAD:Scopes:AdvancedUsage"
-        )]
+        //[RequiredScopeOrAppPermission(
+        //    RequiredScopesConfigurationKey = "AzureAD:Scopes:AdvancedUsage"
+        //)]
         public async Task<ActionResult<List<AlphabetListInfoDTO>>> GetAll()
         {
             var all = await domainUow.BasicCrudOperations.GetAllAlphabetListInfoAsync();
@@ -34,9 +34,9 @@ namespace Lantor.Server.Controllers
         }
 
         [HttpPost]
-        [RequiredScopeOrAppPermission(
-            RequiredScopesConfigurationKey = "AzureAD:Scopes:AdvancedUsage"
-        )]
+        //[RequiredScopeOrAppPermission(
+        //    RequiredScopesConfigurationKey = "AzureAD:Scopes:AdvancedUsage"
+        //)]
         public async Task<ActionResult<AlphabetListInfoDTO>> Create(AlphabetListInfoDTO newDTO)
         {
             if (string.IsNullOrEmpty(newDTO.Name))
@@ -50,9 +50,9 @@ namespace Lantor.Server.Controllers
         }
 
         [HttpDelete("{id:int}")]
-        [RequiredScopeOrAppPermission(
-            RequiredScopesConfigurationKey = "AzureAD:Scopes:AdvancedUsage"
-        )]
+        //[RequiredScopeOrAppPermission(
+        //    RequiredScopesConfigurationKey = "AzureAD:Scopes:AdvancedUsage"
+        //)]
         public async Task<ActionResult> Delete(int id)
         {
             await domainUow.RemoveAlphabetAsync(id);

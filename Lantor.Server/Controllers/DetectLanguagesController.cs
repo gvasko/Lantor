@@ -7,7 +7,6 @@ using Microsoft.Identity.Web.Resource;
 
 namespace Lantor.Server.Controllers
 {
-    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class DetectLanguagesController : ControllerBase
@@ -20,19 +19,23 @@ namespace Lantor.Server.Controllers
         }
 
         // TODO: LanguageSimilarityResultDTO?   
-        [HttpPost(Name = "DefaultDetectLanguages")]
-        [RequiredScopeOrAppPermission(
-            RequiredScopesConfigurationKey = "AzureAD:Scopes:BasicUsage",
-            RequiredAppPermissionsConfigurationKey = "AzureAD:AppPermissions:BasicUsage"
-        )]
-        public async Task<LanguageSimilarityResult> DefaultPost(string request)
+        [HttpPost, Route("Default")]
+        public async Task<LanguageSimilarityResult> DefaultPost(LanguageDetectorRequestDTO request)
         {
-            return await languageDetectorService.Detect(request);
+            if (request.Text == null)
+            {
+                return new LanguageSimilarityResult();
+            }
+            else
+            {
+                return await languageDetectorService.Detect(request.Text);
+            }
         }
 
         // TODO: LanguageSimilarityResultDTO?   
-        [HttpPost(Name = "CustomDetectLanguages")]
-        [RequiredScopeOrAppPermission(
+        [HttpPost, Route("Custom")]
+        [Authorize]
+        [RequiredScope(
             RequiredScopesConfigurationKey = "AzureAD:Scopes:AdvancedUsage"
         )]
         public async Task<LanguageSimilarityResult> CustomPost(LanguageDetectorRequestDTO request)

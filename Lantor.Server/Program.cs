@@ -18,9 +18,6 @@ namespace Lantor.Server
     {
         public static void Main(string[] args)
         {
-            IdentityModelEventSource.LogCompleteSecurityArtifact = true;
-            IdentityModelEventSource.ShowPII = true;
-
             Log.Logger = new LoggerConfiguration().MinimumLevel.Debug().WriteTo.Console().CreateLogger();
             LoggerService.Logger = new SeriLogger();
 
@@ -56,7 +53,6 @@ namespace Lantor.Server
                     }, options => { builder.Configuration.Bind("AzureAd", options); }
                 );
 
-            builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
@@ -67,11 +63,9 @@ namespace Lantor.Server
             builder.Services.AddScoped<ILanguageVectorBuilder, LanguageVectorBuilder>();
             builder.Services.AddScoped<ILanguageDetectorService, LanguageDetectorService>();
             builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
+            builder.Services.AddControllers();
 
             var app = builder.Build();
-
-            IdentityModelEventSource.LogCompleteSecurityArtifact = true;
-            IdentityModelEventSource.ShowPII = true;
 
             using (var serviceScope = app.Services.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
@@ -85,11 +79,15 @@ namespace Lantor.Server
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
+                //IdentityModelEventSource.LogCompleteSecurityArtifact = true;
+                IdentityModelEventSource.ShowPII = true;
+                app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
 
             app.UseHttpsRedirection();
+            app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
 

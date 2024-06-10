@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Lantor.Server.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class MultilingualSampleController : ControllerBase
