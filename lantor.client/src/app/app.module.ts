@@ -47,40 +47,69 @@ export function MsalInterceptorConfigurationFactory(): MsalInterceptorConfigurat
     }
   ]);
 
-  myProtectedResourceMap.set("/api/DetectLanguages/Custom", [
+  myProtectedResourceMap.set("/api/detectlanguages/custom", [
     {
       httpMethod: "POST",
-      scopes: ["api://ccb2bc83-dda9-4966-9782-658ea2e8edf9/Detector.Default"]
+      scopes: ["api://ccb2bc83-dda9-4966-9782-658ea2e8edf9/Detector.Custom"]
     }
   ]);
 
-  //myProtectedResourceMap.set("/api/DetectLanguages/Default", [
-  //  {
-  //    httpMethod: "POST",
-  //    scopes: ["api://ccb2bc83-dda9-4966-9782-658ea2e8edf9/Detector.Default"]
-  //  }
-  //]);
+  myProtectedResourceMap.set("/api/alphabet", [
+    {
+      httpMethod: "GET",
+      scopes: ["api://ccb2bc83-dda9-4966-9782-658ea2e8edf9/Alphabet.Manage"]
+    },
+    {
+      httpMethod: "POST",
+      scopes: ["api://ccb2bc83-dda9-4966-9782-658ea2e8edf9/Alphabet.Manage"]
+    },
+    {
+      httpMethod: "PUT",
+      scopes: ["api://ccb2bc83-dda9-4966-9782-658ea2e8edf9/Alphabet.Manage"]
+    },
+    {
+      httpMethod: "DELETE",
+      scopes: ["api://ccb2bc83-dda9-4966-9782-658ea2e8edf9/Alphabet.Manage"]
+    }
+  ]);
 
-  //myProtectedResourceMap.set("/api/*", [
-  //  {
-  //    httpMethod:"GET",
-  //    scopes: ["Detector.Default", "Detector.Custom", "Alphabet.Manage", "Samples.Manage", "Admin.DefaultData"]
-  //  },
-  //  {
-  //    httpMethod: "POST",
-  //    scopes: ["Detector.Default", "Detector.Custom", "Alphabet.Manage", "Samples.Manage", "Admin.DefaultData"]
-  //  },
-  //  {
-  //    httpMethod: "PUT",
-  //    scopes: ["Detector.Default", "Detector.Custom", "Alphabet.Manage", "Samples.Manage", "Admin.DefaultData"]
-  //  },
-  //  {
-  //    httpMethod: "DELETE",
-  //    scopes: ["Detector.Default", "Detector.Custom", "Alphabet.Manage", "Samples.Manage", "Admin.DefaultData"]
-  //  }
-  //]);
+  myProtectedResourceMap.set("/api/multilingualsample", [
+    {
+      httpMethod: "GET",
+      scopes: ["api://ccb2bc83-dda9-4966-9782-658ea2e8edf9/Samples.Manage"]
+    },
+    {
+      httpMethod: "POST",
+      scopes: ["api://ccb2bc83-dda9-4966-9782-658ea2e8edf9/Samples.Manage"]
+    },
+    {
+      httpMethod: "PUT",
+      scopes: ["api://ccb2bc83-dda9-4966-9782-658ea2e8edf9/Samples.Manage"]
+    },
+    {
+      httpMethod: "DELETE",
+      scopes: ["api://ccb2bc83-dda9-4966-9782-658ea2e8edf9/Samples.Manage"]
+    }
+  ]);
 
-  // TODO: add more for our API
+  myProtectedResourceMap.set("/api/languagesample", [
+    {
+      httpMethod: "GET",
+      scopes: ["api://ccb2bc83-dda9-4966-9782-658ea2e8edf9/Samples.Manage"]
+    },
+    {
+      httpMethod: "POST",
+      scopes: ["api://ccb2bc83-dda9-4966-9782-658ea2e8edf9/Samples.Manage"]
+    },
+    {
+      httpMethod: "PUT",
+      scopes: ["api://ccb2bc83-dda9-4966-9782-658ea2e8edf9/Samples.Manage"]
+    },
+    {
+      httpMethod: "DELETE",
+      scopes: ["api://ccb2bc83-dda9-4966-9782-658ea2e8edf9/Samples.Manage"]
+    }
+  ]);
 
   return {
     interactionType: InteractionType.Redirect,

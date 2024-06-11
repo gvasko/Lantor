@@ -2,13 +2,15 @@
 using Lantor.Data.Infrastructure;
 using Lantor.DomainModel;
 using Lantor.Server.DTO;
+using Lantor.Server.Infrastructure;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Identity.Web.Resource;
 
 namespace Lantor.Server.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class LanguageSampleController : ControllerBase
@@ -23,6 +25,7 @@ namespace Lantor.Server.Controllers
         }
 
         [HttpGet("{id:int}")]
+        [RequiredScope(AuthScopes.SAMPLES_MANAGE_BY_OWNER)]
         public async Task<ActionResult<LanguageSampleDTO>> GetById(int id)
         {
             var mls = await domainUow.BasicCrudOperations.GetLanguageSampleAsync(id);
@@ -31,6 +34,7 @@ namespace Lantor.Server.Controllers
         }
 
         [HttpPut]
+        [RequiredScope(AuthScopes.SAMPLES_MANAGE_BY_OWNER)]
         public async Task<IActionResult> Update(LanguageSampleDTO updatedDTO)
         {
             var updatedDM = mapper.Map<LanguageSample>(updatedDTO);
@@ -40,6 +44,7 @@ namespace Lantor.Server.Controllers
         }
 
         [HttpPost]
+        [RequiredScope(AuthScopes.SAMPLES_MANAGE_BY_OWNER)]
         public async Task<ActionResult<LanguageSampleDTO>> Create(LanguageSampleDTO newDTO)
         {
             var newDM = mapper.Map<LanguageSample>(newDTO);
@@ -50,6 +55,7 @@ namespace Lantor.Server.Controllers
         }
 
         [HttpDelete("{id:int}")]
+        [RequiredScope(AuthScopes.SAMPLES_MANAGE_BY_OWNER)]
         public async Task<ActionResult> Delete(int id)
         {
             await domainUow.RemoveLanguageSampleAsync(id);

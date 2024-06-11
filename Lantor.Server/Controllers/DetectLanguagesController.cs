@@ -1,5 +1,6 @@
 ﻿using Lantor.DomainModel;
 using Lantor.Server.DTO;
+using Lantor.Server.Infrastructure;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -9,6 +10,7 @@ namespace Lantor.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class DetectLanguagesController : ControllerBase
     {
         private readonly ILanguageDetectorService languageDetectorService;
@@ -20,6 +22,7 @@ namespace Lantor.Server.Controllers
 
         // TODO: LanguageSimilarityResultDTO?   
         [HttpPost, Route("Default")]
+        [AllowAnonymous]
         public async Task<LanguageSimilarityResult> DefaultPost(LanguageDetectorRequestDTO request)
         {
             if (request.Text == null)
@@ -34,10 +37,7 @@ namespace Lantor.Server.Controllers
 
         // TODO: LanguageSimilarityResultDTO?   
         [HttpPost, Route("Custom")]
-        [Authorize]
-        [RequiredScope(
-            RequiredScopesConfigurationKey = "AzureAD:Scopes:AdvancedUsage"
-        )]
+        [RequiredScope(AuthScopes.CUSTOM_DETECTION)]
         public async Task<LanguageSimilarityResult> CustomPost(LanguageDetectorRequestDTO request)
         {
             if (request.Text == null)

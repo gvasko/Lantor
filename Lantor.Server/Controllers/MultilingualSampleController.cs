@@ -1,13 +1,15 @@
 ﻿using AutoMapper;
 using Lantor.DomainModel;
 using Lantor.Server.DTO;
+using Lantor.Server.Infrastructure;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Identity.Web.Resource;
 
 namespace Lantor.Server.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class MultilingualSampleController : ControllerBase
@@ -22,6 +24,7 @@ namespace Lantor.Server.Controllers
         }
 
         [HttpGet]
+        [RequiredScope(AuthScopes.SAMPLES_MANAGE_BY_OWNER)]
         public async Task<ActionResult<List<MultilingualSampleListInfoDTO>>> GetAll()
         {
             var all = await domainUow.BasicCrudOperations.GetAllMultilingualSamplesAsync();
@@ -30,6 +33,7 @@ namespace Lantor.Server.Controllers
         }
 
         [HttpGet("{id:int}")]
+        [RequiredScope(AuthScopes.SAMPLES_MANAGE_BY_OWNER)]
         public async Task<ActionResult<EmptyMultilingualSampleDTO>> GetById(int id)
         {
             var mls = await domainUow.BasicCrudOperations.GetMultilingualSampleAsync(id);
@@ -38,6 +42,7 @@ namespace Lantor.Server.Controllers
         }
 
         [HttpPut]
+        [RequiredScope(AuthScopes.SAMPLES_MANAGE_BY_OWNER)]
         public async Task<IActionResult> Update(EmptyMultilingualSampleDTO updatedDTO)
         {
             var updatedDM = mapper.Map<MultilingualSample>(updatedDTO);
@@ -47,6 +52,7 @@ namespace Lantor.Server.Controllers
         }
 
         [HttpPost]
+        [RequiredScope(AuthScopes.SAMPLES_MANAGE_BY_OWNER)]
         public async Task<ActionResult<EmptyMultilingualSampleDTO>> Create(EmptyMultilingualSampleDTO newDTO)
         {
             var newDM = mapper.Map<MultilingualSample>(newDTO);
@@ -57,6 +63,7 @@ namespace Lantor.Server.Controllers
         }
 
         [HttpDelete("{id:int}")]
+        [RequiredScope(AuthScopes.SAMPLES_MANAGE_BY_OWNER)]
         public async Task<ActionResult> Delete(int id)
         {
             await domainUow.RemoveMultilingualSampleAsync(id);
