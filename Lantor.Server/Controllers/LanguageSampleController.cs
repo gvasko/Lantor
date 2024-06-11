@@ -37,6 +37,11 @@ namespace Lantor.Server.Controllers
         [RequiredScope(AuthScopes.SAMPLES_MANAGE_BY_OWNER)]
         public async Task<IActionResult> Update(LanguageSampleDTO updatedDTO)
         {
+            if (!await ModificationAllowedForLanguageSample(updatedDTO.Id))
+            {
+                return Forbid();
+            }
+
             var updatedDM = mapper.Map<LanguageSample>(updatedDTO);
             domainUow.UpdateLanguageSample(updatedDM);
             await domainUow.Save();
@@ -58,9 +63,26 @@ namespace Lantor.Server.Controllers
         [RequiredScope(AuthScopes.SAMPLES_MANAGE_BY_OWNER)]
         public async Task<ActionResult> Delete(int id)
         {
+            if (!await ModificationAllowedForLanguageSample(id))
+            {
+                return Forbid();
+            }
+
             await domainUow.RemoveLanguageSampleAsync(id);
             await domainUow.Save();
             return Ok();
+        }
+
+        private async Task<bool> ModificationAllowedForLanguageSample(int id)
+        {
+            var sample = await domainUow.BasicCrudOperations.GetLanguageSampleAsync(id);
+
+            if (sample == null)
+            {
+                return false;
+            }
+
+            return sample.MultilingualSampleId > 1;
         }
 
     }

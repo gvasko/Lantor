@@ -50,9 +50,19 @@ namespace Lantor.Server.Controllers
         [RequiredScope(AuthScopes.ALPHABETS_MANAGE_BY_OWNER)]
         public async Task<ActionResult> Delete(int id)
         {
+            if (!ModificationAllowedForAlphabet(id))
+            {
+                return Forbid();
+            }
             await domainUow.RemoveAlphabetAsync(id);
             await domainUow.Save();
             return Ok();
         }
+
+        private bool ModificationAllowedForAlphabet(int id)
+        {
+            return id > 1;
+        }
+
     }
 }
