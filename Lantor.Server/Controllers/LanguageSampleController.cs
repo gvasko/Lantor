@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Web.Resource;
+using System.Security.Claims;
 
 namespace Lantor.Server.Controllers
 {
@@ -82,7 +83,8 @@ namespace Lantor.Server.Controllers
                 return false;
             }
 
-            return sample.MultilingualSampleId > 1;
+            var isDefault = sample.MultilingualSampleId == 1;
+            return !isDefault || this.HasRole(AuthRoles.ADMINS);
         }
 
     }

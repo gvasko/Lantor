@@ -57,6 +57,8 @@ export class LanguageSampleComponent implements OnInit {
     } else {
       this.sampleRepository.updateLanguageSample(ls).subscribe(() => {
         console.log("LanguageSample updated successfully.");
+      }, (error: any) => {
+        alert(`Error occurred while updating this resource: ${error.statusText}`);
       });
     }
   }

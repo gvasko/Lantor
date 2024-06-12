@@ -78,15 +78,15 @@ export class LanguageAdminComponent {
   }
 
   onDeleteSelectedSample() {
-    console.log("Delete sample");
     let ref = this.modalService.open(ConfirmationComponent);
     ref.componentInstance.title = "Delete Sample";
     ref.componentInstance.messages = ["Would you like to delete the following sample:", this.selectedSample.name, "This cannot be undone."];
     ref.componentInstance.confirmationType = ConfirmationType.YesNo;
     ref.componentInstance.mainAction = () => {
-      console.log(`DELETE SAMPLE ${this.selectedSample.name}`);
       this.sampleRepository.deleteMultilingualSample(this.selectedSample.id).subscribe(() => {
         this.refreshMultiSamples();
+      }, (error: any) => {
+        alert(`Error occurred while deleting this resource: ${error.statusText}`);
       });
     };
   }
@@ -114,6 +114,8 @@ export class LanguageAdminComponent {
       console.log(`DELETE ALPHABET ${this.selectedAlphabet.name}`);
       this.sampleRepository.deleteAlphabet(this.selectedAlphabet.id).subscribe(() => {
         this.refreshAlphabets();
+      }, (error: any) => {
+        alert(`Error occurred while deleting this resource: ${error.statusText}`);
       });
     };
   }

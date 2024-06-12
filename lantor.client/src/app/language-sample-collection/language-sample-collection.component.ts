@@ -70,6 +70,8 @@ export class LanguageSampleCollectionComponent implements OnInit {
     } else {
       this.sampleRepository.updateMultilingualSample(mls).subscribe(() => {
         console.log("MultilingualSample updated successfully.");
+      }, (error: any) => {
+        alert(`Error occurred while updating this resource: ${error.statusText}`);
       });
     }
   }
@@ -89,9 +91,10 @@ export class LanguageSampleCollectionComponent implements OnInit {
     ref.componentInstance.messages = ["Would you like to delete the following sample:", languageSample.name, "This cannot be undone."];
     ref.componentInstance.confirmationType = ConfirmationType.YesNo;
     ref.componentInstance.mainAction = () => {
-      console.log(`DELETE SAMPLE ${languageSample.name}`);
       this.sampleRepository.deleteLanguageSample(languageSample.id).subscribe(() => {
         this.refreshSamples();
+      }, (error: any) => {
+        alert(`Error occurred while deleting this resource: ${error.statusText}`);
       });
     };
   }

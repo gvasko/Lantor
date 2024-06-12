@@ -83,7 +83,9 @@ namespace Lantor.Server.Controllers
 
         private bool ModificationAllowedForMultilingualSample(int id)
         {
-            return id > 1;
+            var isDefault = id == 1;
+
+            return !isDefault || this.HasRole(AuthRoles.ADMINS);
         }
     }
 }
