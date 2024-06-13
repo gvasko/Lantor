@@ -4,6 +4,9 @@ import { AppComponent } from './app.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { SpinnerComponent } from './spinner/spinner.component';
 import { RouterTestingModule } from '@angular/router/testing';
+import { MsalBroadcastService, MsalGuard, MsalService, MSAL_GUARD_CONFIG, MSAL_INSTANCE } from '@azure/msal-angular';
+import { IPublicClientApplication } from '@azure/msal-browser';
+import { MsalGuardConfigurationFactory, MSALInstanceFactory } from './app.module';
 
 describe('AppComponent', () => {
   let component: AppComponent;
@@ -13,7 +16,18 @@ describe('AppComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [AppComponent, SpinnerComponent, NavbarComponent],
-      imports: [HttpClientTestingModule, RouterTestingModule]
+      imports: [HttpClientTestingModule, RouterTestingModule],
+      providers: [
+        {
+          provide: MSAL_INSTANCE,
+          useFactory: MSALInstanceFactory
+        },
+        {
+          provide: MSAL_GUARD_CONFIG,
+          useFactory: MsalGuardConfigurationFactory
+        },
+        MsalService, MsalBroadcastService, MsalGuard,
+      ]
     }).compileComponents();
   });
 
