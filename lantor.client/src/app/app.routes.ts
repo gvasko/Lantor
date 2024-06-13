@@ -9,11 +9,11 @@ import { MsalGuard, MsalRedirectComponent } from '@azure/msal-angular';
 export const routes: Routes = [
   { path: 'default-detector', component: DefaultDetectorComponent },
   { path: 'custom-detector', component: CustomDetectorComponent, canActivate: [MsalGuard] },
-  { path: 'language-admin', component: LanguageAdminComponent, canActivate: [MsalGuard] },
+  { path: 'configure', component: LanguageAdminComponent, canActivate: [MsalGuard] },
   { path: 'language-sample-collection', component: LanguageSampleCollectionComponent, canActivate: [MsalGuard] },
   { path: 'language-sample-collection/:id', component: LanguageSampleCollectionComponent, canActivate: [MsalGuard] },
   { path: 'language-sample-collection/:id/language', component: LanguageSampleComponent, canActivate: [MsalGuard] },
   { path: 'language-sample-collection/:id/language/:languageId', component: LanguageSampleComponent, canActivate: [MsalGuard] },
   { path: 'auth', component: MsalRedirectComponent },
-  { path: '', redirectTo: '/default-detector', pathMatch: 'full' }
+  { path: '**', redirectTo: '/default-detector', pathMatch: 'full' }
 ];

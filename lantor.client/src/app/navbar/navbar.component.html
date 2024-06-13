@@ -8,9 +8,9 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent" [ngbCollapse]="isCollapsed">
       <ul class="navbar-nav me-auto mb-2 mb-sm-0">
-        <li class="nav-item"><a class="nav-link" routerLink="/default-detector" routerLinkActive="active">Default Detector</a></li>
-        <li class="nav-item" *ngIf="isAuthenticated"><a class="nav-link" routerLink="/custom-detector" routerLinkActive="active">Custom Detector</a></li>
-        <li class="nav-item" *ngIf="isAuthenticated"><a class="nav-link" routerLink="/language-admin" routerLinkActive="active">Admin</a></li>
+        <li class="nav-item"><a class="nav-link" routerLink="/default-detector" routerLinkActive="active">Default</a></li>
+        <li class="nav-item" *ngIf="isAuthenticated"><a class="nav-link" routerLink="/custom-detector" routerLinkActive="active">Custom</a></li>
+        <li class="nav-item" *ngIf="isAuthenticated"><a class="nav-link" routerLink="/configure" routerLinkActive="active">Configure</a></li>
       </ul>
       <span class="badge" *ngIf="isAuthenticated">{{userName}}</span>
       <a class="btn btn-outline-primary" (click)="login()" *ngIf="!isAuthenticated">Login</a>

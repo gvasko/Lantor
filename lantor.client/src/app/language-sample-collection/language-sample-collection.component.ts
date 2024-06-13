@@ -108,6 +108,6 @@ export class LanguageSampleCollectionComponent implements OnInit {
   }
 
   onClickCrossButton() {
-    this.router.navigate(["/language-admin"]);
+    this.router.navigate(["/configure"]);
   }
 }
