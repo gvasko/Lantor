@@ -12,6 +12,7 @@ namespace Lantor.Data
         public DbSet<MultilingualSample> MultilingualSamples { get; set; }
         public DbSet<LanguageVectorCache> LanguageVectorCache { get; set; }
         public DbSet<Alphabet> Alphabets { get; set; }
+        public DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

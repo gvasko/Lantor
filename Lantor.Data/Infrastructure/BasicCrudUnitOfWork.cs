@@ -162,5 +162,39 @@ namespace Lantor.Data.Infrastructure
         {
             await context.SaveChangesAsync();
         }
+
+        public async Task<User?> GetUserByIdAsync(int id)
+        {
+            return await context.Users.AsNoTracking().Where(u => u.Id == id).FirstOrDefaultAsync();
+        }
+
+        public async Task<User?> GetUserByEmailAsync(string email)
+        {
+            return await context.Users.AsNoTracking().Where(u => u.Email == email).FirstOrDefaultAsync();
+        }
+
+        public void UpdateUser(User updated)
+        {
+            context.Users.Update(updated);
+        }
+
+        public async Task<User> CreateUserAsync(User user)
+        {
+            user.Id = 0;
+            var added = await context.Users.AddAsync(user);
+            return added.Entity;
+        }
+
+        public async Task RemoveUser(int id)
+        {
+            var u = await GetUserByIdAsync(id);
+
+            if (u == null)
+            {
+                throw new ArgumentException($"Unable to delete, User not found with ID {id}");
+            }
+
+            context.Users.Remove(u);
+        }
     }
 }

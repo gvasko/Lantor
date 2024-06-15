@@ -30,6 +30,11 @@ namespace Lantor.DomainModel
         void RemoveLanguageSampleFromCache(int languageSampleId);
         void RemoveAlphabetFromCache(int alphabetId);
 
+        Task<User?> GetUserByIdAsync(int id);
+        Task<User?> GetUserByEmailAsync(string email);
+        void UpdateUser(User updated);
+        Task<User> CreateUserAsync(User user);
+        Task RemoveUser(int id);
         Task Save();
     }
 }
