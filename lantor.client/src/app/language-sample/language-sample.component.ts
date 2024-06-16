@@ -56,10 +56,13 @@ export class LanguageSampleComponent implements OnInit {
         this.router.navigate(["/language-sample-collection", this.collectionId, 'language', newLs.id]);
       })
     } else {
-      this.sampleRepository.updateLanguageSample(ls).subscribe(() => {
-        console.log("LanguageSample updated successfully.");
-      }, (error: any) => {
-        alert(`Error occurred while updating this resource: ${error.statusText}`);
+      this.sampleRepository.updateLanguageSample(ls).subscribe({
+        next: () => {
+          console.log("LanguageSample updated successfully.");
+        },
+        error: (error: any) => {
+          alert(`Error occurred while updating this resource: ${error.statusText}`);
+        }
       });
     }
   }

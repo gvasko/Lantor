@@ -25,7 +25,7 @@ namespace Lantor.Server
 
             // Add services to the container.
 
-            //builder.Services.AddSerilog(lc => lc.ReadFrom.Configuration(builder.Configuration));
+            builder.Services.AddSerilog(lc => lc.ReadFrom.Configuration(builder.Configuration));
 
             builder.Services.AddHttpContextAccessor();
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

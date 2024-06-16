@@ -83,10 +83,13 @@ export class LanguageAdminComponent {
     ref.componentInstance.messages = ["Would you like to delete the following sample:", this.selectedSample.name, "This cannot be undone."];
     ref.componentInstance.confirmationType = ConfirmationType.YesNo;
     ref.componentInstance.mainAction = () => {
-      this.sampleRepository.deleteMultilingualSample(this.selectedSample.id).subscribe(() => {
-        this.refreshMultiSamples();
-      }, (error: any) => {
-        alert(`Error occurred while deleting this resource: ${error.statusText}`);
+      this.sampleRepository.deleteMultilingualSample(this.selectedSample.id).subscribe({
+        next: () => {
+          this.refreshMultiSamples();
+        },
+        error: (error: any) => {
+          alert(`Error occurred while deleting this resource: ${error.statusText}`);
+        }
       });
     };
   }
@@ -112,10 +115,13 @@ export class LanguageAdminComponent {
     ref.componentInstance.confirmationType = ConfirmationType.YesNo;
     ref.componentInstance.mainAction = () => {
       console.log(`DELETE ALPHABET ${this.selectedAlphabet.name}`);
-      this.sampleRepository.deleteAlphabet(this.selectedAlphabet.id).subscribe(() => {
-        this.refreshAlphabets();
-      }, (error: any) => {
-        alert(`Error occurred while deleting this resource: ${error.statusText}`);
+      this.sampleRepository.deleteAlphabet(this.selectedAlphabet.id).subscribe({
+        next: () => {
+          this.refreshAlphabets();
+        },
+        error: (error: any) => {
+          alert(`Error occurred while deleting this resource: ${error.statusText}`);
+        }
       });
     };
   }
