@@ -27,7 +27,7 @@ namespace Lantor.Server.Controllers
         [RequiredScope(AuthScopes.SAMPLES_MANAGE_BY_OWNER)]
         public async Task<ActionResult<List<MultilingualSampleListInfoDTO>>> GetAll()
         {
-            await domainUow.ConstructCurrentUserAsync(this.GetUser());
+            await domainUow.EnsureCurrentUserFromDataAsync(this.GetUserData());
             var all = await domainUow.BasicCrudOperations.GetAllMultilingualSamplesAsync();
             var result = mapper.Map<List<MultilingualSampleListInfoDTO>>(all);
             return Ok(result);
@@ -37,7 +37,7 @@ namespace Lantor.Server.Controllers
         [RequiredScope(AuthScopes.SAMPLES_MANAGE_BY_OWNER)]
         public async Task<ActionResult<EmptyMultilingualSampleDTO>> GetById(int id)
         {
-            await domainUow.ConstructCurrentUserAsync(this.GetUser());
+            await domainUow.EnsureCurrentUserFromDataAsync(this.GetUserData());
             var mls = await domainUow.BasicCrudOperations.GetMultilingualSampleAsync(id);
             var result = mapper.Map<EmptyMultilingualSampleDTO>(mls);
             return Ok(result);
@@ -52,7 +52,7 @@ namespace Lantor.Server.Controllers
                 return Forbid();
             }
 
-            await domainUow.ConstructCurrentUserAsync(this.GetUser());
+            await domainUow.EnsureCurrentUserFromDataAsync(this.GetUserData());
             var updatedDM = mapper.Map<MultilingualSample>(updatedDTO);
             domainUow.BasicCrudOperations.UpdateMultilingualSample(updatedDM);
             await domainUow.Save();
@@ -63,7 +63,7 @@ namespace Lantor.Server.Controllers
         [RequiredScope(AuthScopes.SAMPLES_MANAGE_BY_OWNER)]
         public async Task<ActionResult<EmptyMultilingualSampleDTO>> Create(EmptyMultilingualSampleDTO newDTO)
         {
-            await domainUow.ConstructCurrentUserAsync(this.GetUser());
+            await domainUow.EnsureCurrentUserFromDataAsync(this.GetUserData());
             var newDM = mapper.Map<MultilingualSample>(newDTO);
             var newEntity = await domainUow.BasicCrudOperations.CreateMultilingualSampleAsync(newDM);
             await domainUow.Save();
@@ -80,7 +80,7 @@ namespace Lantor.Server.Controllers
                 return Forbid();
             }
 
-            await domainUow.ConstructCurrentUserAsync(this.GetUser());
+            await domainUow.EnsureCurrentUserFromDataAsync(this.GetUserData());
             await domainUow.RemoveMultilingualSampleAsync(id);
             await domainUow.Save();
             return Ok();

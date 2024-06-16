@@ -78,7 +78,7 @@ namespace Lantor.DomainModel
             _basicUow.RemoveLanguageSampleFromCache(updated.Id);
         }
 
-        public async Task<User> EnsureCurrentUserAsync(User user)
+        private async Task<User> EnsureCurrentUserAsync(User user)
         {
             await _semaphor.WaitAsync();
             try
@@ -113,12 +113,12 @@ namespace Lantor.DomainModel
             return _basicUow.CurrentUser;
         }
 
-        public async Task<User> ConstructCurrentUserAsync(User user)
+        public async Task<User> EnsureCurrentUserFromDataAsync(User userData)
         {
-            var name = user.Name;
-            var userName = user.UserName;
-            var email = user.Email;
-            var externalId = user.ExternalId;
+            var name = userData.Name;
+            var userName = userData.UserName;
+            var email = userData.Email;
+            var externalId = userData.ExternalId;
 
             if (string.IsNullOrEmpty(userName))
             {

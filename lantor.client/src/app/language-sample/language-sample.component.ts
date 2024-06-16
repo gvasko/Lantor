@@ -53,6 +53,7 @@ export class LanguageSampleComponent implements OnInit {
       this.sampleRepository.createLanguageSample(ls).subscribe((newLs) => {
         console.log("LanguageSample created successfully.");
         this.formGroup.setValue(newLs);
+        this.router.navigate(["/language-sample-collection", this.collectionId, 'language', newLs.id]);
       })
     } else {
       this.sampleRepository.updateLanguageSample(ls).subscribe(() => {

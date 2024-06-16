@@ -65,6 +65,7 @@ export class LanguageSampleCollectionComponent implements OnInit {
         console.log("MultilingualSample created successfully.");
         this.languageSamples = newMls;
         this.formGroup.setValue(newMls);
+        this.router.navigate(["/language-sample-collection", newMls.id]);
       });
 
     } else {

@@ -27,7 +27,7 @@ namespace Lantor.Server.Controllers
         [RequiredScope(AuthScopes.ALPHABETS_MANAGE_BY_OWNER)]
         public async Task<ActionResult<List<AlphabetListInfoDTO>>> GetAll()
         {
-            await domainUow.ConstructCurrentUserAsync(this.GetUser());
+            await domainUow.EnsureCurrentUserFromDataAsync(this.GetUserData());
             var all = await domainUow.BasicCrudOperations.GetAllAlphabetListInfoAsync();
             var result = mapper.Map<List<AlphabetListInfoDTO>>(all);
             return Ok(result);
@@ -37,7 +37,7 @@ namespace Lantor.Server.Controllers
         [RequiredScope(AuthScopes.ALPHABETS_MANAGE_BY_OWNER)]
         public async Task<ActionResult<AlphabetListInfoDTO>> Create(AlphabetListInfoDTO newDTO)
         {
-            await domainUow.ConstructCurrentUserAsync(this.GetUser());
+            await domainUow.EnsureCurrentUserFromDataAsync(this.GetUserData());
             if (string.IsNullOrEmpty(newDTO.Name))
             {
                 return BadRequest("Alphabet name cannot be null or empty");
@@ -56,7 +56,7 @@ namespace Lantor.Server.Controllers
             {
                 return Forbid();
             }
-            await domainUow.ConstructCurrentUserAsync(this.GetUser());
+            await domainUow.EnsureCurrentUserFromDataAsync(this.GetUserData());
             await domainUow.RemoveAlphabetAsync(id);
             await domainUow.Save();
             return Ok();

@@ -42,7 +42,7 @@ namespace Lantor.Server.Controllers
         [RequiredScope(AuthScopes.CUSTOM_DETECTION)]
         public async Task<LanguageSimilarityResult> CustomPost(LanguageDetectorRequestDTO request)
         {
-            await domainUow.ConstructCurrentUserAsync(this.GetUser());
+            await domainUow.EnsureCurrentUserFromDataAsync(this.GetUserData());
             if (request.Text == null)
             {
                 return new LanguageSimilarityResult();

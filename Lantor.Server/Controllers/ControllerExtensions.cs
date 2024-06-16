@@ -5,7 +5,7 @@ using System.Security.Claims;
 
 namespace Lantor.Server.Controllers
 {
-    public static class ControllerExtension
+    public static class ControllerExtensions
     {
         public static bool HasRole(this ControllerBase controller, string roleName)
         {
@@ -13,7 +13,7 @@ namespace Lantor.Server.Controllers
             return roleClaims.Any(r => r == roleName);
         }
 
-        public static User GetUser(this ControllerBase controller)
+        public static User GetUserData(this ControllerBase controller)
         {
             string? name = controller.HttpContext.User.FindAll("name").Select(r => r.Value).ToList().FirstOrDefault();
             string? userName = controller.HttpContext.User.FindAll("preferred_username").Select(r => r.Value).ToList().FirstOrDefault();

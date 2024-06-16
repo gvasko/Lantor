@@ -29,7 +29,7 @@ namespace Lantor.Server.Controllers
         [RequiredScope(AuthScopes.SAMPLES_MANAGE_BY_OWNER)]
         public async Task<ActionResult<LanguageSampleDTO>> GetById(int id)
         {
-            await domainUow.ConstructCurrentUserAsync(this.GetUser());
+            await domainUow.EnsureCurrentUserFromDataAsync(this.GetUserData());
             var mls = await domainUow.BasicCrudOperations.GetLanguageSampleAsync(id);
             var result = mapper.Map<LanguageSampleDTO>(mls);
             return Ok(result);
@@ -44,7 +44,7 @@ namespace Lantor.Server.Controllers
                 return Forbid();
             }
 
-            await domainUow.ConstructCurrentUserAsync(this.GetUser());
+            await domainUow.EnsureCurrentUserFromDataAsync(this.GetUserData());
             var updatedDM = mapper.Map<LanguageSample>(updatedDTO);
             domainUow.UpdateLanguageSample(updatedDM);
             await domainUow.Save();
@@ -55,7 +55,7 @@ namespace Lantor.Server.Controllers
         [RequiredScope(AuthScopes.SAMPLES_MANAGE_BY_OWNER)]
         public async Task<ActionResult<LanguageSampleDTO>> Create(LanguageSampleDTO newDTO)
         {
-            await domainUow.ConstructCurrentUserAsync(this.GetUser());
+            await domainUow.EnsureCurrentUserFromDataAsync(this.GetUserData());
             var newDM = mapper.Map<LanguageSample>(newDTO);
             var newEntity = await domainUow.BasicCrudOperations.CreateLanguageSampleAsync(newDM);
             await domainUow.Save();
@@ -72,7 +72,7 @@ namespace Lantor.Server.Controllers
                 return Forbid();
             }
 
-            await domainUow.ConstructCurrentUserAsync(this.GetUser());
+            await domainUow.EnsureCurrentUserFromDataAsync(this.GetUserData());
             await domainUow.RemoveLanguageSampleAsync(id);
             await domainUow.Save();
             return Ok();
