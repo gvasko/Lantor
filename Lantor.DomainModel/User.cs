@@ -18,8 +18,9 @@ namespace Lantor.DomainModel
 
         public static User GetNullUser() { return NullUser; }
 
-        public User()
+        public User(int id = 1)
         {
+            Id = id;
             Name = "";
             UserName = "";
             Email = "";

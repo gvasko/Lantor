@@ -15,6 +15,12 @@ namespace Lantor.Data.Infrastructure
     {
         private readonly LantorContext context;
 
+        public User CurrentUser 
+        { 
+            get => context.CurrentUser; 
+            set => context.CurrentUser = value; 
+        }
+
         public BasicCrudUnitOfWork(LantorContext context) 
         {
             this.context = context;
@@ -33,6 +39,8 @@ namespace Lantor.Data.Infrastructure
 
         public async Task<Alphabet> CreateAlphabetAsync(Alphabet alphabet)
         {
+            alphabet.OwnerId = CurrentUser.Id;
+            alphabet.Id = 0;
             var added = await context.Alphabets.AddAsync(alphabet);
             return added.Entity;
         }
@@ -61,11 +69,16 @@ namespace Lantor.Data.Infrastructure
 
         public void UpdateMultilingualSample(MultilingualSample updated)
         {
+            if (updated.OwnerId != CurrentUser.Id)
+            {
+                throw new ArgumentException("Invalid owner");
+            }
             context.MultilingualSamples.Entry(updated).State = EntityState.Modified;
         }
 
         public async Task<MultilingualSample> CreateMultilingualSampleAsync(MultilingualSample sample)
         {
+            sample.OwnerId = CurrentUser.Id;
             sample.Id = 0;
             sample.Languages = [];
             var added = await context.MultilingualSamples.AddAsync(sample);
@@ -85,16 +98,20 @@ namespace Lantor.Data.Infrastructure
 
         public async Task<LanguageSample?> GetLanguageSampleAsync(int id)
         {
-            return await context.LanguageSamples.AsNoTracking().Where(ls => ls.Id == id).FirstOrDefaultAsync();
+            var ls = await context.LanguageSamples.AsNoTracking().Where(ls => ls.Id == id).SingleOrDefaultAsync();
+            // TODO: check owner
+            return ls;
         }
 
         public void UpdateLanguageSample(LanguageSample updated)
         {
+            // TODO: check owner
             context.LanguageSamples.Update(updated);
         }
 
         public async Task<LanguageSample> CreateLanguageSampleAsync(LanguageSample sample)
         {
+            // TODO: check owner
             if (sample.MultilingualSampleId == 0)
             {
                 throw new Exception("Invalid language sample: no parent specified");
@@ -106,6 +123,7 @@ namespace Lantor.Data.Infrastructure
 
         public async Task RemoveLanguageSampleAsync(int sampleId)
         {
+            // TODO: check owner
             var ls = await GetLanguageSampleAsync(sampleId);
             if (ls == null)
             {
@@ -165,7 +183,7 @@ namespace Lantor.Data.Infrastructure
 
         public async Task<User?> GetUserByIdAsync(int id)
         {
-            return await context.Users.AsNoTracking().Where(u => u.Id == id).FirstOrDefaultAsync();
+            return await context.Users.AsNoTracking().Where(u => u.Id == id).SingleOrDefaultAsync();
         }
 
         public async Task<User?> GetUserByEmailAsync(string email)
@@ -185,16 +203,17 @@ namespace Lantor.Data.Infrastructure
             return added.Entity;
         }
 
-        public async Task RemoveUser(int id)
+        public Task RemoveUser(int id)
         {
-            var u = await GetUserByIdAsync(id);
+            //var u = await GetUserByIdAsync(id);
 
-            if (u == null)
-            {
-                throw new ArgumentException($"Unable to delete, User not found with ID {id}");
-            }
+            //if (u == null)
+            //{
+            //    throw new ArgumentException($"Unable to delete, User not found with ID {id}");
+            //}
 
-            context.Users.Remove(u);
+            //context.Users.Remove(u);
+            throw new NotImplementedException();
         }
     }
 }

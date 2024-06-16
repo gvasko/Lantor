@@ -18,7 +18,7 @@ namespace Lantor.DomainModel
         Task RemoveLanguageSampleAsync(int sampleId);
 
         Task<User> EnsureCurrentUserAsync(User user);
-        Task<User> EnsureCurrentUserAsync(string name, string userName, string email, string externalId);
+        Task<User> ConstructCurrentUserAsync(User user);
         User GetCurrentUser();
 
         Task Save();

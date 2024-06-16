@@ -3,6 +3,7 @@ using Lantor.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Lantor.Data.Migrations
 {
     [DbContext(typeof(LantorContext))]
-    partial class LantorContextModelSnapshot : ModelSnapshot
+    [Migration("20240615195715_AddNullUser")]
+    partial class AddNullUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -33,12 +36,7 @@ namespace Lantor.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("OwnerId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("OwnerId");
 
                     b.ToTable("Alphabets");
                 });
@@ -108,12 +106,7 @@ namespace Lantor.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("OwnerId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("OwnerId");
 
                     b.ToTable("MultilingualSamples");
                 });
@@ -149,12 +142,6 @@ namespace Lantor.Data.Migrations
 
             modelBuilder.Entity("Lantor.DomainModel.Alphabet", b =>
                 {
-                    b.HasOne("Lantor.DomainModel.User", "Owner")
-                        .WithMany()
-                        .HasForeignKey("OwnerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.OwnsMany("Lantor.DomainModel.LetterVector", "LetterVectors", b1 =>
                         {
                             b1.Property<int>("AlphabetId")
@@ -202,8 +189,6 @@ namespace Lantor.Data.Migrations
                         });
 
                     b.Navigation("LetterVectors");
-
-                    b.Navigation("Owner");
                 });
 
             modelBuilder.Entity("Lantor.DomainModel.LanguageSample", b =>
@@ -252,17 +237,6 @@ namespace Lantor.Data.Migrations
 
                     b.Navigation("Vector")
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Lantor.DomainModel.MultilingualSample", b =>
-                {
-                    b.HasOne("Lantor.DomainModel.User", "Owner")
-                        .WithMany()
-                        .HasForeignKey("OwnerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Owner");
                 });
 
             modelBuilder.Entity("Lantor.DomainModel.MultilingualSample", b =>

@@ -8,6 +8,7 @@ namespace Lantor.DomainModel
 {
     public interface IBasicCrudUnitOfWork
     {
+        public User CurrentUser { get; set; }
         Task<Alphabet?> GetAlphabetAsync(int id);
         Task<IList<Alphabet>> GetAllAlphabetListInfoAsync();
         Task<Alphabet> CreateAlphabetAsync(Alphabet alphabet);

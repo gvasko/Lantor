@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System.Collections;
+using System.Net.Quic;
 
 namespace Lantor.Data
 {
@@ -13,6 +14,16 @@ namespace Lantor.Data
         public DbSet<LanguageVectorCache> LanguageVectorCache { get; set; }
         public DbSet<Alphabet> Alphabets { get; set; }
         public DbSet<User> Users { get; set; }
+
+        private User _currentUser = User.GetNullUser();
+        public User CurrentUser { 
+            get { return _currentUser; }
+            set { _currentUser = value; }
+        }
+
+        public LantorContext()
+        {
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -41,6 +52,11 @@ namespace Lantor.Data
                 });
             });
             modelBuilder.Entity<Alphabet>().Navigation(a => a.LetterVectors).AutoInclude(false);
+
+            var nullUser = User.GetNullUser();
+            modelBuilder.Entity<Alphabet>().HasQueryFilter(abc => abc.OwnerId == CurrentUser.Id || abc.OwnerId == nullUser.Id);
+            modelBuilder.Entity<MultilingualSample>().HasQueryFilter(abc => abc.OwnerId == CurrentUser.Id || abc.OwnerId == nullUser.Id);
+            // modelBuilder.Entity<Alphabet>().Property(abc => abc.OwnerId). value should be > 0
         }
 
         private static byte[] ConvertToBytes(BitArray bitArray)

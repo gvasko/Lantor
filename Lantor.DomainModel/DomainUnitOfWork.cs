@@ -9,13 +9,12 @@ namespace Lantor.DomainModel
 {
     public class DomainUnitOfWork : IDomainUnitOfWork
     {
+        private static SemaphoreSlim _semaphor = new SemaphoreSlim(1, 1);
         private IBasicCrudUnitOfWork _basicUow;
-        private User _currentUser;
 
         public DomainUnitOfWork(IBasicCrudUnitOfWork uow)
         {
             _basicUow = uow;
-            _currentUser = User.GetNullUser();
         }
 
         public IBasicCrudUnitOfWork BasicCrudOperations { get => _basicUow; }
@@ -81,33 +80,45 @@ namespace Lantor.DomainModel
 
         public async Task<User> EnsureCurrentUserAsync(User user)
         {
-            if (user.Id == 0)
+            await _semaphor.WaitAsync();
+            try
             {
-                var dbUser = await _basicUow.GetUserByEmailAsync(user.Email);
-                if (dbUser == null)
+                if (user.Id == 0)
                 {
-                    dbUser = await _basicUow.CreateUserAsync(user);
-                    await _basicUow.Save();
-                }
-                _currentUser = dbUser;
-            }
-            else
-            {
-                var dbUser = await _basicUow.GetUserByIdAsync(user.Id);
-                if (dbUser == null)
-                {
-                    throw new ArgumentException($"User with id {user.Id} does not exist");
+                    var dbUser = await _basicUow.GetUserByEmailAsync(user.Email);
+                    if (dbUser == null)
+                    {
+                        dbUser = await _basicUow.CreateUserAsync(user);
+                        await _basicUow.Save();
+                    }
+                    _basicUow.CurrentUser = dbUser;
                 }
                 else
                 {
-                    _currentUser = dbUser;
+                    var dbUser = await _basicUow.GetUserByIdAsync(user.Id);
+                    if (dbUser == null)
+                    {
+                        throw new ArgumentException($"User with id {user.Id} does not exist");
+                    }
+                    else
+                    {
+                        _basicUow.CurrentUser = dbUser;
+                    }
                 }
             }
-            return _currentUser;
+            finally
+            {
+                _semaphor.Release();
+            }
+            return _basicUow.CurrentUser;
         }
 
-        public async Task<User> EnsureCurrentUserAsync(string name, string userName, string email, string externalId)
+        public async Task<User> ConstructCurrentUserAsync(User user)
         {
+            var name = user.Name;
+            var userName = user.UserName;
+            var email = user.Email;
+            var externalId = user.ExternalId;
 
             if (string.IsNullOrEmpty(userName))
             {

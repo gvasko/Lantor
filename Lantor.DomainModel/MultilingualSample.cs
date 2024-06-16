@@ -12,7 +12,8 @@ namespace Lantor.DomainModel
         public string Name { get; set; }
         public string Comment { get; set; }
         public List<LanguageSample> Languages { get; set; }
-
+        public int OwnerId { get; set; }
+        public User? Owner { get; set; }
         public MultilingualSample(): this("", "")
         {
         }

@@ -13,10 +13,12 @@ namespace Lantor.Server.Controllers
     [Authorize]
     public class DetectLanguagesController : ControllerBase
     {
+        private readonly IDomainUnitOfWork domainUow;
         private readonly ILanguageDetectorService languageDetectorService;
 
-        public DetectLanguagesController(ILanguageDetectorService languageDetectorService) 
+        public DetectLanguagesController(IDomainUnitOfWork domainUow, ILanguageDetectorService languageDetectorService) 
         {
+            this.domainUow = domainUow;
             this.languageDetectorService = languageDetectorService;
         }
 
@@ -40,6 +42,7 @@ namespace Lantor.Server.Controllers
         [RequiredScope(AuthScopes.CUSTOM_DETECTION)]
         public async Task<LanguageSimilarityResult> CustomPost(LanguageDetectorRequestDTO request)
         {
+            await domainUow.ConstructCurrentUserAsync(this.GetUser());
             if (request.Text == null)
             {
                 return new LanguageSimilarityResult();
