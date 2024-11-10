@@ -14,10 +14,10 @@ namespace Lantor.Data.Migrations
             var defaultAlphabet = new Alphabet("Default", 5024, new RandomVectorFactory());
             migrationBuilder.InsertData(
                 table: "Alphabets",
-                columns: new[] { "Id", "Name" },
+                columns: new[] { "Id", "Name", "OwnerId" },
                 values: new object[,]
                 {
-                    { 1, defaultAlphabet.Name }
+                    { 1, defaultAlphabet.Name, 1 }
                 });
 
             for (int i = 0; i < defaultAlphabet.LetterVectors.Count; i++)

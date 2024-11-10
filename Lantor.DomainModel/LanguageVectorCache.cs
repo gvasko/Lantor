@@ -9,9 +9,9 @@ namespace Lantor.DomainModel
     public class LanguageVectorCache
     {
         public int Id { get; set; }
-        public int LanguageSampleId { get; set; }
+        public int? LanguageSampleId { get; set; }
         public LanguageSample? LanguageSample { get; set; }
-        public int AlphabetId { get; set; }
+        public int? AlphabetId { get; set; }
         public Alphabet? Alphabet { get; set; }
         public HiDimBipolarVector Vector { get; set; }
 
