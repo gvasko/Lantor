@@ -130,7 +130,7 @@ namespace Lantor.DomainModel
 
             if (string.IsNullOrEmpty(userName) || string.IsNullOrEmpty(email))
             {
-                throw new ArgumentException("User cannot be created, userName or email must be provided");
+                throw new ArgumentNullException("User cannot be created, userName or email must be provided");
             }
 
             if (!MailAddress.TryCreate(email, out var _))

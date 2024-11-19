@@ -188,7 +188,7 @@ namespace Lantor.Data.Infrastructure
 
         public async Task<User?> GetUserByEmailAsync(string email)
         {
-            return await context.Users.AsNoTracking().Where(u => u.Email == email).FirstOrDefaultAsync();
+            return await context.Users.AsNoTracking().Where(u => u.Email == email).SingleOrDefaultAsync();
         }
 
         public void UpdateUser(User updated)
