@@ -2,7 +2,6 @@
   <div class="row my-2">
     <div class="d-flex">
       <h4>Language Sample Collection Details</h4>
-      <button type="button" class="btn-close ms-auto" aria-label="Close button" aria-describedby="modal-title" (click)="onClickCrossButton()"></button>
     </div>
   </div>
   <div class="row mb-5">
@@ -16,8 +15,9 @@
         <input id="collectionComment" type="text" class="form-control" placeholder="Enter comment" formControlName="comment"/>
       </section>
       <section class="my-3">
-        <button type="button" class="btn btn-primary me-3" (click)="saveCollectionDetails()">Save Details</button>
-        <button type="button" class="btn btn-secondary" (click)="cancelCollectionsDetails()">Cancel</button>
+        <button type="button" class="btn btn-primary me-3" (click)="saveCollectionDetails()" [disabled]="saveDisabled()">Save Details</button>
+        <button type="button" class="btn btn-secondary me-3" (click)="discardCollectionsDetails()" [disabled]="discardDisabled()">Discard</button>
+        <button type="button" class="btn btn-secondary me-3" (click)="close()" [disabled]="closeDisabled()">Close</button>
       </section>
     </form>
   </div>

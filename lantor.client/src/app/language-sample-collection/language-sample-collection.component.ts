@@ -35,6 +35,18 @@ export class LanguageSampleCollectionComponent implements OnInit {
     this.refreshSamples();
   }
 
+  saveDisabled(): boolean {
+    return this.formGroup.pristine;
+  }
+
+  discardDisabled(): boolean {
+    return this.saveDisabled();
+  }
+
+  closeDisabled(): boolean {
+    return !this.saveDisabled();
+  }
+
   refreshSamples() {
     if (this.collectionId === 0)
       return;
@@ -45,6 +57,7 @@ export class LanguageSampleCollectionComponent implements OnInit {
 
         this.languageSamples = s;
         this.formGroup.setValue(s);
+        this.formGroup.markAsPristine();
       });
     });
   }
@@ -73,6 +86,7 @@ export class LanguageSampleCollectionComponent implements OnInit {
       this.sampleRepository.updateMultilingualSample(mls).subscribe({
         next: () => {
           console.log("MultilingualSample updated successfully.");
+          this.formGroup.markAsPristine();
         },
         error: (error: any) => {
           alert(`Error occurred while updating this resource: ${error.statusText}`);
@@ -81,8 +95,8 @@ export class LanguageSampleCollectionComponent implements OnInit {
     }
   }
 
-  cancelCollectionsDetails() {
-
+  discardCollectionsDetails() {
+    this.refreshSamples();
   }
 
   openLanguageSample(id: number) {
@@ -115,7 +129,7 @@ export class LanguageSampleCollectionComponent implements OnInit {
     return this.languageSamples === null ? false : this.languageSamples.id !== 0;
   }
 
-  onClickCrossButton() {
+  close() {
     this.router.navigate(["/configure"]);
   }
 }
