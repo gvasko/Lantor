@@ -21,7 +21,7 @@ describe('CustomDetectorComponent', () => {
     const fakeAbc = new AlphabetListInfo(1, 'fakeabc', 10);
     tdSampleRepo.getAlphabets.and.returnValue(of([fakeAbc]));
 
-    const fakeSample = new MultilingualSampleListInfo(1, 'fakesample', 'comment', 10);
+    const fakeSample = new MultilingualSampleListInfo(1, 'fakesample', 'comment', 10, 1);
     tdSampleRepo.getMultilingualSamples.and.returnValue(of([fakeSample]));
 
     await TestBed.configureTestingModule({

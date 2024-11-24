@@ -22,6 +22,7 @@ export class LanguageSampleCollectionComponent implements OnInit {
     id: new FormControl(0),
     name: new FormControl(""),
     comment: new FormControl(""),
+    ownerId: new FormControl(0),
     languages: new FormControl<EmptyLanguageSample[]>([])
   });
 

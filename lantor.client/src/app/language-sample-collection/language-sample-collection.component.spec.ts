@@ -17,7 +17,7 @@ describe('LanguageSampleCollectionComponent', () => {
 
     const tdSampleRepo = jasmine.createSpyObj('SampleReposiroryService', ['createMultilingualSample', 'getMultilingualSample', 'getMultilingualSamples', 'updateMultilingualSample', 'deleteLanguageSample']);
 
-    const fakeSample = new MultilingualSampleListInfo(1, 'fakesample', 'comment', 10);
+    const fakeSample = new MultilingualSampleListInfo(1, 'fakesample', 'comment', 10, 1);
     tdSampleRepo.getMultilingualSample.and.returnValue(of(fakeSample));
     tdSampleRepo.getMultilingualSamples.and.returnValue(of([fakeSample]));
     tdSampleRepo.createMultilingualSample.and.returnValue(of(fakeSample));

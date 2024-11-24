@@ -23,7 +23,7 @@ describe('LanguageAdminComponent', () => {
     tdSampleRepo.createAlphabet.and.returnValue(of(fakeAbc));
     tdSampleRepo.deleteAlphabet.and.returnValue(of());
 
-    const fakeSample = new MultilingualSampleListInfo(1, 'fakesample', 'comment', 10);
+    const fakeSample = new MultilingualSampleListInfo(1, 'fakesample', 'comment', 10, 1);
     tdSampleRepo.getMultilingualSamples.and.returnValue(of([fakeSample]));
     tdSampleRepo.deleteMultilingualSample.and.returnValue(of());
 
