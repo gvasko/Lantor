@@ -55,14 +55,14 @@ describe('SampleRepositoryService', () => {
   });
 
   it('updateMultilingualSample invokes MultilingualSample API call', () => {
-    const fakeObj = new EmptyMultilingualSample(1, 'fake', 'comment', []);
+    const fakeObj = new EmptyMultilingualSample(1, 'fake', 'comment', 1, []);
     service.updateMultilingualSample(fakeObj);
     expect(httpClientSpy.put.calls.count()).toBe(1);
     expect(httpClientSpy.put.calls.mostRecent().args[0]).toBe(SampleRepositoryService.MultilingualSampleApiUri);
   });
 
   it('createMultilingualSample invokes MultilingualSample API call', () => {
-    const fakeObj = new EmptyMultilingualSample(1, 'fake', 'comment', []);
+    const fakeObj = new EmptyMultilingualSample(1, 'fake', 'comment', 1, []);
     service.createMultilingualSample(fakeObj);
     expect(httpClientSpy.post.calls.count()).toBe(1);
     expect(httpClientSpy.post.calls.mostRecent().args[0]).toBe(SampleRepositoryService.MultilingualSampleApiUri);
