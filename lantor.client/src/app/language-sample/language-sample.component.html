@@ -13,8 +13,9 @@
         <textarea id="sampleText" class="form-control" rows="10" placeholder="Enter language sample" formControlName="sample"></textarea>
       </section>
       <section class="my-3">
-        <button type="button" class="btn btn-primary me-3" (click)="saveLanguageSampleDetails()">Save</button>
-        <button type="button" class="btn btn-secondary" (click)="cancelLanguageSampleDetails()">Cancel</button>
+        <button type="button" class="btn btn-primary me-3" (click)="saveLanguageSampleDetails()" [disabled]="saveDisabled()">Save</button>
+        <button type="button" class="btn btn-secondary me-3" (click)="discardLanguageSampleDetails()" [disabled]="discardDisabled()">Discard</button>
+        <button type="button" class="btn btn-secondary me-3" (click)="close()" [disabled]="closeDisabled()">Close</button>
       </section>
     </form>
   </div>

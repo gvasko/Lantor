@@ -30,15 +30,31 @@ export class LanguageSampleComponent implements OnInit {
     const languageIdParam = this.route.snapshot.paramMap.get("languageId");
     this.languageId = languageIdParam === null ? 0 : +languageIdParam;
 
+    this.refreshSample();
+  }
+
+  refreshSample() {
     if (this.languageId > 0) {
       this.sampleRepository.getLanguageSample(this.languageId).subscribe(ls => {
         if (ls === null) return;
         this.formGroup.setValue(ls);
+        this.formGroup.markAsPristine();
       });
     } else {
       this.formGroup.controls.multilingualSampleId.setValue(this.collectionId);
     }
+  }
 
+  saveDisabled(): boolean {
+    return this.formGroup.pristine;
+  }
+
+  discardDisabled(): boolean {
+    return this.saveDisabled();
+  }
+
+  closeDisabled(): boolean {
+    return !this.saveDisabled();
   }
 
   saveLanguageSampleDetails() {
@@ -59,6 +75,7 @@ export class LanguageSampleComponent implements OnInit {
       this.sampleRepository.updateLanguageSample(ls).subscribe({
         next: () => {
           console.log("LanguageSample updated successfully.");
+          this.formGroup.markAsPristine();
         },
         error: (error: any) => {
           alert(`Error occurred while updating this resource: ${error.statusText}`);
@@ -67,7 +84,11 @@ export class LanguageSampleComponent implements OnInit {
     }
   }
 
-  cancelLanguageSampleDetails() {
+  discardLanguageSampleDetails() {
+    this.refreshSample();
+  }
+
+  close() {
     this.goBackToCollection();
   }
 
