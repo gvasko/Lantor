@@ -94,14 +94,7 @@ namespace Lantor.DomainModel
                 else
                 {
                     var dbUser = await _basicUow.GetUserByIdAsync(user.Id);
-                    if (dbUser == null)
-                    {
-                        throw new ArgumentException($"User with id {user.Id} does not exist");
-                    }
-                    else
-                    {
-                        _basicUow.CurrentUser = dbUser;
-                    }
+                    _basicUow.CurrentUser = dbUser ?? throw new ArgumentException($"User with id {user.Id} does not exist");
                 }
             }
             finally

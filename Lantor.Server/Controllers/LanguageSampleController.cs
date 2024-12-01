@@ -87,6 +87,7 @@ namespace Lantor.Server.Controllers
                 return false;
             }
 
+            // TODO: better way to indicate default
             var isDefault = sample.MultilingualSampleId == 1;
             return !isDefault || this.HasRole(AuthRoles.ADMINS);
         }
