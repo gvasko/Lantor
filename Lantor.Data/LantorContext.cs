@@ -28,6 +28,8 @@ namespace Lantor.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasDefaultSchema("lantor");
+
+            // TODO: ComplexProperty?
             modelBuilder.Entity<LanguageVectorCache>(c =>
             {
                 c.OwnsOne(e => e.Vector, b =>
